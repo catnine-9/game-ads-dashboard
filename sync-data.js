@@ -71,6 +71,7 @@ async function fetchChart(startDate, endDate) {
 
 async function fetchRange(startDate, endDate) {
   let detail = null;
+  let detailErr = null;
   for (let i = 0; i < 4; i++) {
     try {
       detail = await post('/reportChannel/detailData', {
@@ -80,12 +81,18 @@ async function fetchRange(startDate, endDate) {
       });
       break;
     } catch (e) {
+      detailErr = e;
       if (e.message === 'RATE_LIMITED' && i < 3) { await sleep(12000 * (i + 1)); continue; }
       if (i === 3) console.error('detail ' + startDate + ' failed: ' + e.message);
     }
   }
+  // detail 必须有 list 才算成功（chart 即使有也可能是缓存/错误响应）
+  const detailList = (detail && detail.list) || [];
+  if (detailList.length === 0) {
+    throw new Error(detailErr ? detailErr.message : 'EMPTY_DETAIL');
+  }
   const chart = await fetchChart(startDate, endDate);
-  return { detail: (detail && detail.list) || [], chart };
+  return { detail: detailList, chart };
 }
 
 async function main() {
