@@ -1,12 +1,9 @@
 name: sync-bi-data
 
 on:
-  # 每 10 分钟自动同步一次
+  # 每 10 分钟自动同步一次（cron 最小粒度由 GitHub 决定，可能延迟几分钟）
   schedule:
     - cron: '*/10 * * * *'
-  # push 到 main 也同步一次（部署兜底，保证每次更新都刷新数据）
-  push:
-    branches: [main]
   # 支持手动触发
   workflow_dispatch:
 
@@ -38,6 +35,7 @@ jobs:
           if ! git diff --cached --quiet; then
             echo "data.json 有更新，提交..."
             git commit -m "sync: 更新 BI 数据 $(date -u +'%Y-%m-%dT%H:%M:%SZ')"
+            git pull --rebase origin main || echo "rebase 失败，继续尝试 push"
             git push
           else
             echo "data.json 无变化，跳过提交"
