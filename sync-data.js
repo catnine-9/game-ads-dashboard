@@ -147,23 +147,9 @@ async function main() {
     }
     return out;
   };
-  /* 补全缺失字段：BI 不返回 tgMfRechargeTotalAmount0d / tgMfPayAmount 等厂商流水金额字段，但有 tgMfRoi0，用它和 tgRealCost 反算 */
+  /* 补全缺失字段：BI 不返回厂商流水金额字段（tgMfPayAmount/tgMfPayCount/tgMfNewUserPayCount），前端不需要金额字段故不再反算 */
   const fillMissing = (row) => {
-    const r = { ...row };
-    if (r.tgMfRechargeTotalAmount0d == null && r.tgMfRoi0 != null && r.tgRealCost > 0) {
-      r.tgMfRechargeTotalAmount0d = r.tgMfRoi0 * r.tgRealCost;
-    }
-    if (r.tgMfPayAmount == null && r.tgMfRechargeTotalAmount0d != null) {
-      r.tgMfPayAmount = r.tgMfRechargeTotalAmount0d;
-    }
-    if (r.tgMfNewUserPayCount == null && r.tgMfPayAmount != null && r.tgPayAmount > 0 && r.tgNewUserPayCount > 0) {
-      const payConv = r.tgNewUserPayCount / r.tgPayAmount;
-      r.tgMfNewUserPayCount = r.tgMfPayAmount * payConv;
-    }
-    if (r.tgMfPayCount == null && r.tgMfNewUserPayCount != null) {
-      r.tgMfPayCount = r.tgMfNewUserPayCount;
-    }
-    return r;
+    return row; // 保留原样，KPI 改用 BI 原值（tgMfRoi0, tgMfLtv0）
   };
   const cleanRange = (r) => ({
     detail: (r.detail || []).map(row => fillMissing(cleanRow(row))),
