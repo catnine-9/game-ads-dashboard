@@ -1,0 +1,1203 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>游戏投放数据看板 · GAME AD ANALYTICS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0A0A0B;
+  --bg-elev: #13141C;
+  --header-bg: rgba(31, 36, 51, 0.9);
+  --card-bg: rgba(255, 255, 255, 0.08);
+  --card-bg-soft: rgba(255, 255, 255, 0.05);
+  --card-bg-hover: rgba(255, 255, 255, 0.1);
+  --border: rgba(255, 255, 255, 0.1);
+  --border-soft: rgba(255, 255, 255, 0.06);
+  --text-primary: #FAFAFA;
+  --text-secondary: #A1A1AA;
+  --text-muted: #71717A;
+  --accent: #7CC2FF;
+  --accent-2: #A8D8FF;
+  --green: #34D399;
+  --orange: #F59E0B;
+  --red: #F87171;
+  --pink: #F43F5E;
+  --purple: #A78BFA;
+  --cyan: #22D3EE;
+  --blue: #3B82F6;
+  --r-sm: 4px;
+  --r-md: 12px;
+  --r-lg: 14px;
+  --r-xl: 20px;
+  --r-card: 28px;
+  --r-pill: 999px;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 18px;
+  --space-6: 20px;
+  --space-7: 24px;
+  --shadow-card: 0 16px 32px rgba(0, 0, 0, 0.4);
+  --shadow-cta: 0 4px 12px rgba(77, 111, 212, 0.35);
+  --font-sans: "Noto Sans SC", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: var(--bg); color: var(--text-primary); font-family: var(--font-sans); -webkit-font-smoothing: antialiased; font-size: 14px; line-height: 1.5; }
+body { min-height: 100vh; padding: 0; }
+button { font-family: inherit; border: none; cursor: pointer; background: none; color: inherit; }
+
+/* ============ Dropdown ============ */
+.dropdown { position: relative; display: inline-flex; }
+.dropdown-trigger { display: inline-flex; align-items: center; gap: 6px; }
+.dropdown-arrow { transition: transform 0.15s; }
+.dropdown.open .dropdown-arrow { transform: rotate(180deg); }
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  min-width: 100%;
+  background: #1C1C24;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: var(--r-md);
+  padding: 6px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+  z-index: 100;
+  max-height: 320px;
+  overflow-y: auto;
+}
+.dropdown.open .dropdown-menu { display: block; }
+.dropdown-item {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 13px; color: #E4E4E7;
+  white-space: nowrap; gap: 12px;
+  transition: background 0.1s;
+}
+.dropdown-item:hover { background: rgba(255, 255, 255, 0.08); }
+.dropdown-item.active { background: rgba(124, 194, 255, 0.15); color: var(--accent); }
+.dropdown-item .check { color: var(--accent); font-weight: 700; }
+.dropdown-divider { height: 1px; background: rgba(255, 255, 255, 0.08); margin: 4px 6px; }
+.dropdown-item .meta { color: var(--text-muted); font-size: 11px; font-family: var(--font-mono); }
+
+/* ============ Layout ============ */
+.dashboard {
+  width: 100%;
+  min-width: 320px;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+}
+.header {
+  height: 72px;
+  display: flex;
+  align-items: center;
+  padding: 0 24px;
+  gap: 16px;
+  background: var(--header-bg);
+  border-bottom: 1px solid var(--border-soft);
+  flex-shrink: 0;
+}
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.logo-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 9px;
+  background: linear-gradient(135deg, #7CC2FF 0%, #5C70ED 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.logo-icon svg { width: 22px; height: 22px; }
+.title-block { display: flex; flex-direction: column; gap: 2px; }
+.title-main { font-size: 20px; font-weight: 700; color: var(--text-primary); letter-spacing: 0.5px; }
+.title-sub { font-size: 11px; color: var(--text-muted); letter-spacing: 1.5px; }
+.spacer { flex: 1; }
+.filters { display: flex; align-items: center; gap: 12px; }
+.pill {
+  height: 38px;
+  padding: 0 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border-radius: var(--r-pill);
+  background: var(--card-bg-hover);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  font-size: 13px;
+  color: #E4E4E7;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s;
+  white-space: nowrap;
+}
+.pill:hover { background: rgba(255, 255, 255, 0.12); }
+.pill .label { font-weight: 500; }
+.pill .arrow { color: var(--text-secondary); transition: transform 0.15s; }
+.pill[aria-expanded="true"] .arrow { transform: rotate(180deg); }
+.pill:focus { outline: none; border-color: var(--accent); }
+.update-time {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 16px;
+  height: 38px;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+.update-time .dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 0 8px var(--green);
+}
+.btn-refresh {
+  width: auto;
+  height: 38px;
+  padding: 0 18px;
+  border-radius: var(--r-pill);
+  background: var(--accent);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: var(--shadow-cta);
+  transition: filter 0.15s;
+}
+.btn-refresh:hover { filter: brightness(1.1); }
+
+.body {
+  display: grid;
+  grid-template-columns: 400px 1fr 400px;
+  gap: 24px;
+  padding: 24px;
+  flex: 1;
+  min-height: 0;
+}
+.col { display: flex; flex-direction: column; gap: 24px; min-width: 0; }
+.col-left, .col-right { min-width: 0; }
+.col-center { min-width: 0; }
+
+/* ============ Card ============ */
+.card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--r-card);
+  padding: 24px;
+  box-shadow: var(--shadow-card);
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+.card-head { display: flex; flex-direction: column; gap: 4px; }
+.card-title { font-size: 18px; font-weight: 600; color: var(--text-primary); }
+.card-sub { font-size: 11px; color: var(--text-muted); }
+.card-pad-sm { padding: 22px; gap: 16px; }
+.card-pad-xs { padding: 22px; gap: 12px; }
+
+/* ============ Main KPI Panel (Center) ============ */
+.main-card { gap: 20px; }
+.main-head { flex-direction: row; align-items: center; gap: 12px; }
+.main-head .card-head { flex: 0 0 auto; }
+.main-head .spacer { flex: 1; }
+.game-badge {
+  height: 34px;
+  padding: 0 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border-radius: var(--r-pill);
+  background: rgba(34, 211, 238, 0.15);
+  border: 1px solid rgba(34, 211, 238, 0.4);
+  font-size: 12.5px;
+  color: #E4E4E7;
+  font-weight: 500;
+}
+.game-badge .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--cyan); }
+.date-pill {
+  height: 34px;
+  padding: 0 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border-radius: var(--r-pill);
+  background: var(--card-bg-hover);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  font-size: 12.5px;
+  color: #E4E4E7;
+  font-weight: 500;
+}
+.kpi-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; }
+.kpi {
+  background: var(--card-bg-soft);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--r-xl);
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+}
+.kpi.kpi-accent {
+  background: rgba(124, 194, 255, 0.1);
+  border-color: rgba(124, 194, 255, 0.25);
+}
+.kpi-label { font-size: 12px; color: var(--text-secondary); }
+.kpi-value {
+  font-family: var(--font-mono);
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.01em;
+  line-height: 1.1;
+  word-break: break-all;
+}
+
+.stack-section { display: flex; flex-direction: column; gap: 10px; }
+.stack-label-row { display: flex; align-items: center; gap: 8px; }
+.stack-title { font-size: 11px; color: var(--text-secondary); }
+.stack-total { font-family: var(--font-mono); font-size: 11px; font-weight: 500; color: var(--text-muted); }
+.stack-bar {
+  display: flex;
+  height: 14px;
+  border-radius: var(--r-sm);
+  overflow: hidden;
+  gap: 2px;
+}
+.stack-seg { height: 100%; border-radius: var(--r-sm); transition: transform 0.2s; }
+.stack-seg:hover { transform: scaleY(1.15); }
+.legend-row { display: flex; gap: 20px; flex-wrap: wrap; align-items: center; }
+.legend-item { display: flex; align-items: center; gap: 6px; font-size: 11.5px; color: #E4E4E7; }
+.legend-item .dot { width: 8px; height: 8px; border-radius: 50%; }
+.legend-item .pct { font-family: var(--font-mono); color: var(--text-secondary); margin-left: 2px; }
+
+/* ============ Chart Card (分日数据明细) ============ */
+.chart-card { gap: 16px; }
+.chart-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.chart-toolbar .spacer { flex: 1; }
+.mini-pill {
+  height: 32px;
+  padding: 0 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  border-radius: 16px;
+  background: var(--card-bg-hover);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  font-size: 11.5px;
+  color: #E4E4E7;
+  font-weight: 500;
+  cursor: pointer;
+}
+.mini-pill .arrow { color: var(--text-secondary); }
+.chart-legend { display: flex; gap: 20px; align-items: center; flex-wrap: wrap; }
+.chart-legend-item {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 12px; color: #E4E4E7;
+}
+.chart-legend-item .swatch { width: 10px; height: 10px; border-radius: 3px; }
+.chart-legend-item .name { font-weight: 500; }
+.chart-legend-item .total { font-family: var(--font-mono); color: var(--text-muted); font-size: 11px; }
+.chart-wrap {
+  display: flex; flex-direction: column; gap: 10px;
+  width: 100%;
+}
+.line-chart {
+  width: 100%;
+  height: 220px;
+  display: block;
+  position: relative;
+}
+.chart-tooltip {
+  position: absolute;
+  background: #1C1C24;
+  border: 1px solid rgba(255,255,255,0.14);
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 11.5px;
+  color: #E4E4E7;
+  pointer-events: none;
+  z-index: 200;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.1s;
+  z-index: 999;
+  font-family: var(--font-mono);
+}
+.chart-tooltip.show { opacity: 1; }
+.chart-tooltip .tt-date { color: var(--accent); font-weight: 600; margin-bottom: 4px; }
+.chart-tooltip .tt-row { display: flex; align-items: center; gap: 6px; margin: 2px 0; }
+.chart-tooltip .tt-dot { width: 8px; height: 8px; border-radius: 50%; }
+.chart-tooltip .tt-label { color: var(--text-muted); flex: 1; }
+.chart-tooltip .tt-val { font-weight: 600; }
+.line-chart circle { transition: r 0.1s; cursor: crosshair; }
+.line-chart circle:hover { r: 6; }
+.x-labels {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  height: 18px;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+.x-labels > div { text-align: center; }
+
+/* ============ Dist Card (Left top) ============ */
+.dist-card { gap: 14px; }
+.dist-section-head {
+  display: flex; align-items: center; gap: 8px;
+  margin-top: 4px;
+}
+.dist-section-head .label { font-size: 12px; font-weight: 600; }
+.dist-section-head .spacer { flex: 1; }
+.dist-section-head .note { font-size: 10.5px; color: var(--text-muted); }
+.dist-section-amount .label { color: var(--accent); }
+.dist-section-people .label { color: var(--green); }
+.dist-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 22px;
+}
+.dist-row .range {
+  width: 76px;
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  font-weight: 500;
+  color: #E4E4E7;
+  flex-shrink: 0;
+}
+.dist-row .bar-track {
+  width: 150px;
+  height: 8px;
+  border-radius: var(--r-sm);
+  background: #1C1C22;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.dist-row .bar-fill {
+  height: 100%;
+  border-radius: var(--r-sm);
+  transition: width 0.4s;
+}
+.dist-row .pct {
+  flex: 1;
+  text-align: right;
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+/* ============ Metrics Card (Left bottom) ============ */
+.metrics-card { gap: 12px; }
+.metric-row {
+  height: 56px;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: var(--r-lg);
+  background: var(--card-bg-soft);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: background 0.15s;
+}
+.metric-row:hover { background: rgba(255, 255, 255, 0.07); }
+.metric-row.accent { background: rgba(34, 211, 238, 0.08); border-color: rgba(34, 211, 238, 0.2); }
+.metric-row .label { font-size: 12px; color: var(--text-secondary); }
+.metric-row .value {
+  font-family: var(--font-mono);
+  font-size: 20px;
+  font-weight: 700;
+}
+.metric-row .value.neutral { color: var(--text-primary); }
+.metric-row .value.green { color: var(--green); }
+
+/* ============ Right Column ============ */
+.conv-card { gap: 14px; }
+.conv-row {
+  height: 56px;
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 8px;
+  border-radius: var(--r-lg);
+  background: rgba(255, 255, 255, 0.04);
+}
+.conv-row.accent { background: rgba(52, 211, 153, 0.08); }
+.conv-row .top { display: flex; align-items: center; justify-content: space-between; }
+.conv-row .label { font-size: 12px; color: var(--text-secondary); }
+.conv-row .value { font-family: var(--font-mono); font-size: 18px; font-weight: 700; }
+.conv-row .track {
+  width: 100%;
+  height: 6px;
+  border-radius: 3px;
+  background: #1C1C22;
+  overflow: hidden;
+}
+.conv-row .fill { height: 100%; border-radius: 3px; }
+
+.slot-card { gap: 16px; }
+.slot-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.donut {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+.donut svg { width: 200px; height: 200px; }
+.slot-legend { display: flex; flex-direction: column; gap: 6px; }
+.slot-legend-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 22px;
+  font-size: 11.5px;
+}
+.slot-legend-row .swatch { width: 10px; height: 10px; border-radius: 3px; flex-shrink: 0; }
+.slot-legend-row .name { font-weight: 500; color: #E4E4E7; width: 70px; flex-shrink: 0; }
+.slot-legend-row .pct {
+  flex: 1;
+  text-align: right;
+  font-family: var(--font-mono);
+  font-weight: 500;
+  color: var(--text-primary);
+}
+.slot-legend-row .val { font-family: var(--font-mono); color: var(--text-muted); font-size: 10.5px; width: 56px; text-align: right; }
+
+/* ============ Responsive ============ */
+@media (max-width: 1400px) {
+  .body { grid-template-columns: 360px 1fr 360px; gap: 20px; padding: 20px; }
+  .card { padding: 22px; }
+  .kpi-value { font-size: 28px; }
+}
+@media (max-width: 1200px) {
+  .body { grid-template-columns: 320px 1fr 320px; gap: 16px; padding: 16px; }
+  .card { padding: 20px; gap: 16px; }
+  .col { gap: 16px; }
+  .kpi-value { font-size: 24px; }
+  .card-title { font-size: 16px; }
+  .dist-row .bar-track { width: 120px; }
+  .line-chart { height: 200px; }
+}
+@media (max-width: 960px) {
+  .body { grid-template-columns: 1fr; }
+  .col-left, .col-right { order: 2; }
+  .col-center { order: 1; }
+  .kpi-row { grid-template-columns: repeat(3, 1fr); }
+  .kpi:nth-child(4), .kpi:nth-child(5) { grid-column: span 1; }
+  .filters { flex-wrap: wrap; }
+  .update-time { display: none; }
+}
+@media (max-width: 600px) {
+  .body { padding: 12px; gap: 12px; }
+  .card { padding: 16px; gap: 12px; }
+  .kpi-row { grid-template-columns: repeat(2, 1fr); }
+  .kpi { padding: 14px; }
+  .kpi-value { font-size: 22px; }
+  .title-main { font-size: 16px; }
+  .title-sub { display: none; }
+  .header { padding: 0 12px; gap: 8px; }
+  .pill, .update-time { padding: 0 10px; height: 34px; font-size: 12px; }
+  .btn-refresh { padding: 0 12px; }
+  .filters { gap: 8px; }
+  .stack-bar { height: 12px; }
+  .dist-row .bar-track { width: 100%; }
+  .line-chart { height: 180px; }
+  .x-labels { font-size: 9.5px; }
+  .slot-legend-row .name { width: 60px; }
+}
+</style>
+</head>
+<body>
+<div class="dashboard">
+
+  <!-- ============ HEADER ============ -->
+  <header class="header">
+    <div class="logo">
+      <div class="logo-icon">
+        <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M16 4L26 9.5V16.5C26 22 21.6 26.5 16 28C10.4 26.5 6 22 6 16.5V9.5L16 4Z" fill="white" fill-opacity="0.92"/>
+          <path d="M11 13L15.5 17L21 10.5" stroke="#3B6FD4" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div class="title-block">
+        <div class="title-main">游戏投放数据看板</div>
+        <div class="title-sub">GAME AD ANALYTICS · 各游戏汇总（按游戏维度） · 今日</div>
+      </div>
+    </div>
+    <div class="spacer"></div>
+    <div class="filters">
+      <div class="dropdown" data-key="game">
+        <button class="pill dropdown-trigger" type="button" aria-haspopup="listbox" aria-expanded="false">
+          <span class="label" data-bind="game-label">神将传说</span>
+          <span class="arrow">▾</span>
+        </button>
+        <div class="dropdown-menu" role="listbox" id="dd-game"></div>
+      </div>
+      <div class="dropdown" data-key="date">
+        <button class="pill dropdown-trigger" type="button" aria-haspopup="listbox" aria-expanded="false">
+          <span class="label" data-bind="date-label">今日 (07-31)</span>
+          <span class="arrow">▾</span>
+        </button>
+        <div class="dropdown-menu" role="listbox" id="dd-date"></div>
+      </div>
+      <div class="update-time"><span class="dot"></span>最后更新 <span data-bind="updated-at">15:35:12</span></div>
+      <button class="btn-refresh" id="btn-refresh" title="点击调用 API 重新拉数据">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M13.5 8C13.5 11.04 11.04 13.5 8 13.5C4.96 13.5 2.5 11.04 2.5 8C2.5 4.96 4.96 2.5 8 2.5C10.02 2.5 11.83 3.53 12.87 5.06" stroke="white" stroke-width="1.6" stroke-linecap="round"/><path d="M12.9 1.5V5.1H9.3" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span data-bind="refresh-text">刷新数据</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ============ BODY ============ -->
+  <div class="body">
+
+    <!-- ============ LEFT COLUMN ============ -->
+    <div class="col col-left">
+
+      <!-- 充值分布卡 -->
+      <section class="card dist-card">
+        <div class="card-head">
+          <h2 class="card-title">在投单游戏充值分布</h2>
+          <p class="card-sub">今日付费用户数 · 付费金额 · 转化指标</p>
+        </div>
+
+        <div class="dist-section-head dist-section-amount">
+          <span class="label">付费用户分布</span>
+          <div class="spacer"></div>
+          <span class="note">今日新增 158</span>
+        </div>
+        <div class="dist-row">
+          <div class="range">付费用户</div>
+          <div class="bar-track"><div class="bar-fill" style="width:87px; background:#22D3EE"></div></div>
+          <div class="pct">26人</div>
+        </div>
+        <div class="dist-row">
+          <div class="range">首日付费</div>
+          <div class="bar-track"><div class="bar-fill" style="width:77px; background:#3B82F6"></div></div>
+          <div class="pct">26人</div>
+        </div>
+        <div class="dist-row">
+          <div class="range">首日付费率</div>
+          <div class="bar-track"><div class="bar-fill" style="width:16px; background:#A78BFA"></div></div>
+          <div class="pct">16.46%</div>
+        </div>
+
+        <div class="dist-section-head dist-section-people">
+          <span class="label">金额产出分布</span>
+          <div class="spacer"></div>
+          <span class="note">单游戏内消费</span>
+        </div>
+        <div class="dist-row">
+          <div class="range">首日R 厂商流水</div>
+          <div class="bar-track"><div class="bar-fill" style="width:39px; background:#F59E0B"></div></div>
+          <div class="pct" data-bind="dist-mfFirstR">¥0</div>
+        </div>
+        <div class="dist-row">
+          <div class="range">首日LTV 厂商流水</div>
+          <div class="bar-track"><div class="bar-fill" style="width:100px; background:#F43F5E"></div></div>
+          <div class="pct" data-bind="dist-mfLtv0">¥2.83</div>
+        </div>
+        <div class="dist-row">
+          <div class="range">首日LTV</div>
+          <div class="bar-track"><div class="bar-fill" style="width:18px; background:#34D399"></div></div>
+          <div class="pct">¥2.15</div>
+        </div>
+      </section>
+
+      <!-- 核心指标卡 -->
+      <section class="card metrics-card card-pad-xs">
+        <div class="card-head">
+          <h2 class="card-title">核心指标</h2>
+          <p class="card-sub">近7日口径 · 留存/付费/LTV</p>
+        </div>
+        <div class="metric-row">
+          <span class="label">首日LTV（单游戏）</span>
+          <span class="value neutral">¥3.30</span>
+        </div>
+        <div class="metric-row">
+          <span class="label">首日ARPPU</span>
+          <span class="value neutral">¥16.66</span>
+        </div>
+        <div class="metric-row">
+          <span class="label">ARPU</span>
+          <span class="value neutral">¥5.91</span>
+        </div>
+        <div class="metric-row">
+          <span class="label">首日LTV（厂商流水）</span>
+          <span class="value neutral">¥4.89</span>
+        </div>
+        <div class="metric-row">
+          <span class="label">付费率（近7日）</span>
+          <span class="value neutral">22.19%</span>
+        </div>
+        <div class="metric-row accent">
+          <span class="label">次留</span>
+          <span class="value green">19.01%</span>
+        </div>
+        <div class="metric-row">
+          <span class="label">付费次日留</span>
+          <span class="value neutral">52.25%</span>
+        </div>
+        <div class="metric-row">
+          <span class="label">付费3日留</span>
+          <span class="value neutral">40.42%</span>
+        </div>
+      </section>
+    </div>
+
+    <!-- ============ CENTER COLUMN ============ -->
+    <div class="col col-center">
+
+      <!-- 单款总数据主面板 -->
+      <section class="card main-card">
+        <div class="main-head">
+          <div class="card-head">
+            <h2 class="card-title">单款总数据</h2>
+            <p class="card-sub" data-bind="main-sub">各游戏汇总（按游戏维度）</p>
+          </div>
+        </div>
+
+        <div class="kpi-row">
+          <div class="kpi kpi-accent">
+            <div class="kpi-label">消耗 (¥)</div>
+            <div class="kpi-value">7,792</div>
+          </div>
+          <div class="kpi">
+            <div class="kpi-label">新增数</div>
+            <div class="kpi-value">158</div>
+          </div>
+          <div class="kpi">
+            <div class="kpi-label">单价 (¥)</div>
+            <div class="kpi-value">49.32</div>
+          </div>
+          <div class="kpi">
+            <div class="kpi-label">首日R · 厂商流水 (¥)</div>
+            <div class="kpi-value" data-field="mfFirstR">0</div>
+          </div>
+          <div class="kpi kpi-accent">
+            <div class="kpi-label">首日LTV · 厂商流水 (¥)</div>
+            <div class="kpi-value" data-field="mfLtv0">2.83</div>
+          </div>
+        </div>
+
+        <div class="stack-section">
+          <div class="stack-label-row">
+            <span class="stack-title">今日游戏消耗分布（仅1款在投）</span>
+            <div class="spacer" style="flex:1"></div>
+            <span class="stack-total">总消耗 ¥7,792</span>
+          </div>
+          <div class="stack-bar">
+            <div class="stack-seg" style="width:100%; background:linear-gradient(90deg,#22D3EE,#3B82F6)" title="神将传说 ¥7,792"></div>
+          </div>
+          <div class="legend-row">
+            <span class="legend-item"><span class="dot" style="background:#22D3EE"></span>神将传说消耗<span class="pct">¥7,792 · 100%</span></span>
+            <span class="legend-item"><span class="dot" style="background:#3B82F6"></span>首日R·厂商流水<span class="pct" data-bind="legend-mfFirstR">¥0</span></span>
+            <span class="legend-item"><span class="dot" style="background:#A78BFA"></span>新增数<span class="pct">158</span></span>
+          </div>
+        </div>
+      </section>
+
+      <!-- 分日数据明细（折线图） -->
+      <section class="card chart-card">
+        <div class="card-head">
+          <h2 class="card-title">分日数据明细</h2>
+          <p class="card-sub">分日消耗趋势 · 按顶部筛选实时刷新</p>
+        </div>
+        <div class="chart-legend">
+          <div class="chart-legend-item">
+            <span class="swatch" style="background:#22D3EE"></span>
+            <span class="name">消耗（元）</span>
+            <span class="total">近7日 ¥91,855</span>
+          </div>
+          <div class="chart-legend-item">
+            <span class="swatch" style="background:#3B82F6"></span>
+            <span class="name">首日R（单游戏）</span>
+            <span class="total">近7日 ¥6,679</span>
+          </div>
+        </div>
+        <div class="chart-wrap" style="position:relative">
+          <svg class="line-chart" id="lineChart" viewBox="0 0 560 220" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+            <!-- grid -->
+            <line x1="40" y1="220" x2="520" y2="220" stroke="#27272A" stroke-width="1"/>
+            <line x1="40" y1="165" x2="520" y2="165" stroke="#1C1C20" stroke-width="1"/>
+            <line x1="40" y1="110" x2="520" y2="110" stroke="#1C1C20" stroke-width="1"/>
+            <line x1="40" y1="55"  x2="520" y2="55"  stroke="#1C1C20" stroke-width="1"/>
+            <!-- cost line -->
+            <path d="M 40 45.0 L 120 66.8 L 200 78.2 L 280 108.9 L 360 88.6 L 440 126.8 L 520 144.0"
+                  stroke="#22D3EE" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" fill="none"/>
+            <!-- first-day revenue line -->
+            <path d="M 40 185.0 L 120 188.8 L 200 190.9 L 280 196.3 L 360 192.7 L 440 199.4 L 520 202.5"
+                  stroke="#3B82F6" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" fill="none"/>
+            <!-- cost dots -->
+            <circle cx="40"  cy="30"  r="4.5" fill="#22D3EE"/>
+            <circle cx="120" cy="57"  r="4.5" fill="#22D3EE"/>
+            <circle cx="200" cy="74"  r="4.5" fill="#22D3EE"/>
+            <circle cx="280" cy="108.9" r="4.5" fill="#22D3EE"/>
+            <circle cx="360" cy="87"  r="4.5" fill="#22D3EE"/>
+            <circle cx="440" cy="126.8" r="4.5" fill="#22D3EE"/>
+            <circle cx="520" cy="144.0" r="4.5" fill="#22D3EE"/>
+            <!-- first-day revenue dots -->
+            <circle cx="40"  cy="150" r="4.5" fill="#3B82F6"/>
+            <circle cx="120" cy="188.8" r="4.5" fill="#3B82F6"/>
+            <circle cx="200" cy="190.9" r="4.5" fill="#3B82F6"/>
+            <circle cx="280" cy="196.3" r="4.5" fill="#3B82F6"/>
+            <circle cx="360" cy="192.7" r="4.5" fill="#3B82F6"/>
+            <circle cx="440" cy="199.4" r="4.5" fill="#3B82F6"/>
+            <circle cx="520" cy="202.5" r="4.5" fill="#3B82F6"/>
+          </svg>
+          <div class="x-labels">
+            <div>07-25</div><div>07-26</div><div>07-27</div>
+            <div>07-28</div><div>07-29</div><div>07-30</div><div>07-31</div>
+          </div>
+          <div class="chart-tooltip" id="chartTooltip"></div>
+        </div>
+      </section>
+    </div>
+
+    <!-- ============ RIGHT COLUMN ============ -->
+    <div class="col col-right">
+
+      <!-- 平台转化数据 -->
+      <section class="card conv-card card-pad-sm">
+        <div class="card-head">
+          <h2 class="card-title">平台转化数据</h2>
+          <p class="card-sub">今日口径 · 点击率 · 激活率 · 付费率</p>
+        </div>
+        <div class="conv-row">
+          <div class="top"><span class="label">点击率（CTR）</span><span class="value" style="color:#7CC2FF">2.01%</span></div>
+          <div class="track"><div class="fill" style="width:2%; background:#7CC2FF"></div></div>
+        </div>
+        <div class="conv-row">
+          <div class="top"><span class="label">激活率（新增/点击）</span><span class="value" style="color:#A78BFA">7.61%</span></div>
+          <div class="track"><div class="fill" style="width:7.6%; background:#A78BFA"></div></div>
+        </div>
+        <div class="conv-row">
+          <div class="top"><span class="label">付费率（今日）</span><span class="value" style="color:#22D3EE">16.46%</span></div>
+          <div class="track"><div class="fill" style="width:16.5%; background:#22D3EE"></div></div>
+        </div>
+        <div class="conv-row">
+          <div class="top"><span class="label">首日ROI</span><span class="value" style="color:#F59E0B">4.36%</span></div>
+          <div class="track"><div class="fill" style="width:4.4%; background:#F59E0B"></div></div>
+        </div>
+        <div class="conv-row accent">
+          <div class="top"><span class="label">首日ROI（厂商流水）</span><span class="value" style="color:#34D399">5.74%</span></div>
+          <div class="track"><div class="fill" style="width:5.7%; background:#34D399"></div></div>
+        </div>
+      </section>
+
+      <!-- 流量版位分布 -->
+      <section class="card slot-card card-pad-sm">
+        <div class="card-head">
+          <h2 class="card-title">分析流量版位分布</h2>
+          <p class="card-sub">今日消耗 ¥7,792 · 神将传说唯一在投</p>
+        </div>
+        <div class="slot-layout">
+          <div class="donut">
+            <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+              <path d="M 100 12 A 88 88 0 0 1 142.4 177.1 L 127 149.1 A 56 56 0 0 0 100 44 Z" fill="#22D3EE"/>
+              <path d="M 142.4 177.1 A 88 88 0 0 1 20.3 137.3 L 49.3 123.8 A 56 56 0 0 0 127 149.1 Z" fill="#3B82F6"/>
+              <path d="M 20.3 137.3 A 88 88 0 0 1 20.3 62.7 L 49.3 76.2 A 56 56 0 0 0 49.3 123.8 Z" fill="#A78BFA"/>
+              <path d="M 20.3 62.7 A 88 88 0 0 1 57.6 22.9 L 73 50.9 A 56 56 0 0 0 49.3 76.2 Z" fill="#F59E0B"/>
+              <path d="M 57.6 22.9 A 88 88 0 0 1 83.2 13.6 L 89.3 45 A 56 56 0 0 0 73 50.9 Z" fill="#F43F5E"/>
+              <path d="M 83.2 13.6 A 88 88 0 0 1 100 12 L 100 44 A 56 56 0 0 0 89.3 45 Z" fill="#34D399"/>
+            </svg>
+          </div>
+          <div class="slot-legend">
+            <div class="slot-legend-row"><span class="swatch" style="background:#22D3EE"></span><span class="name">消耗</span><span class="pct">¥7,792</span><span class="val">100%</span></div>
+            <div class="slot-legend-row"><span class="swatch" style="background:#3B82F6"></span><span class="name">新增数</span><span class="pct">158</span><span class="val">100%</span></div>
+            <div class="slot-legend-row"><span class="swatch" style="background:#A78BFA"></span><span class="name">首日R 厂商流水</span><span class="pct" data-bind="slot-mfFirstR">¥0</span><span class="val" data-bind="slot-mfFirstR-pct">—</span></div>
+            <div class="slot-legend-row"><span class="swatch" style="background:#F59E0B"></span><span class="name">首日LTV 厂商流水</span><span class="pct" data-bind="slot-mfLtv0">¥2.83</span><span class="val" data-bind="slot-mfLtv0-pct">—</span></div>
+            <div class="slot-legend-row"><span class="swatch" style="background:#F43F5E"></span><span class="name">付费用户</span><span class="pct">26人</span><span class="val">16.5%</span></div>
+            <div class="slot-legend-row"><span class="swatch" style="background:#34D399"></span><span class="name">首日付费用户</span><span class="pct">26人</span><span class="val">16.5%</span></div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+  </div>
+</div>
+<script>
+/* ============ Dropdown & Filter Logic ============ */
+const GAMES = [
+  { id: '13874',  name: '神将传说-8月12日上线', tag: '在投 · 唯一' },
+  { id: '13341',  name: '上古王冠：先锋版',     tag: '历史' },
+  { id: '13616',  name: '时隙之旅-UR星灵湿婆上线', tag: '历史' },
+  { id: '13474',  name: '新不良人-九幽降臣上线',   tag: '历史' },
+  { id: '12785',  name: '拳魂觉醒-免费瓜分宝库',   tag: '历史' },
+  { id: '14122',  name: '御剑九宫',              tag: '历史' },
+  { id: 'all',    name: '全部游戏（汇总）',     tag: '全部' },
+];
+const DATES = [
+  { id: 'today',   label: '今日',     range: ['2026-07-31','2026-07-31'] },
+  { id: 'yest',    label: '昨日',     range: ['2026-07-30','2026-07-30'] },
+  { id: 'd7',      label: '最近 7 日', range: ['2026-07-25','2026-07-31'] },
+  { id: 'd30',     label: '最近 30 日', range: ['2026-07-02','2026-07-31'] },
+  { id: 'wtd',     label: '本周（截止昨日）', range: ['2026-07-27','2026-07-30'] },
+  { id: 'mtd',     label: '本月（截止昨日）', range: ['2026-07-01','2026-07-30'] },
+  { id: 'custom',  label: '自定义范围…', range: null },
+];
+const state = { game: 'all', date: 'today' };
+
+function renderMenu(el, items, currentId, formatter) {
+  el.innerHTML = items.map(it => {
+    const label = formatter ? formatter(it) : (it.name || it.label || (it.range ? `${it.range[0].slice(5)} ~ ${it.range[1].slice(5)}` : '（无标题）'));
+    const active = it.id === currentId;
+    const meta = it.tag ? `<span class="meta">${it.tag}</span>` : (it.range ? `<span class="meta">${it.range[0].slice(5)} ~ ${it.range[1].slice(5)}</span>` : '');
+    return `<div class="dropdown-item ${active?'active':''}" data-id="${it.id}" role="option" aria-selected="${active}">
+      <span>${label}</span>${meta}
+    </div>`;
+  }).join('<div class="dropdown-divider"></div>') + `
+    <div class="dropdown-item" data-action="manage" style="color:#7CC2FF">
+      <span>＋ 管理 / 搜索…</span><span class="meta">长按编辑</span>
+    </div>`;
+  el.querySelectorAll('.dropdown-item').forEach(it => {
+    it.addEventListener('click', e => {
+      e.stopPropagation();
+      const id = it.dataset.id;
+      if (!id || id === 'manage') return;
+      if (el.dataset.kind === 'game') state.game = id;
+      if (el.dataset.kind === 'date') state.date = id;
+      updateLabels();
+      document.querySelectorAll('.dropdown.open').forEach(d => d.classList.remove('open'));
+      triggerRefresh();
+    });
+  });
+}
+function updateLabels() {
+  const g = GAMES.find(x => x.id === state.game) || GAMES[0];
+  const d = DATES.find(x => x.id === state.date) || DATES[2];
+  const dateText = d.range ? `${d.label} (${d.range[0].slice(5)} ~ ${d.range[1].slice(5)})` : d.label;
+  document.querySelectorAll('[data-bind="game-label"]').forEach(n => n.textContent = g.name);
+  document.querySelectorAll('[data-bind="game-label-c"]').forEach(n => n.textContent = g.name);
+  document.querySelectorAll('[data-bind="game-label-ch"]').forEach(n => n.textContent = g.name);
+  document.querySelectorAll('[data-bind="date-label"]').forEach(n => n.textContent = dateText);
+  document.querySelectorAll('[data-bind="date-label-c"]').forEach(n => n.textContent = d.range ? d.range.join(' ~ ') : d.label);
+  document.querySelectorAll('[data-bind="date-label-ch"]').forEach(n => n.textContent = d.label);
+}
+function openDropdown(el) {
+  document.querySelectorAll('.dropdown.open').forEach(d => d.classList.remove('open'));
+  el.classList.add('open');
+  el.querySelector('.dropdown-trigger').setAttribute('aria-expanded', 'true');
+}
+function closeDropdown(el) { el.classList.remove('open'); el.querySelector('.dropdown-trigger').setAttribute('aria-expanded', 'false'); }
+
+function init() {
+  const ddGame = document.getElementById('dd-game');
+  const ddDate = document.getElementById('dd-date');
+  ddGame.dataset.kind = 'game';
+  ddDate.dataset.kind = 'date';
+  renderMenu(ddGame, GAMES, state.game);
+  renderMenu(ddDate, DATES, state.date);
+
+  document.querySelectorAll('.dropdown').forEach(dd => {
+    const trigger = dd.querySelector('.dropdown-trigger');
+    trigger.addEventListener('click', e => {
+      e.stopPropagation();
+      if (dd.classList.contains('open')) closeDropdown(dd);
+      else openDropdown(dd);
+    });
+  });
+  document.addEventListener('click', () => {
+    document.querySelectorAll('.dropdown.open').forEach(closeDropdown);
+  });
+  document.getElementById('btn-refresh').addEventListener('click', triggerRefresh);
+  updateLabels();
+  // 默认当天自动拉一次
+  fetchDashboardData().catch(e => {
+    console.warn('BI 接口未连通（CORS / 跨域 / 登录态失效）：', e.message);
+  });
+}
+function triggerRefresh() {
+  const txt = document.querySelector('[data-bind="refresh-text"]');
+  const orig = txt.textContent;
+  txt.textContent = '刷新中…';
+  fetchDashboardData().finally(() => {
+    setTimeout(() => { txt.textContent = orig; }, 600);
+  });
+}
+/* 实时调用 BI API：依赖用户浏览器已登录 mailiang.4399dev.com（同源 cookie） */
+const BI_BASE = 'https://mailiang.4399dev.com/user-growth';
+const COMMON = {
+  customId: 594,
+  dateType: 6,
+  isCompare: false,
+  channelTypeList: ['付费渠道'],
+  deptList: ['社区市场部'],
+};
+function fmtN(v, n=0){ return (v==null||isNaN(v))?'-':Number(v).toLocaleString('zh-CN',{minimumFractionDigits:n,maximumFractionDigits:n}); }
+function fmtPct(v){ return v==null?'-':(v*100).toFixed(2)+'%'; }
+
+async function apiPost(path, body) {
+  const res = await fetch(BI_BASE + path, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+    credentials: 'include',     // 带 BI 域 cookie
+    body: JSON.stringify(body),
+  });
+  if (!res.ok) throw new Error('HTTP ' + res.status);
+  const json = await res.json();
+  if (json.code !== 1) throw new Error(json.msg || '接口错误');
+  return json.data;
+}
+
+function setText(sel, txt){ const el=document.querySelector(sel); if(el) el.textContent=txt; }
+function updateKPIsFromDetail(list) {
+  // 取首行（汇总）作为默认值
+  const summary = list[0] || {};
+  // 找目标游戏行（如果有 name 匹配）
+  const target = state.game && state.game !== 'all'
+    ? list.find(x => String(x.gameId) === String(state.game)) || summary
+    : summary;
+  const data = target;
+  const cost   = data.tgRealCost || 0;
+  const newU   = data.tgNewUserCount || 0;
+  const price  = data.tgOriginPrice || 0;
+  // 第 4 个 KPI 改为「首日R·厂商流水」
+  const mfFirstR = data.tgMfRechargeTotalAmount0d || 0;
+  // 第 5 个 KPI 改为「首日LTV·厂商流水」
+  const mfLtv0 = data.tgMfLtv0 || 0;
+  // 更新中栏 KPI
+  setText('.kpi.kpi-accent .kpi-value', fmtN(cost, 0));
+  setText('.kpi:nth-child(2) .kpi-value', fmtN(newU, 0));
+  setText('.kpi:nth-child(3) .kpi-value', price.toFixed(2));
+  setText('.kpi:nth-child(4) [data-field="mfFirstR"]', fmtN(mfFirstR, 0));
+  setText('.kpi:nth-child(5) [data-field="mfLtv0"]', mfLtv0.toFixed(2));
+  // 堆叠条
+  setText('[data-bind="main-sub"]', `${state.game==='all'?'各游戏汇总（按游戏维度）':GAMES.find(g=>g.id===state.game).name+' · '+DATES.find(d=>d.id===state.date).label}`);
+  // 核心指标
+  const setMetric = (n, label, val, accent=false) => {
+    const rows = document.querySelectorAll('.metric-row');
+    if (rows[n]) {
+      const lab = rows[n].querySelector('.label');
+      const v   = rows[n].querySelector('.value');
+      if (lab) lab.textContent = label;
+      if (v)   v.textContent = val;
+      if (accent) rows[n].classList.add('accent'); else rows[n].classList.remove('accent');
+    }
+  };
+  setMetric(0, '首日LTV（单游戏）', '¥' + (data.tgLtv0 || 0).toFixed(2));
+  setMetric(1, '首日ARPPU',         '¥' + (data.tgaArppu0 || 0).toFixed(2));
+  setMetric(2, 'ARPU',              '¥' + (data.tgArpu || 0).toFixed(2));
+  setMetric(3, '首日LTV（厂商流水）', '¥' + (data.tgMfLtv0 || 0).toFixed(2));
+  setMetric(4, '付费率',            fmtPct(data.tgPayRate));
+  // 留存
+  if (data.tgRetention1 != null) {
+    setMetric(5, '次留', fmtPct(data.tgRetention1), true);
+  } else {
+    setMetric(5, '次留（数据产生中）', '—', true);
+  }
+  if (data.tgRechargeUserRetain1 != null) {
+    setMetric(6, '付费次日留', fmtPct(data.tgRechargeUserRetain1));
+  } else {
+    setMetric(6, '付费次日留（待产生）', '—');
+  }
+  if (data.tgRechargeUserRetain2 != null) {
+    setMetric(7, '付费3日留', fmtPct(data.tgRechargeUserRetain2));
+  } else {
+    setMetric(7, '付费3日留（待产生）', '—');
+  }
+  // 平台转化
+  const setConv = (i, label, val, color) => {
+    const rows = document.querySelectorAll('.conv-row');
+    if (!rows[i]) return;
+    const lab = rows[i].querySelector('.label');
+    const v   = rows[i].querySelector('.value');
+    const fill= rows[i].querySelector('.fill');
+    if (lab)  lab.textContent = label;
+    if (v)    { v.textContent = val; v.style.color = color; }
+    if (fill && data.tgRealCost){
+      // 进度条按当前指标值填充（简化）
+    }
+  };
+  setConv(0, '点击率（CTR）', fmtPct(data.tgClickRate), '#7CC2FF');
+  setConv(1, '激活率（新增/点击）', fmtPct(data.tgActiveConvertRate), '#A78BFA');
+  setConv(2, '付费率', fmtPct(data.tgPayRate), '#22D3EE');
+  setConv(3, '首日ROI', fmtPct(data.tgRoi0), '#F59E0B');
+  setConv(4, '首日ROI（厂商流水）', fmtPct(data.tgMfRoi0), '#34D399');
+  // 右侧流量版位
+  setText('[data-bind="legend-mfFirstR"]', '¥' + fmtN(mfFirstR, 0));
+  setText('[data-bind="slot-mfFirstR"]', '¥' + fmtN(mfFirstR, 0));
+  setText('[data-bind="slot-mfFirstR-pct"]', mfFirstR && cost ? ((mfFirstR/cost)*100).toFixed(1)+'%' : '—');
+  setText('[data-bind="slot-mfLtv0"]', '¥' + mfLtv0.toFixed(2));
+  setText('[data-bind="slot-mfLtv0-pct"]', mfLtv0 ? ((mfLtv0/(data.tgOriginPrice||1))*100).toFixed(1)+'%' : '—');
+  setText('[data-bind="dist-mfFirstR"]', '¥' + fmtN(mfFirstR, 0));
+  setText('[data-bind="dist-mfLtv0"]', '¥' + mfLtv0.toFixed(2));
+  // 右侧流量版位
+  setText('.slot-legend-row:nth-child(1) .pct', '¥' + fmtN(cost, 0));
+  setText('.slot-legend-row:nth-child(1) .val', '100%');
+  setText('.slot-legend-row:nth-child(2) .pct', fmtN(newU, 0));
+  setText('.slot-legend-row:nth-child(2) .val', '100%');
+  setText('.slot-legend-row:nth-child(5) .pct', fmtN(data.tgPayCount, 0) + '人');
+  setText('.slot-legend-row:nth-child(5) .val', fmtPct(data.tgPayRate));
+  setText('.slot-legend-row:nth-child(6) .pct', fmtN(data.tgNewUserPayCount, 0) + '人');
+  setText('.slot-legend-row:nth-child(6) .val', fmtPct(data.tgRechargeConvertRate));
+  // 左侧充值分布
+  setText('.dist-section-head.dist-section-amount .note', '今日新增 ' + fmtN(newU, 0));
+  const setDist = (i, range, val, color) => {
+    const rows = document.querySelectorAll('.dist-row');
+    if (!rows[i]) return;
+    const r = rows[i].querySelector('.range');
+    const p = rows[i].querySelector('.pct');
+    const f = rows[i].querySelector('.bar-fill');
+    if (r) r.textContent = range;
+    if (p) p.textContent = val;
+    if (f) {
+      const numMatch = val.match(/(\d+\.?\d*)/);
+      if (numMatch) {
+        const n = parseFloat(numMatch[1]);
+        const max = Math.max(cost, firstR, payAmt, 100);
+        f.style.width = Math.max(8, (n / max) * 100) + 'px';
+        f.style.background = color;
+      }
+    }
+  };
+  setDist(0, '付费用户',         fmtN(data.tgPayCount,0)+'人',           '#22D3EE');
+  setDist(1, '首日付费',         fmtN(data.tgNewUserPayCount,0)+'人',   '#3B82F6');
+  setDist(2, '首日付费率',       fmtPct(data.tgRechargeConvertRate),    '#A78BFA');
+  setDist(3, '首日R 厂商流水',   '¥'+fmtN(mfFirstR,0),                  '#F59E0B');
+  setDist(4, '首日LTV 厂商流水', '¥'+mfLtv0.toFixed(2),                 '#F43F5E');
+  setDist(5, '首日LTV',          '¥'+(data.tgLtv0||0).toFixed(2),       '#34D399');
+  // 头部副标题更新
+  setText('.title-sub', `GAME AD ANALYTICS · ${state.game==='all'?'各游戏汇总（按游戏维度）':GAMES.find(g=>g.id===state.game).name} · ${DATES.find(d=>d.id===state.date).label}`);
+}
+
+function updateChartFromList(list) {
+  // 重新画折线图：分日消耗
+  const points = list.slice().sort((a,b)=>String(a.dateKey).localeCompare(String(b.dateKey)));
+  if (points.length === 0) return;
+  const costs = points.map(p => p.tgRealCost || 0);
+  const maxC = Math.max(...costs, 1);
+  const xs = points.map((_,i)=>40 + i*80);
+  const costPts = points.map((p,i)=> [xs[i], 215 - ((p.tgRealCost||0)/maxC)*170]);
+  // 首日R 用相对值
+  const rFirstR = points.map(p=>p.tgRechargeTotalAmount0d||0);
+  const maxR = Math.max(...rFirstR, 1);
+  const rPts = points.map((p,i)=> [xs[i], 215 - ((p.tgRechargeTotalAmount0d||0)/maxR)*30]);
+  // 更新 path
+  const svg = document.querySelector('svg.line-chart');
+  if (!svg) return;
+  const costPath = svg.querySelector('path[d^="M"][stroke="#22D3EE"]') || svg.children[4];
+  const rPath = svg.querySelector('path[d^="M"][stroke="#3B82F6"]') || svg.children[5];
+  if (costPath) costPath.setAttribute('d', 'M ' + costPts.map(p=>p.join(' ')).join(' L '));
+  if (rPath)    rPath.setAttribute('d', 'M ' + rPts.map(p=>p.join(' ')).join(' L '));
+  // 更新点
+  const costDots = svg.querySelectorAll('circle[fill="#22D3EE"]');
+  const rDots    = svg.querySelectorAll('circle[fill="#3B82F6"]');
+  costDots.forEach((c,i)=>{ if (costPts[i]) { c.setAttribute('cx', costPts[i][0]); c.setAttribute('cy', costPts[i][1]); }});
+  rDots.forEach((c,i)=>{ if (rPts[i])    { c.setAttribute('cx', rPts[i][0]); c.setAttribute('cy', rPts[i][1]); }});
+  // 折线图 hover tooltip
+  const tip   = document.getElementById('chartTooltip');
+  const wrap  = svg.parentElement;
+  if (tip && wrap) {
+    costDots.forEach((c, i) => {
+      c.onmouseenter = c.onmouseleave = c.onmousemove = null;
+      c.addEventListener('mouseenter', e => {
+        const p = points[i] || {};
+        tip.innerHTML = `
+          <div class="tt-date">${p.dateKey || ''}</div>
+          <div class="tt-row"><span class="tt-dot" style="background:#22D3EE"></span><span class="tt-label">消耗</span><span class="tt-val">¥${fmtN(p.tgRealCost||0,0)}</span></div>
+          <div class="tt-row"><span class="tt-dot" style="background:#3B82F6"></span><span class="tt-label">首日R</span><span class="tt-val">¥${fmtN(p.tgRechargeTotalAmount0d||0,0)}</span></div>
+          <div class="tt-row"><span class="tt-dot" style="background:#34D399"></span><span class="tt-label">新增数</span><span class="tt-val">${fmtN(p.tgNewUserCount||0,0)}</span></div>
+        `;
+        tip.classList.add('show');
+      });
+      c.addEventListener('mousemove', e => {
+        const rect = wrap.getBoundingClientRect();
+        tip.style.left = (e.clientX - rect.left + 12) + 'px';
+        tip.style.top  = (e.clientY - rect.top - 8)  + 'px';
+      });
+      c.addEventListener('mouseleave', () => tip.classList.remove('show'));
+    });
+    rDots.forEach((c, i) => {
+      c.onmouseenter = c.onmouseleave = c.onmousemove = null;
+      c.addEventListener('mouseenter', e => {
+        const p = points[i] || {};
+        tip.innerHTML = `
+          <div class="tt-date">${p.dateKey || ''}</div>
+          <div class="tt-row"><span class="tt-dot" style="background:#3B82F6"></span><span class="tt-label">首日R</span><span class="tt-val">¥${fmtN(p.tgRechargeTotalAmount0d||0,0)}</span></div>
+        `;
+        tip.classList.add('show');
+      });
+      c.addEventListener('mousemove', e => {
+        const rect = wrap.getBoundingClientRect();
+        tip.style.left = (e.clientX - rect.left + 12) + 'px';
+        tip.style.top  = (e.clientY - rect.top - 8)  + 'px';
+      });
+      c.addEventListener('mouseleave', () => tip.classList.remove('show'));
+    });
+  }
+  // X 轴日期
+  const xLbls = document.querySelectorAll('.x-labels > div');
+  points.forEach((p,i)=>{ if (xLbls[i]) xLbls[i].textContent = String(p.dateKey).slice(4); });
+  // 图例总额
+  const sumCost = costs.reduce((a,b)=>a+b,0);
+  const sumFirstR = rFirstR.reduce((a,b)=>a+b,0);
+  const legendItems = document.querySelectorAll('.chart-legend-item .total');
+  if (legendItems[0]) legendItems[0].textContent = '共 ' + fmtN(sumCost, 0);
+  if (legendItems[1]) legendItems[1].textContent = '共 ' + fmtN(sumFirstR, 0);
+}
+
+async function fetchDashboardData() {
+  const g = GAMES.find(x => x.id === state.game) || GAMES[0];
+  const d = DATES.find(x => x.id === state.date) || DATES[0];
+  const range = d.range || ['2026-07-25','2026-07-31'];
+  // 维度：state.game === 'all' 时按 dateKey 汇总；否则按 gameName
+  const dimension = (state.game === 'all') ? 'dateKey' : 'gameName';
+  // 1) 拿详情（含每游戏/每日指标）
+  const detailBody = {
+    ...COMMON, dimension,
+    startDate: range[0], endDate: range[1],
+    pageNum: 1, pageSize: 60,
+  };
+  // gameName 维度：detailData 需要传 gameIds 数组（即使单选也要传）
+  if (dimension === 'gameName' && state.game !== 'all') {
+    detailBody.gameIds = [String(state.game)];
+  }
+  const detail = await apiPost('/reportChannel/detailData', detailBody);
+  const list = (detail && detail.list) || [];
+  // 2) 更新所有卡片
+  updateKPIsFromDetail(list);
+  // 3) 拿分日 chart（用 dateKey 维度展示趋势）
+  try {
+    const chartBody = {
+      ...COMMON, dimension: 'dateKey',
+      startDate: range[0], endDate: range[1],
+      summaryType: 3,
+      indicatorFields: ['tgRealCost','tgRechargeTotalAmount0d','tgNewUserCount'],
+    };
+    const chart = await apiPost('/reportChannel/chartData', chartBody);
+    updateChartFromList(chart || []);
+  } catch(e) { console.warn('chart 拉取失败', e); }
+  // 4) 更新时间戳
+  const now = new Date();
+  setText('[data-bind="updated-at"]', now.toLocaleTimeString('zh-CN',{hour12:false}));
+}
+document.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>
