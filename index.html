@@ -944,7 +944,7 @@ const COMMON = {
 /* 图表调色板（与设计稿一致） */
 const PALETTE = ['#22D3EE','#3B82F6','#A78BFA','#F59E0B','#F43F5E','#34D399'];
 function fmtN(v, n=0){ return (v==null||isNaN(v))?'-':Number(v).toLocaleString('zh-CN',{minimumFractionDigits:n,maximumFractionDigits:n}); }
-function fmtPct(v){ return v==null?'-':(v*100).toFixed(2)+'%'; }
+function fmtPct(v){ if(v==null){return '—';} const n=Number(v); if(isNaN(n)){return '—';} return (n*100).toFixed(2)+'%'; }
 
 async function apiPost(path, body) {
   const res = await fetch(BI_BASE + path, {
@@ -1169,7 +1169,7 @@ function updateChartFromList(list) {
 
 /* ============ 快照数据渲染（GitHub Actions 每 10 分钟生成 data.json） ============ */
 function sumGames(list) {
-  /* 全部游戏模式：各游戏指标求和（比率字段不求和，留给单游戏/汇总行展示） */
+  /* 全部游戏模式：各游戏数值指标求和，比率字段用加权公式重算，跨游戏无意义的留存指标保持空 */
   const summable = ['tgRealCost','tgNewUserCount','tgStartCount','tgPayCount','tgPayAmount',
     'tgRechargeTotalAmount0d','tgNewUserPayCount','tgShow','tgClick','tgActiveCount',
     'tgActivePayCount','tgActivePayAmount','tgMfPayAmount','tgMfPayCount','tgMfNewUserPayCount',
@@ -1183,8 +1183,26 @@ function sumGames(list) {
       if (!isNaN(v)) s[f] = (s[f] || 0) + v;
     });
   });
-  s.tgOriginPrice = s.tgNewUserCount ? s.tgRealCost / s.tgNewUserCount : 0;   // 单价=消耗/新增
-  s.tgStartPrice  = s.tgStartCount  ? s.tgRealCost / s.tgStartCount  : 0;
+  /* 派生比率字段（加权公式） */
+  s.tgOriginPrice  = s.tgNewUserCount ? s.tgRealCost / s.tgNewUserCount : 0;            // 单价
+  s.tgStartPrice   = s.tgStartCount  ? s.tgRealCost / s.tgStartCount  : 0;
+  s.tgClickRate    = s.tgShow        ? s.tgClick    / s.tgShow        : 0;              // 点击率
+  s.tgActiveConvertRate = s.tgClick ? s.tgActiveCount / s.tgClick   : 0;              // 激活率
+  s.tgPayRate      = s.tgStartCount  ? s.tgPayCount  / s.tgStartCount : 0;             // 付费率
+  s.tgRechargeConvertRate = s.tgNewUserCount ? s.tgNewUserPayCount / s.tgNewUserCount : 0; // 首日付费率
+  s.tgMfRechargeConvertRate = s.tgNewUserCount ? (() => {
+    // 首日厂商流水付费率 = 新增的厂商流水首日付费用户（近似用 mfNewUserPayCount）
+    const n = parseFloat(s.tgMfNewUserPayCount || 0);
+    return s.tgNewUserCount ? n / s.tgNewUserCount : 0;
+  })() : 0;
+  s.tgActiveUserCountRate = s.tgNewUserCount ? s.tgNewUserCount / s.tgNewUserCount : 0; // 新增回传比例（无源数据，保持 0）
+  s.tgRoi0     = s.tgRealCost ? s.tgRechargeTotalAmount0d / s.tgRealCost : 0;          // 首日ROI
+  s.tgMfRoi0   = s.tgRealCost ? s.tgMfRechargeTotalAmount0d / s.tgRealCost : 0;      // 首日ROI厂商流水
+  s.tgLtv0     = s.tgNewUserCount ? s.tgPayAmount / s.tgNewUserCount : 0;             // 首日LTV
+  s.tgMfLtv0   = s.tgNewUserCount ? s.tgMfRechargeTotalAmount0d / s.tgNewUserCount : 0; // 首日LTV厂商流水
+  s.tgArpu     = s.tgNewUserCount ? s.tgPayAmount / s.tgNewUserCount : 0;             // ARPU ≈ LTV
+  s.tgaArppu0  = s.tgPayCount     ? s.tgRechargeTotalAmount0d / s.tgPayCount : 0;    // 首日ARPPU
+  /* 留存/付费留存：跨游戏无意义，不在汇总行计算（保持 undefined → 全部显示 —） */
   s.gameName = '全部游戏';
   return s;
 }
