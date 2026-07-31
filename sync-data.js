@@ -121,6 +121,23 @@ async function main() {
     console.error('ALL_RANGES_EMPTY — 保留旧 data.json（可能接口限流或登录态过期）');
     process.exit(0);
   }
+  /* 清洗：BI 对无数据游戏返回字符串 "NaN"，前端 fmtPct/fmtN 会显示 "NaN%"。统一转为 null，前端显示 — */
+  const cleanRow = (row) => {
+    const out = {};
+    for (const [k, v] of Object.entries(row)) {
+      if (v === 'NaN' || v === 'Infinity' || v === '-Infinity' || (typeof v === 'number' && isNaN(v))) {
+        out[k] = null;
+      } else {
+        out[k] = v;
+      }
+    }
+    return out;
+  };
+  const cleanRange = (r) => ({
+    detail: (r.detail || []).map(cleanRow),
+    chart: (r.chart || []).map(cleanRow),
+  });
+  out.ranges = Object.fromEntries(Object.entries(out.ranges).map(([k, r]) => [k, cleanRange(r)]));
   fs.writeFileSync('data.json', JSON.stringify(out, null, 1));
   console.log('=> data.json written (' + fs.statSync('data.json').size + ' bytes)');
 }
