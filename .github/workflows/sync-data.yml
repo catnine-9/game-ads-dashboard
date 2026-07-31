@@ -1,0 +1,46 @@
+name: sync-bi-data
+
+on:
+  # 每 10 分钟自动同步一次（cron 最小粒度由 GitHub 决定，可能延迟几分钟）
+  schedule:
+    - cron: '*/10 * * * *'
+  # 支持手动触发
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+
+      - name: setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: 拉取 BI 数据
+        run: node sync-data.js
+        env:
+          COOKIE: ${{ secrets.COOKIE_SECRET }}
+
+      - name: 提交更新（仅当有变化时）
+        run: |
+          git config user.name "bi-sync-bot"
+          git config user.email "actions@github.com"
+          git add data.json
+          if ! git diff --cached --quiet; then
+            echo "data.json 有更新，提交..."
+            git commit -m "sync: 更新 BI 数据 $(date -u +'%Y-%m-%dT%H:%M:%SZ')"
+            git push
+          else
+            echo "data.json 无变化，跳过提交"
+          fi
+
+      - name: 同步失败提示
+        if: failure()
+        run: |
+          echo "::warning::BI 同步失败，可能原因：1) cookie 过期（需重新登录并更新 COOKIE_SECRET）2) BI 接口限流/维护"
