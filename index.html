@@ -1231,7 +1231,7 @@ button { font-family: inherit; border: none; cursor: pointer; background: none; 
 
           <div class="bar-track"><div class="bar-fill" style="width:39px; background:#F59E0B"></div></div>
 
-          <div class="pct" data-bind="dist-mfFirstR">¥0</div>
+          <div class="pct" data-bind="dist-mfFirstR">0%</div>
 
         </div>
 
@@ -1241,7 +1241,7 @@ button { font-family: inherit; border: none; cursor: pointer; background: none; 
 
           <div class="bar-track"><div class="bar-fill" style="width:100px; background:#F43F5E"></div></div>
 
-          <div class="pct" data-bind="dist-mfLtv0">¥2.83</div>
+          <div class="pct" data-bind="dist-mfLtv0">2.83</div>
 
         </div>
 
@@ -1393,7 +1393,7 @@ button { font-family: inherit; border: none; cursor: pointer; background: none; 
 
           <div class="kpi">
 
-            <div class="kpi-label">首日R · 厂商流水 (¥)</div>
+            <div class="kpi-label">首日ROI · 厂商流水</div>
 
             <div class="kpi-value" data-field="mfFirstR">0</div>
 
@@ -1401,7 +1401,7 @@ button { font-family: inherit; border: none; cursor: pointer; background: none; 
 
           <div class="kpi kpi-accent">
 
-            <div class="kpi-label">首日LTV · 厂商流水 (¥)</div>
+            <div class="kpi-label">首日LTV · 厂商流水</div>
 
             <div class="kpi-value" data-field="mfLtv0">2.83</div>
 
@@ -1951,7 +1951,7 @@ function updateKPIsFromDetail(list, forcedData) {
 
   // 第 4 个 KPI 改为「首日R·厂商流水」
 
-  const mfFirstR = data.tgMfRechargeTotalAmount0d || 0;
+  const mfFirstR = data.tgMfRoi0 != null ? (data.tgMfRoi0 * 100).toFixed(2) + '%' : '—';
 
   // 第 5 个 KPI 改为「首日LTV·厂商流水」
 
@@ -1965,7 +1965,7 @@ function updateKPIsFromDetail(list, forcedData) {
 
   setText('.kpi:nth-child(3) .kpi-value', price.toFixed(2));
 
-  setText('.kpi:nth-child(4) [data-field="mfFirstR"]', fmtN(mfFirstR, 0));
+  setText('.kpi:nth-child(4) [data-field="mfFirstR"]', mfFirstR);
 
   setText('.kpi:nth-child(5) [data-field="mfLtv0"]', mfLtv0.toFixed(2));
 
@@ -2079,19 +2079,19 @@ function updateKPIsFromDetail(list, forcedData) {
 
   // 右侧流量版位
 
-  setText('[data-bind="legend-mfFirstR"]', '¥' + fmtN(mfFirstR, 0));
+  setText('[data-bind="legend-mfFirstR"]', mfFirstR);
 
-  setText('[data-bind="slot-mfFirstR"]', '¥' + fmtN(mfFirstR, 0));
+  setText('[data-bind="slot-mfFirstR"]', mfFirstR);
 
-  setText('[data-bind="slot-mfFirstR-pct"]', mfFirstR && cost ? ((mfFirstR/cost)*100).toFixed(1)+'%' : '—');
+  setText('[data-bind="slot-mfFirstR-pct"]', '—');
 
-  setText('[data-bind="slot-mfLtv0"]', '¥' + mfLtv0.toFixed(2));
+  setText('[data-bind="slot-mfLtv0"]', mfLtv0.toFixed(2));
 
   setText('[data-bind="slot-mfLtv0-pct"]', mfLtv0 ? ((mfLtv0/(data.tgOriginPrice||1))*100).toFixed(1)+'%' : '—');
 
-  setText('[data-bind="dist-mfFirstR"]', '¥' + fmtN(mfFirstR, 0));
+  setText('[data-bind="dist-mfFirstR"]', mfFirstR);
 
-  setText('[data-bind="dist-mfLtv0"]', '¥' + mfLtv0.toFixed(2));
+  setText('[data-bind="dist-mfLtv0"]', mfLtv0.toFixed(2));
 
   // 右侧流量版位
 
