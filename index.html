@@ -927,9 +927,9 @@ function init() {
   });
   document.getElementById('btn-refresh').addEventListener('click', triggerRefresh);
   updateLabels();
-  // 默认当天自动拉一次
+  // 默认当天自动拉一次（失败时保留页面硬编码数据）
   fetchDashboardData().catch(e => {
-    console.warn('BI 接口未连通（CORS / 跨域 / 登录态失效）：', e.message);
+    console.warn('BI 接口未连通（CORS / 跨域 / 登录态失效），使用页面默认数据：', e.message);
   });
 }
 function triggerRefresh() {
