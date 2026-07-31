@@ -2,9 +2,10 @@
  * 读取环境变量 COOKIE（BI 登录 cookie），调用 mailiang.4399dev.com 真实接口，
  * 生成 data.json 快照供前端读取。
  *
- * 2026-07-31 修复：reportChannel/customId=594 报表已在 BI 下线（EMPTY_DETAIL），
- * 改用 reportLinkChannel + dimensionId=34（游戏维度）+ customId=287（已验证有效）。
- * 返回字段为 t* 前缀，统一映射为前端使用的 tg* 字段。
+ * 2026-07-31 修复：数据源 = mailiang/report/basic/promote?orgId=43 报表
+ *  - 接口: reportChannel/detailData + customId=594 + dimension=gameName
+ *  - 关键: 请求 header 必须带 orgId: 43（缺这个返回空数据 EMPTY_DETAIL）
+ *  - 返回字段原生为 tg* 前缀，与前端一致，无需映射
  * Node 18+ 运行，无第三方依赖。
  */
 const fs = require('fs');
@@ -18,11 +19,12 @@ async function post(path, body) {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'Accept': 'application/json',
+      'Accept': 'application/json, text/plain, */*',
       'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0 Safari/537.36',
       'Cookie': COOKIE,
+      'orgId': '43',
       'Origin': 'https://mailiang.4399dev.com',
-      'Referer': 'https://mailiang.4399dev.com/mailiang/report/basic/linkPromote?orgId=42',
+      'Referer': 'https://mailiang.4399dev.com/mailiang/report/basic/promote?orgId=43',
     },
     body: JSON.stringify(body),
   });
@@ -33,67 +35,24 @@ async function post(path, body) {
   return json.data;
 }
 
-// 游戏维度报表参数（dimensionId=34 = 游戏维度；customId=287 = 3387游戏平台报表）
+// promote?orgId=43 报表参数
 const COMMON = {
-  userType: 1,
-  dimensionId: 34,
-  customId: 287,
+  customId: 594,
   dateType: 6,
   isCompare: false,
+  channelTypeList: ['付费渠道'],
   deptList: ['社区市场部'],
-  tableType: 1,
 };
-
-/* t* -> tg* 字段映射（BI 报表字段 -> 前端字段） */
-const FIELD_MAP = {
-  tgRealCost: 'tOriginAmount',           // 消耗
-  tgNewUserCount: 'tNewUser',            // 新增
-  tgPayCount: 'tRechargeCount',          // 付费人数
-  tgPayAmount: 'tRecharge',              // 付费金额
-  tgRechargeTotalAmount0d: 'tRrechargeTotalAmount0d', // 首日R（厂商流水）
-  tgNewUserPayCount: 'tNewUserRechargeCount', // 首日付费人数
-  tgLtv0: 'tLtv0d',                      // 首日LTV
-  tgaArppu0: 'tArppu0d',                 // 首日ARPPU
-  tgArpu: 'tArpu',                       // ARPU
-  tgPayRate: 'tRecharge0dRate',          // 付费率
-  tgClickRate: 'tClickRate',             // 点击率
-  tgActiveConvertRate: 'tActivationRat', // 激活率
-  tgRoi0: 'tRoi0d',                      // 首日ROI（单游戏）
-  tgRoi: 'tRoi',                         // ROI
-  tgOriginPrice: 'tPrice',               // 单价
-  tgStartPrice: 'tPrice',                // 启动单价
-  tgRechargeConvertRate: 'tRechargeRate', // 转化率
-  tgMfRoi0: 'tRoi0d',                    // 厂商流水ROI（近似整体ROI）
-  tgMfLtv0: 'tLtv0d',                    // 厂商流水LTV
-  tgMfRechargeConvertRate: 'tRecharge0dRate',
-  tgMfRechargeTotalAmount0d: 'tRrechargeTotalAmount0d',
-  tgMfPayAmount: 'tRecharge',
-  tgMfPayCount: 'tRechargeCount',
-  tgMfNewUserPayCount: 'tNewUserRechargeCount',
-  tgActiveUserCountRate: 'tActivationRat',
-  tgStartCount: 'tRegister',             // 启动数 ≈ 注册数
-  tgRetention1: 'tStartGameRate',        // 次留率（近似，BI 无直接字段时用启动率占位）
-};
-
-function toGameFormat(row) {
-  const out = { dateKey: row.dateKey || '', gameName: row.gameName || '' };
-  // gameId：dimensionId=34 无 gameId，用 gameName 作为稳定 id（前端字符串匹配）
-  out.gameId = row.gameName || '';
-  for (const [tg, t] of Object.entries(FIELD_MAP)) {
-    out[tg] = row[t] !== undefined ? row[t] : null;
-  }
-  return out;
-}
 
 // 分日 chart：chartData 单指标更稳定，逐指标拉取再合并
 async function fetchChart(startDate, endDate) {
-  const fields = ['tOriginAmount', 'tRrechargeTotalAmount0d', 'tNewUser'];
+  const fields = ['tgRealCost', 'tgRechargeTotalAmount0d', 'tgNewUserCount'];
   const merged = {};
   for (const f of fields) {
     let got = null;
     for (let i = 0; i < 4; i++) {
       try {
-        got = await post('/reportLinkChannel/chartData', {
+        got = await post('/reportChannel/chartData', {
           ...COMMON, dimension: 'dateKey',
           startDate, endDate,
           summaryType: 3,
@@ -114,14 +73,7 @@ async function fetchChart(startDate, endDate) {
     }
     await sleep(1500);
   }
-  // 映射为前端 chart 字段
-  return Object.values(merged).sort((a, b) => String(a.dateKey).localeCompare(String(b.dateKey)))
-    .map(row => ({
-      dateKey: row.dateKey,
-      tgRealCost: row.tOriginAmount,
-      tgRechargeTotalAmount0d: row.tRrechargeTotalAmount0d,
-      tgNewUserCount: row.tNewUser,
-    }));
+  return Object.values(merged).sort((a, b) => String(a.dateKey).localeCompare(String(b.dateKey)));
 }
 
 async function fetchRange(startDate, endDate) {
@@ -129,8 +81,8 @@ async function fetchRange(startDate, endDate) {
   let detailErr = null;
   for (let i = 0; i < 4; i++) {
     try {
-      detail = await post('/reportLinkChannel/detailData', {
-        ...COMMON,
+      detail = await post('/reportChannel/detailData', {
+        ...COMMON, dimension: 'gameName',
         startDate, endDate,
         pageNum: 1, pageSize: 100,
       });
@@ -147,7 +99,7 @@ async function fetchRange(startDate, endDate) {
     throw new Error(detailErr ? detailErr.message : 'EMPTY_DETAIL');
   }
   const chart = await fetchChart(startDate, endDate);
-  return { detail: detailList.map(toGameFormat), chart };
+  return { detail: detailList, chart };
 }
 
 async function main() {
