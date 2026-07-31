@@ -565,7 +565,7 @@ button { font-family: inherit; border: none; cursor: pointer; background: none; 
         </button>
         <div class="dropdown-menu" role="listbox" id="dd-date"></div>
       </div>
-      <div class="update-time"><span class="dot"></span>最后更新 <span data-bind="updated-at">15:35:12</span></div>
+      <div class="update-time"><span class="dot"></span>最后更新 <span data-bind="updated-at">--:--:--</span> · 每10分钟自动刷新</div>
       <button class="btn-refresh" id="btn-refresh" title="点击调用 API 重新拉数据">
         <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M13.5 8C13.5 11.04 11.04 13.5 8 13.5C4.96 13.5 2.5 11.04 2.5 8C2.5 4.96 4.96 2.5 8 2.5C10.02 2.5 11.83 3.53 12.87 5.06" stroke="white" stroke-width="1.6" stroke-linecap="round"/><path d="M12.9 1.5V5.1H9.3" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
         <span data-bind="refresh-text">刷新数据</span>
@@ -843,25 +843,17 @@ button { font-family: inherit; border: none; cursor: pointer; background: none; 
 </div>
 <script>
 /* ============ Dropdown & Filter Logic ============ */
-const GAMES = [
-  { id: '13874',  name: '神将传说-8月12日上线', tag: '在投 · 唯一' },
-  { id: '13341',  name: '上古王冠：先锋版',     tag: '历史' },
-  { id: '13616',  name: '时隙之旅-UR星灵湿婆上线', tag: '历史' },
-  { id: '13474',  name: '新不良人-九幽降臣上线',   tag: '历史' },
-  { id: '12785',  name: '拳魂觉醒-免费瓜分宝库',   tag: '历史' },
-  { id: '14122',  name: '御剑九宫',              tag: '历史' },
-  { id: 'all',    name: '全部游戏（汇总）',     tag: '全部' },
+/* 游戏列表：默认只有「全部游戏」，BI 快照加载后按有数据的游戏动态重建 */
+let GAMES = [
+  { id: 'all', name: '全部游戏（汇总）', tag: '全部' },
 ];
 const DATES = [
-  { id: 'today',   label: '今日',     range: ['2026-07-31','2026-07-31'] },
-  { id: 'yest',    label: '昨日',     range: ['2026-07-30','2026-07-30'] },
-  { id: 'd7',      label: '最近 7 日', range: ['2026-07-25','2026-07-31'] },
-  { id: 'd30',     label: '最近 30 日', range: ['2026-07-02','2026-07-31'] },
-  { id: 'wtd',     label: '本周（截止昨日）', range: ['2026-07-27','2026-07-30'] },
-  { id: 'mtd',     label: '本月（截止昨日）', range: ['2026-07-01','2026-07-30'] },
-  { id: 'custom',  label: '自定义范围…', range: null },
+  { id: 'today',   label: '今日',     range: null },
+  { id: 'd7',      label: '最近 7 日', range: null },
+  { id: 'd30',     label: '最近 30 日', range: null },
 ];
-const state = { game: 'all', date: 'today' };
+/* 日期范围由 sync 脚本在 data.json 里给出（跟随真实当天） */
+const state = { game: 'all', date: 'today', snapshot: null };
 
 function renderMenu(el, items, currentId, formatter) {
   el.innerHTML = items.map(it => {
@@ -890,7 +882,7 @@ function renderMenu(el, items, currentId, formatter) {
 }
 function updateLabels() {
   const g = GAMES.find(x => x.id === state.game) || GAMES[0];
-  const d = DATES.find(x => x.id === state.date) || DATES[2];
+  const d = DATES.find(x => x.id === state.date) || DATES[0];
   const dateText = d.range ? `${d.label} (${d.range[0].slice(5)} ~ ${d.range[1].slice(5)})` : d.label;
   document.querySelectorAll('[data-bind="game-label"]').forEach(n => n.textContent = g.name);
   document.querySelectorAll('[data-bind="game-label-c"]').forEach(n => n.textContent = g.name);
@@ -949,6 +941,8 @@ const COMMON = {
   channelTypeList: ['付费渠道'],
   deptList: ['社区市场部'],
 };
+/* 图表调色板（与设计稿一致） */
+const PALETTE = ['#22D3EE','#3B82F6','#A78BFA','#F59E0B','#F43F5E','#34D399'];
 function fmtN(v, n=0){ return (v==null||isNaN(v))?'-':Number(v).toLocaleString('zh-CN',{minimumFractionDigits:n,maximumFractionDigits:n}); }
 function fmtPct(v){ return v==null?'-':(v*100).toFixed(2)+'%'; }
 
@@ -966,17 +960,20 @@ async function apiPost(path, body) {
 }
 
 function setText(sel, txt){ const el=document.querySelector(sel); if(el) el.textContent=txt; }
-function updateKPIsFromDetail(list) {
-  // 取首行（汇总）作为默认值
-  const summary = list[0] || {};
-  // 找目标游戏行（如果有 name 匹配）
-  const target = state.game && state.game !== 'all'
-    ? list.find(x => String(x.gameId) === String(state.game)) || summary
-    : summary;
-  const data = target;
+function updateKPIsFromDetail(list, forcedData) {
+  // forcedData 优先（快照模式：all=求和行 / 单游戏=匹配行）；否则从 list 取
+  let data = forcedData;
+  if (!data) {
+    const summary = list[0] || {};
+    data = state.game && state.game !== 'all'
+      ? list.find(x => String(x.gameId) === String(state.game)) || summary
+      : summary;
+  }
   const cost   = data.tgRealCost || 0;
   const newU   = data.tgNewUserCount || 0;
   const price  = data.tgOriginPrice || 0;
+  const firstR = data.tgRechargeTotalAmount0d || 0;
+  const payAmt = data.tgPayAmount || 0;
   // 第 4 个 KPI 改为「首日R·厂商流水」
   const mfFirstR = data.tgMfRechargeTotalAmount0d || 0;
   // 第 5 个 KPI 改为「首日LTV·厂商流水」
@@ -1000,11 +997,13 @@ function updateKPIsFromDetail(list) {
       if (accent) rows[n].classList.add('accent'); else rows[n].classList.remove('accent');
     }
   };
-  setMetric(0, '首日LTV（单游戏）', '¥' + (data.tgLtv0 || 0).toFixed(2));
-  setMetric(1, '首日ARPPU',         '¥' + (data.tgaArppu0 || 0).toFixed(2));
-  setMetric(2, 'ARPU',              '¥' + (data.tgArpu || 0).toFixed(2));
-  setMetric(3, '首日LTV（厂商流水）', '¥' + (data.tgMfLtv0 || 0).toFixed(2));
-  setMetric(4, '付费率',            fmtPct(data.tgPayRate));
+  const y = v => (v != null && !isNaN(v)) ? '¥' + Number(v).toFixed(2) : '—';
+  const p = v => (v != null && !isNaN(v)) ? (Number(v)*100).toFixed(2) + '%' : '—';
+  setMetric(0, '首日LTV（单游戏）',   y(data.tgLtv0));
+  setMetric(1, '首日ARPPU',          y(data.tgaArppu0));
+  setMetric(2, 'ARPU',               y(data.tgArpu));
+  setMetric(3, '首日LTV（厂商流水）', y(data.tgMfLtv0));
+  setMetric(4, '付费率',             p(data.tgPayRate));
   // 留存
   if (data.tgRetention1 != null) {
     setMetric(5, '次留', fmtPct(data.tgRetention1), true);
@@ -1083,7 +1082,13 @@ function updateKPIsFromDetail(list) {
   setDist(4, '首日LTV 厂商流水', '¥'+mfLtv0.toFixed(2),                 '#F43F5E');
   setDist(5, '首日LTV',          '¥'+(data.tgLtv0||0).toFixed(2),       '#34D399');
   // 头部副标题更新
-  setText('.title-sub', `GAME AD ANALYTICS · ${state.game==='all'?'各游戏汇总（按游戏维度）':GAMES.find(g=>g.id===state.game).name} · ${DATES.find(d=>d.id===state.date).label}`);
+  const gName = state.game === 'all' ? '各游戏汇总（按游戏维度）' : ((GAMES.find(g => g.id === state.game) || {}).name || '');
+  const dName = (DATES.find(d => d.id === state.date) || DATES[0]).label;
+  setText('.title-sub', `GAME AD ANALYTICS · ${gName} · ${dName}`);
+  setText('[data-bind="main-sub"]', state.game === 'all' ? '各游戏汇总（按游戏维度）' : `${gName} · ${dName}`);
+  // 堆叠条：总消耗
+  setText('.stack-total', '总消耗 ¥' + fmtN(cost, 0));
+  setText('.stack-title', `${state.game==='all' ? '全游戏消耗分布' : gName + ' 消耗分布'} · ${dName}`);
 }
 
 function updateChartFromList(list) {
@@ -1162,41 +1167,155 @@ function updateChartFromList(list) {
   if (legendItems[1]) legendItems[1].textContent = '共 ' + fmtN(sumFirstR, 0);
 }
 
-async function fetchDashboardData() {
-  const g = GAMES.find(x => x.id === state.game) || GAMES[0];
-  const d = DATES.find(x => x.id === state.date) || DATES[0];
-  const range = d.range || ['2026-07-25','2026-07-31'];
-  // 维度：state.game === 'all' 时按 dateKey 汇总；否则按 gameName
-  const dimension = (state.game === 'all') ? 'dateKey' : 'gameName';
-  // 1) 拿详情（含每游戏/每日指标）
-  const detailBody = {
-    ...COMMON, dimension,
-    startDate: range[0], endDate: range[1],
-    pageNum: 1, pageSize: 60,
-  };
-  // gameName 维度：detailData 需要传 gameIds 数组（即使单选也要传）
-  if (dimension === 'gameName' && state.game !== 'all') {
-    detailBody.gameIds = [String(state.game)];
-  }
-  const detail = await apiPost('/reportChannel/detailData', detailBody);
-  const list = (detail && detail.list) || [];
-  // 2) 更新所有卡片
-  updateKPIsFromDetail(list);
-  // 3) 拿分日 chart（用 dateKey 维度展示趋势）
-  try {
-    const chartBody = {
-      ...COMMON, dimension: 'dateKey',
-      startDate: range[0], endDate: range[1],
-      summaryType: 3,
-      indicatorFields: ['tgRealCost','tgRechargeTotalAmount0d','tgNewUserCount'],
-    };
-    const chart = await apiPost('/reportChannel/chartData', chartBody);
-    updateChartFromList(chart || []);
-  } catch(e) { console.warn('chart 拉取失败', e); }
-  // 4) 更新时间戳
-  const now = new Date();
-  setText('[data-bind="updated-at"]', now.toLocaleTimeString('zh-CN',{hour12:false}));
+/* ============ 快照数据渲染（GitHub Actions 每 10 分钟生成 data.json） ============ */
+function sumGames(list) {
+  /* 全部游戏模式：各游戏指标求和（比率字段不求和，留给单游戏/汇总行展示） */
+  const summable = ['tgRealCost','tgNewUserCount','tgStartCount','tgPayCount','tgPayAmount',
+    'tgRechargeTotalAmount0d','tgNewUserPayCount','tgShow','tgClick','tgActiveCount',
+    'tgActivePayCount','tgActivePayAmount','tgMfPayAmount','tgMfPayCount','tgMfNewUserPayCount',
+    'tgMfRechargeTotalAmount0d','tgNewUserPayCountPrice','tgPayCountPrice'];
+  const s = {};
+  (list || []).forEach(g => {
+    const nm = String(g.gameName || '');
+    if (nm.includes('汇总') || nm.includes('合计') || nm.includes('总计')) return; // 跳过汇总行
+    summable.forEach(f => {
+      const v = parseFloat(g[f]);
+      if (!isNaN(v)) s[f] = (s[f] || 0) + v;
+    });
+  });
+  s.tgOriginPrice = s.tgNewUserCount ? s.tgRealCost / s.tgNewUserCount : 0;   // 单价=消耗/新增
+  s.tgStartPrice  = s.tgStartCount  ? s.tgRealCost / s.tgStartCount  : 0;
+  s.gameName = '全部游戏';
+  return s;
 }
+
+function getRangeData() {
+  const snap = state.snapshot || {};
+  const ranges = snap.ranges || {};
+  let key = state.date === 'today' ? 'today' : state.date === 'd30' ? 'last30d' : 'last7d';
+  if (!ranges[key] || (!ranges[key].detail.length && !ranges[key].chart.length)) {
+    key = ranges.last7d ? 'last7d' : (ranges.today ? 'today' : null);
+  }
+  const range = (key && ranges[key]) || { detail: [], chart: [] };
+  // 折线图最多展示最近 7 个分日点
+  const chart7 = (range.chart || []).slice(-7);
+  return { range, chart7, key };
+}
+
+function rebuildGameDropdown() {
+  const snap = state.snapshot || {};
+  const seen = {};
+  const games = [];
+  Object.values(snap.ranges || {}).forEach(r => {
+    (r.detail || []).forEach(g => {
+      const id = String(g.gameId);
+      const nm = String(g.gameName || '');
+      if (nm.includes('汇总') || nm.includes('合计')) return;
+      if (seen[id]) return;
+      seen[id] = 1;
+      if (parseFloat(g.tgRealCost) > 0) games.push({ id, name: nm, tag: '在投' });
+    });
+  });
+  games.sort((a, b) => a.name.localeCompare(b.name, 'zh'));
+  GAMES = [{ id: 'all', name: '全部游戏（汇总）', tag: '全部' }].concat(games);
+  const dd = document.getElementById('dd-game');
+  if (dd) renderMenu(dd, GAMES, state.game);
+}
+
+function applySnapshot(snap) {
+  state.snapshot = snap;
+  rebuildGameDropdown();
+  const { range, chart7, key } = getRangeData();
+  // 数据行：全部游戏 → 求和；单游戏 → 匹配行
+  const list = range.detail || [];
+  let data = null;
+  if (state.game === 'all') {
+    data = sumGames(list);
+  } else {
+    data = list.find(x => String(x.gameId) === String(state.game)) || null;
+  }
+  if (!data && list.length) data = sumGames(list); // 找不到该游戏（无消耗）→ 汇总兜底
+  if (data) updateKPIsFromDetail(list, data);
+  // 堆叠条：游戏消耗分布（top 6）
+  const active = (range.detail || []).filter(g => parseFloat(g.tgRealCost) > 0)
+    .sort((a, b) => b.tgRealCost - a.tgRealCost).slice(0, 6);
+  const totalCost = (range.detail || []).reduce((a, g) => a + (parseFloat(g.tgRealCost) || 0), 0);
+  const barEl = document.querySelector('.stack-bar');
+  const legendEl = document.querySelector('.stack-section .legend-row');
+  if (barEl && totalCost > 0) {
+    barEl.innerHTML = active.map(g => {
+      const w = ((g.tgRealCost / totalCost) * 100).toFixed(1);
+      const color = PALETTE[(active.indexOf(g)) % PALETTE.length];
+      return `<div class="stack-seg" style="width:${w}%; background:${color}" title="${g.gameName} ${w}%"></div>`;
+    }).join('');
+    if (legendEl) {
+      legendEl.innerHTML = active.map(g => {
+        const w = ((g.tgRealCost / totalCost) * 100).toFixed(1);
+        const color = PALETTE[active.indexOf(g) % PALETTE.length];
+        return `<span class="legend-item"><span class="dot" style="background:${color}"></span>${g.gameName}<span class="pct">${w}%</span></span>`;
+      }).join('');
+    }
+  }
+  // 折线图
+  if (chart7.length) updateChartFromList(chart7);
+  // 更新时间戳（data.json 的同步时间）
+  const upd = snap.updatedAt ? new Date(snap.updatedAt) : null;
+  if (upd && !isNaN(upd)) {
+    setText('[data-bind="updated-at"]', upd.toLocaleTimeString('zh-CN', { hour12: false }));
+  } else {
+    setText('[data-bind="updated-at"]', new Date().toLocaleTimeString('zh-CN', { hour12: false }));
+  }
+  console.log('[snapshot]', key, 'games:', list.length, 'chart:', chart7.length, 'updatedAt:', snap.updatedAt);
+}
+
+/* ============ 数据获取：优先同源 data.json（自动同步），失败回退直连 BI ============ */
+async function fetchDashboardData() {
+  // 1) 优先读 data.json（GitHub Actions 每 10 分钟生成，同源无 CORS）
+  try {
+    const res = await fetch('./data.json?t=' + Date.now(), { cache: 'no-store' });
+    if (res.ok) {
+      const snap = await res.json();
+      if (snap && snap.ranges) {
+        try {
+          applySnapshot(snap);
+          console.log('[snapshot-ok]');
+          return;
+        } catch (e) {
+          console.error('[snapshot-fail]', e && e.message);
+        }
+      }
+    }
+  } catch (e) { console.error('[snapshot-fetch-fail]', e && e.message); /* 继续走直连回退 */ }
+
+  // 2) 回退：直连 BI（浏览器已登录 mailiang.4399dev.com 的场景）
+  try {
+    const d = DATES.find(x => x.id === state.date) || DATES[0];
+    const now = new Date();
+    const fmt = dt => `${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,'0')}-${String(dt.getDate()).padStart(2,'0')}`;
+    const end = fmt(now);
+    const start = state.date === 'today' ? end
+      : state.date === 'd30' ? fmt(new Date(now.getTime() - 29*86400000))
+      : fmt(new Date(now.getTime() - 6*86400000));
+    const dimension = (state.game === 'all') ? 'dateKey' : 'gameName';
+    const detailBody = { ...COMMON, dimension, startDate: start, endDate: end, pageNum: 1, pageSize: 60 };
+    if (dimension === 'gameName' && state.game !== 'all') detailBody.gameIds = [String(state.game)];
+    const detail = await apiPost('/reportChannel/detailData', detailBody);
+    const list = (detail && detail.list) || [];
+    updateKPIsFromDetail(list);
+    try {
+      const chartBody = { ...COMMON, dimension: 'dateKey', startDate: start, endDate: end, summaryType: 3,
+        indicatorFields: ['tgRealCost','tgRechargeTotalAmount0d','tgNewUserCount'] };
+      const chart = await apiPost('/reportChannel/chartData', chartBody);
+      if (chart && chart.length) updateChartFromList(chart.slice(-7));
+    } catch (e) { console.warn('chart 拉取失败', e); }
+    setText('[data-bind="updated-at"]', new Date().toLocaleTimeString('zh-CN', { hour12: false }));
+  } catch (e) {
+    console.warn('BI 未连通，保留当前展示数据：', e.message);
+  }
+}
+
+/* 每 10 分钟自动刷新（600,000 ms） */
+setInterval(() => { fetchDashboardData(); }, 600000);
 document.addEventListener('DOMContentLoaded', init);
 </script>
 </body>
