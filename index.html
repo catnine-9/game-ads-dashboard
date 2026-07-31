@@ -1286,26 +1286,21 @@ function applySnapshot(snap) {
   console.log('[snapshot]', key, 'games:', list.length, 'chart:', chart7.length, 'updatedAt:', snap.updatedAt);
 }
 
-/* ============ 数据获取：优先同源 data.json（自动同步），失败回退直连 BI ============ */
+/* ============ 数据获取：快照兜底 + 实时直连 BI（CORS 已放行） ============ */
 async function fetchDashboardData() {
-  // 1) 优先读 data.json（GitHub Actions 每 10 分钟生成，同源无 CORS）
+  // 1) 快照兜底渲染（data.json 来自 GitHub Actions，先展示）
   try {
     const res = await fetch('./data.json?t=' + Date.now(), { cache: 'no-store' });
     if (res.ok) {
       const snap = await res.json();
       if (snap && snap.ranges) {
-        try {
-          applySnapshot(snap);
-          console.log('[snapshot-ok]');
-          return;
-        } catch (e) {
-          console.error('[snapshot-fail]', e && e.message);
-        }
+        try { applySnapshot(snap); console.log('[snapshot-ok]'); }
+        catch (e) { console.error('[snapshot-fail]', e && e.message); }
       }
     }
-  } catch (e) { console.error('[snapshot-fetch-fail]', e && e.message); /* 继续走直连回退 */ }
+  } catch (e) { console.error('[snapshot-fetch-fail]', e && e.message); }
 
-  // 2) 回退：直连 BI（浏览器已登录 mailiang.4399dev.com 的场景）
+  // 2) 实时直连 BI（浏览器已登录 mailiang.4399dev.com + CORS 放行时覆盖为实时数据；失败保留快照）
   try {
     const d = DATES.find(x => x.id === state.date) || DATES[0];
     const now = new Date();
