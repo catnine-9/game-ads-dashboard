@@ -147,9 +147,27 @@ async function main() {
     }
     return out;
   };
+  /* 补全缺失字段：BI 不返回 tgMfRechargeTotalAmount0d / tgMfPayAmount 等厂商流水金额字段，但有 tgMfRoi0，用它和 tgRealCost 反算 */
+  const fillMissing = (row) => {
+    const r = { ...row };
+    if (r.tgMfRechargeTotalAmount0d == null && r.tgMfRoi0 != null && r.tgRealCost > 0) {
+      r.tgMfRechargeTotalAmount0d = r.tgMfRoi0 * r.tgRealCost;
+    }
+    if (r.tgMfPayAmount == null && r.tgMfRechargeTotalAmount0d != null) {
+      r.tgMfPayAmount = r.tgMfRechargeTotalAmount0d;
+    }
+    if (r.tgMfNewUserPayCount == null && r.tgMfPayAmount != null && r.tgPayAmount > 0 && r.tgNewUserPayCount > 0) {
+      const payConv = r.tgNewUserPayCount / r.tgPayAmount;
+      r.tgMfNewUserPayCount = r.tgMfPayAmount * payConv;
+    }
+    if (r.tgMfPayCount == null && r.tgMfNewUserPayCount != null) {
+      r.tgMfPayCount = r.tgMfNewUserPayCount;
+    }
+    return r;
+  };
   const cleanRange = (r) => ({
-    detail: (r.detail || []).map(cleanRow),
-    chart: (r.chart || []).map(cleanRow),
+    detail: (r.detail || []).map(row => fillMissing(cleanRow(row))),
+    chart: (r.chart || []).map(row => fillMissing(cleanRow(row))),
   });
   out.ranges = Object.fromEntries(Object.entries(out.ranges).map(([k, r]) => [k, cleanRange(r)]));
   fs.writeFileSync('data.json', JSON.stringify(out, null, 1));
