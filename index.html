@@ -109,6 +109,8 @@ button { font-family: inherit; border: none; cursor: pointer; background: none; 
 /* ============ Dropdown ============ */
 
 .dropdown { position: relative; display: inline-flex; }
+.date-input { padding: 4px 8px; border-radius: 4px; background: rgba(10,24,56,0.6); border: 1px solid rgba(46,167,255,0.3); color: #fff; font-size: 12px; cursor: pointer; }
+.date-input::-webkit-calendar-picker-indicator { filter: invert(1); }
 
 .dropdown-trigger { display: inline-flex; align-items: center; gap: 6px; }
 
@@ -1118,18 +1120,15 @@ button { font-family: inherit; border: none; cursor: pointer; background: none; 
 
       </div>
 
-      <div class="dropdown" data-key="date">
-
-        <button class="pill dropdown-trigger" type="button" aria-haspopup="listbox" aria-expanded="false">
-
-          <span class="label" data-bind="date-label">今日 (07-31)</span>
-
-          <span class="arrow">▾</span>
-
-        </button>
-
+      <div class="dropdown" data-key="date" style="position:relative">
+        <div style="display:flex;align-items:center;gap:6px">
+          <button class="pill dropdown-trigger" type="button" aria-haspopup="listbox" aria-expanded="false">
+            <span class="label" data-bind="date-label">今日</span>
+            <span class="arrow">▾</span>
+          </button>
+          <input type="date" id="datePicker" class="date-input" title="选具体日期"/>
+        </div>
         <div class="dropdown-menu" role="listbox" id="dd-date"></div>
-
       </div>
 
       <div class="update-time"><span class="dot"></span>最后更新 <span data-bind="updated-at">--:--:--</span> · 每10分钟自动刷新</div>
@@ -1900,7 +1899,7 @@ async function apiPost(path, body) {
 
     method: 'POST',
 
-    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json, text/plain, */*', 'orgId': '43' },
 
     credentials: 'include',     // 带 BI 域 cookie
 
@@ -2214,9 +2213,14 @@ function updateChartFromList(list) {
 
   if (!svg) return;
 
-  const costPath = svg.querySelector('path[d^="M"][stroke="#22D3EE"]') || svg.children[4];
-
-  const rPath = svg.querySelector('path[d^="M"][stroke="#3B82F6"]') || svg.children[5];
+  // 用属性遍历选 path（避免 querySelector 兼容性 + 颜色匹配问题）
+  const paths = svg.querySelectorAll('path');
+  let costPath = null, rPath = null;
+  paths.forEach(p => {
+    const stroke = p.getAttribute('stroke') || '';
+    if (stroke.indexOf('22D3EE') >= 0) costPath = p;
+    if (stroke.indexOf('3B82F6') >= 0) rPath = p;
+  });
 
   if (costPath) costPath.setAttribute('d', 'M ' + costPts.map(p=>p.join(' ')).join(' L '));
 
@@ -2422,7 +2426,12 @@ function getRangeData() {
 
   const ranges = snap.ranges || {};
 
-  let key = state.date === 'today' ? 'today' : state.date === 'd30' ? 'last30d' : 'last7d';
+  let key;
+if (/^\d{4}-\d{2}-\d{2}$/.test(state.date)) {
+  key = 'today';  // 自定义日期走实时 BI（不读 snap）
+} else {
+  key = state.date === 'today' ? 'today' : state.date === 'd30' ? 'last30d' : 'last7d';
+}
 
   if (!ranges[key] || (!ranges[key].detail.length && !ranges[key].chart.length)) {
 
@@ -2614,11 +2623,16 @@ async function fetchDashboardData() {
 
     const end = fmt(now);
 
-    const start = state.date === 'today' ? end
-
-      : state.date === 'd30' ? fmt(new Date(now.getTime() - 29*86400000))
-
-      : fmt(new Date(now.getTime() - 6*86400000));
+    let start;
+    if (/^\d{4}-\d{2}-\d{2}$/.test(state.date)) {
+      start = state.date;
+    } else if (state.date === 'today') {
+      start = end;
+    } else if (state.date === 'd30') {
+      start = fmt(new Date(now.getTime() - 29*86400000));
+    } else {
+      start = fmt(new Date(now.getTime() - 6*86400000));
+    }
 
     const dimension = (state.game === 'all') ? 'dateKey' : 'gameName';
 
@@ -2640,7 +2654,7 @@ async function fetchDashboardData() {
 
       const chart = await apiPost('/reportChannel/chartData', chartBody);
 
-      if (chart && chart.length) updateChartFromList(chart.slice(-7));
+      if (chart && chart.length) updateChartFromList(chart);
 
     } catch (e) { console.warn('chart 拉取失败', e); }
 
@@ -2685,6 +2699,20 @@ async function __autoRefreshCheck() {
   } catch (e) {}
 }
 setTimeout(__recordDataUpdate, 3000);
+
+/* ============ 日历日期选择 ============ */
+document.addEventListener('DOMContentLoaded', () => {
+  const dp = document.getElementById('datePicker');
+  if (!dp) return;
+  dp.max = new Date().toISOString().slice(0, 10); // 不能选未来
+  dp.addEventListener('change', () => {
+    if (!dp.value) return;
+    state.date = dp.value;
+    // 触发重新渲染
+    if (state.snapshot) applySnapshot(state.snapshot);
+    fetchDashboardData();
+  });
+});
 setInterval(__autoRefreshCheck, 5 * 60 * 1000);
 setTimeout(() => window.location.reload(), 30 * 60 * 1000);
 
