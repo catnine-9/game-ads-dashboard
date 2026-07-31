@@ -1951,7 +1951,7 @@ function updateKPIsFromDetail(list, forcedData) {
 
   // 第 4 个 KPI 改为「首日R·厂商流水」
 
-  const mfFirstR = data.tgMfRoi0 != null ? (data.tgMfRoi0 * 100).toFixed(2) + '%' : '—';
+  const mfFirstR = data.tgMfRoi0 != null && !isNaN(data.tgMfRoi0) ? (data.tgMfRoi0 * 100).toFixed(2) + '%' : '—';
 
   // 第 5 个 KPI 改为「首日LTV·厂商流水」
 
@@ -2400,11 +2400,17 @@ function sumGames(list) {
 
   s.tgRoi0     = s.tgRealCost ? s.tgRechargeTotalAmount0d / s.tgRealCost : 0;          // 首日ROI
 
-  s.tgMfRoi0   = s.tgRealCost ? s.tgMfRechargeTotalAmount0d / s.tgRealCost : 0;      // 首日ROI厂商流水
-
-  s.tgLtv0     = s.tgNewUserCount ? s.tgPayAmount / s.tgNewUserCount : 0;             // 首日LTV
-
-  s.tgMfLtv0   = s.tgNewUserCount ? s.tgMfRechargeTotalAmount0d / s.tgNewUserCount : 0; // 首日LTV厂商流水
+  /* tgMfRoi0 / tgMfLtv0 加权平均（按新增量/消耗加权），保留 BI 原值 */
+  let mfRoiSum=0, mfRoiWeight=0, mfLtvSum=0, mfLtvWeight=0;
+  (list || []).forEach(g => {
+    const vR = parseFloat(g.tgMfRoi0), wR = parseFloat(g.tgRealCost);
+    if (!isNaN(vR) && !isNaN(wR) && wR > 0) { mfRoiSum += vR * wR; mfRoiWeight += wR; }
+    const vL = parseFloat(g.tgMfLtv0), wL = parseFloat(g.tgNewUserCount);
+    if (!isNaN(vL) && !isNaN(wL) && wL > 0) { mfLtvSum += vL * wL; mfLtvWeight += wL; }
+  });
+  s.tgMfRoi0   = mfRoiWeight > 0 ? mfRoiSum / mfRoiWeight : 0;                          // 首日ROI厂商流水（加权平均）
+  s.tgMfLtv0   = mfLtvWeight > 0 ? mfLtvSum / mfLtvWeight : 0;                          // 首日LTV厂商流水（加权平均）
+  s.tgLtv0     = s.tgNewUserCount ? s.tgPayAmount / s.tgNewUserCount : 0;             // 首日LTV（补回）
 
   s.tgArpu     = s.tgNewUserCount ? s.tgPayAmount / s.tgNewUserCount : 0;             // ARPU ≈ LTV
 
