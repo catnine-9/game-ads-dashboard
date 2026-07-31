@@ -1,0 +1,23 @@
+name: auto-trigger-sync
+
+# 独立 cron 工作流：每 10 分钟触发 sync-data 工作流
+# （主 sync-data.yml 的 cron schedule 偶尔不触发，加这个保证实时性）
+
+on:
+  schedule:
+    - cron: '*/10 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  trigger:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 触发 sync 工作流
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          curl -X POST             -H "Authorization: Bearer $GH_TOKEN"             -H "Accept: application/vnd.github.v3+json"             https://api.github.com/repos/${{ github.repository }}/actions/workflows/sync-data.yml/dispatches             -d '{"ref": "main"}'
+          echo "已触发 sync-data workflow"
