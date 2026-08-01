@@ -1,12 +1,12 @@
 name: auto-trigger-sync
 
 # 独立 cron 工作流：错峰触发 sync-data 工作流
-#（主 sync-data.yml 的 cron 偶发失效，加这个做兜底）
+#（用 GH_PAT 触发，GITHUB_TOKEN 默认无 actions:write 权限会 403）
 
 on:
   schedule:
-    - cron: '*/15 * * * *'   # 每 15 分钟（比 */10 触发更稳）
-    - cron: '5,20,35,50 * * * *'  # 备用错峰触发
+    - cron: '*/15 * * * *'
+    - cron: '5,20,35,50 * * * *'
   workflow_dispatch:
 
 permissions:
@@ -18,7 +18,15 @@ jobs:
     steps:
       - name: 触发 sync 工作流
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_PAT: \${{ secrets.GH_PAT }}
         run: |
-          curl -X POST             -H "Authorization: Bearer $GH_TOKEN"             -H "Accept: application/vnd.github.v3+json"             https://api.github.com/repos/${{ github.repository }}/actions/workflows/sync-data.yml/dispatches             -d '{"ref": "main"}'
-          echo "已触发 sync-data workflow"
+          HTTP_CODE=\$(curl -s -o /tmp/dispatch_resp -w "%{http_code}" -X POST \
+            -H "Authorization: Bearer \$GH_PAT" \
+            -H "Accept: application/vnd.github.v3+json" \
+            https://api.github.com/repos/\${{ github.repository }}/actions/workflows/sync-data.yml/dispatches \
+            -d '{"ref": "main"}')
+          echo "dispatch HTTP: \$HTTP_CODE"
+          if [ "\$HTTP_CODE" != "204" ]; then
+            cat /tmp/dispatch_resp
+            exit 1
+          fi
