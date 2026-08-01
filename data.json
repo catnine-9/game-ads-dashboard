@@ -1,38 +1,40 @@
 {
- "updatedAt": "2026-08-01T15:51:33.549Z",
+ "updatedAt": "2026-08-01T16:01:44.476Z",
  "ranges": {
   "today": {
    "detail": [
     {
      "tgNewUserCount": 273,
-     "tgActiveConvertRate": 0.08866515102305944,
-     "tgMfRoi": 0.09955620643322362,
-     "tgPayCountPrice": 82.86776179578125,
-     "tgRealCost": 10607.07350986,
-     "tgaArppu0": 16.138867924528302,
-     "tgRoi": 0.08064052721091114,
-     "tgShowCost": 67.30846385128403,
+     "tgActiveConvertRate": 0.08860759493670886,
+     "tgMfRoi": 0.10041224243676738,
+     "tgPayCountPrice": 82.29639823726359,
+     "tgRealCost": 10616.235372607003,
+     "tgaArppu0": 16.32754716981132,
+     "tgRetention1": 0,
+     "tgRoi": 0.08151288753759947,
+     "tgShowCost": 67.28718347397879,
      "tgPayCount": 53,
      "gameName": "神将传说-8月12日上线",
-     "tgLtv0": 3.1331,
+     "tgLtv0": 3.1698,
      "tgPayRate": 0.19413919413919414,
      "dateKey": "20260801-20260801",
-     "tgOriginPrice": 38.8537491203663,
+     "tgOriginPrice": 38.88730905716851,
      "tgMfRechargeConvertRate": 0.19413919413919414,
      "tgRechargeConvertRate": 0.19413919413919414,
-     "tgMfLtv0": 3.8681,
+     "tgMfLtv0": 3.9047,
      "gameId": "13874",
      "tgActiveUserCountRate": 0.0695970695970696,
-     "tgStartCount": 300,
-     "tgMfRoi0": 0.09955620643322362,
-     "tgStartPrice": 35.356911699533335,
-     "tgNewUserPayCountPrice": 200.1334624501887,
-     "tgRechargeTotalAmount0d": 855.36,
-     "tgClickRate": 0.019538165734918046,
+     "tgStartCount": 301,
+     "tgMfRoi0": 0.10041224243676738,
+     "tgStartPrice": 35.269884958827255,
+     "tgNewUserPayCountPrice": 200.3063277850378,
+     "tgRechargeTotalAmount0d": 865.36,
+     "tgClickRate": 0.01952780858817937,
      "tgNewUserPayCount": 53,
-     "tgRoi0": 0.08064052721091114,
-     "tgArpu": 3.1331,
-     "tgPayAmount": 855.36
+     "tgRoi0": 0.08151288753759947,
+     "tgArpu": 3.1698,
+     "tgRechargeUserRetain1": null,
+     "tgPayAmount": 865.36
     },
     {
      "tgNewUserCount": 0,
@@ -40,6 +42,7 @@
      "tgPayCountPrice": null,
      "tgRealCost": 0,
      "tgaArppu0": null,
+     "tgRetention1": null,
      "tgRoi": 0,
      "tgShowCost": 0,
      "tgPayCount": 0,
@@ -62,6 +65,7 @@
      "tgNewUserPayCount": 0,
      "tgRoi0": null,
      "tgArpu": 0,
+     "tgRechargeUserRetain1": null,
      "tgPayAmount": 0
     },
     {
@@ -71,6 +75,7 @@
      "tgPayCountPrice": null,
      "tgRealCost": 0,
      "tgaArppu0": null,
+     "tgRetention1": 0,
      "tgRoi": 0,
      "tgShowCost": 0,
      "tgPayCount": 0,
@@ -93,6 +98,7 @@
      "tgNewUserPayCount": 0,
      "tgRoi0": null,
      "tgArpu": 0,
+     "tgRechargeUserRetain1": null,
      "tgPayAmount": 0
     },
     {
@@ -101,6 +107,7 @@
      "tgPayCountPrice": null,
      "tgRealCost": 0,
      "tgaArppu0": null,
+     "tgRetention1": null,
      "tgRoi": 0,
      "tgShowCost": 0,
      "tgPayCount": 0,
@@ -122,6 +129,7 @@
      "tgNewUserPayCount": 0,
      "tgRoi0": null,
      "tgArpu": 0,
+     "tgRechargeUserRetain1": null,
      "tgPayAmount": 0
     },
     {
@@ -130,6 +138,7 @@
      "tgPayCountPrice": null,
      "tgRealCost": 0,
      "tgaArppu0": null,
+     "tgRetention1": null,
      "tgRoi": 0,
      "tgShowCost": 0,
      "tgPayCount": 0,
@@ -152,6 +161,7 @@
      "tgNewUserPayCount": 0,
      "tgRoi0": null,
      "tgArpu": 0,
+     "tgRechargeUserRetain1": null,
      "tgPayAmount": 0
     },
     {
@@ -160,6 +170,7 @@
      "tgPayCountPrice": null,
      "tgRealCost": 0,
      "tgaArppu0": null,
+     "tgRetention1": null,
      "tgRoi": 0,
      "tgShowCost": 0,
      "tgPayCount": 0,
@@ -182,6 +193,7 @@
      "tgNewUserPayCount": 0,
      "tgRoi0": null,
      "tgArpu": 0,
+     "tgRechargeUserRetain1": null,
      "tgPayAmount": 0
     },
     {
@@ -190,6 +202,7 @@
      "tgPayCountPrice": null,
      "tgRealCost": 0,
      "tgaArppu0": null,
+     "tgRetention1": null,
      "tgRoi": 0,
      "tgShowCost": 0,
      "tgPayCount": 0,
@@ -212,6 +225,7 @@
      "tgNewUserPayCount": 0,
      "tgRoi0": null,
      "tgArpu": 0,
+     "tgRechargeUserRetain1": null,
      "tgPayAmount": 0
     },
     {
@@ -220,6 +234,7 @@
      "tgPayCountPrice": null,
      "tgRealCost": 0,
      "tgaArppu0": null,
+     "tgRetention1": null,
      "tgRoi": 0,
      "tgShowCost": 0,
      "tgPayCount": 0,
@@ -242,6 +257,7 @@
      "tgNewUserPayCount": 0,
      "tgRoi0": null,
      "tgArpu": 0,
+     "tgRechargeUserRetain1": null,
      "tgPayAmount": 0
     },
     {
@@ -250,6 +266,7 @@
      "tgPayCountPrice": null,
      "tgRealCost": 0,
      "tgaArppu0": null,
+     "tgRetention1": null,
      "tgRoi": 0,
      "tgShowCost": 0,
      "tgPayCount": 0,
@@ -272,6 +289,7 @@
      "tgNewUserPayCount": 0,
      "tgRoi0": null,
      "tgArpu": 0,
+     "tgRechargeUserRetain1": null,
      "tgPayAmount": 0
     },
     {
@@ -280,6 +298,7 @@
      "tgPayCountPrice": null,
      "tgRealCost": 0,
      "tgaArppu0": null,
+     "tgRetention1": null,
      "tgRoi": 0,
      "tgShowCost": 0,
      "tgPayCount": 0,
@@ -302,6 +321,7 @@
      "tgNewUserPayCount": 0,
      "tgRoi0": null,
      "tgArpu": 0,
+     "tgRechargeUserRetain1": null,
      "tgPayAmount": 0
     },
     {
@@ -311,6 +331,7 @@
      "tgPayCountPrice": null,
      "tgRealCost": 0,
      "tgaArppu0": null,
+     "tgRetention1": 0,
      "tgRoi": 0,
      "tgShowCost": 0,
      "tgPayCount": 0,
@@ -333,6 +354,7 @@
      "tgNewUserPayCount": 0,
      "tgRoi0": null,
      "tgArpu": 0,
+     "tgRechargeUserRetain1": null,
      "tgPayAmount": 0
     },
     {
@@ -341,6 +363,7 @@
      "tgPayCountPrice": null,
      "tgRealCost": 0,
      "tgaArppu0": null,
+     "tgRetention1": null,
      "tgRoi": 0,
      "tgShowCost": 0,
      "tgPayCount": 0,
@@ -363,6 +386,7 @@
      "tgNewUserPayCount": 0,
      "tgRoi0": null,
      "tgArpu": 0,
+     "tgRechargeUserRetain1": null,
      "tgPayAmount": 0
     },
     {
@@ -371,6 +395,7 @@
      "tgPayCountPrice": null,
      "tgRealCost": 0,
      "tgaArppu0": null,
+     "tgRetention1": 0,
      "tgRoi": 0,
      "tgShowCost": 0,
      "tgPayCount": 0,
@@ -393,6 +418,7 @@
      "tgNewUserPayCount": 0,
      "tgRoi0": null,
      "tgArpu": 0,
+     "tgRechargeUserRetain1": null,
      "tgPayAmount": 0
     },
     {
@@ -401,6 +427,7 @@
      "tgPayCountPrice": null,
      "tgRealCost": 0,
      "tgaArppu0": null,
+     "tgRetention1": null,
      "tgRoi": 0,
      "tgShowCost": 0,
      "tgPayCount": 0,
@@ -423,6 +450,7 @@
      "tgNewUserPayCount": 0,
      "tgRoi0": null,
      "tgArpu": 0,
+     "tgRechargeUserRetain1": null,
      "tgPayAmount": 0
     },
     {
@@ -431,6 +459,7 @@
      "tgPayCountPrice": null,
      "tgRealCost": 0,
      "tgaArppu0": null,
+     "tgRetention1": null,
      "tgRoi": 0,
      "tgShowCost": 0,
      "tgPayCount": 0,
@@ -453,6 +482,7 @@
      "tgNewUserPayCount": 0,
      "tgRoi0": null,
      "tgArpu": 0,
+     "tgRechargeUserRetain1": null,
      "tgPayAmount": 0
     },
     {
@@ -461,6 +491,7 @@
      "tgPayCountPrice": null,
      "tgRealCost": 0,
      "tgaArppu0": null,
+     "tgRetention1": null,
      "tgRoi": 0,
      "tgShowCost": 0,
      "tgPayCount": 0,
@@ -483,6 +514,7 @@
      "tgNewUserPayCount": 0,
      "tgRoi0": null,
      "tgArpu": 0,
+     "tgRechargeUserRetain1": null,
      "tgPayAmount": 0
     },
     {
@@ -491,6 +523,7 @@
      "tgPayCountPrice": null,
      "tgRealCost": 0,
      "tgaArppu0": null,
+     "tgRetention1": null,
      "tgRoi": 0,
      "tgShowCost": 0,
      "tgPayCount": 0,
@@ -513,6 +546,7 @@
      "tgNewUserPayCount": 0,
      "tgRoi0": null,
      "tgArpu": 0,
+     "tgRechargeUserRetain1": null,
      "tgPayAmount": 0
     },
     {
@@ -522,6 +556,7 @@
      "tgPayCountPrice": null,
      "tgRealCost": 0,
      "tgaArppu0": null,
+     "tgRetention1": 0,
      "tgRoi": 0,
      "tgShowCost": 0,
      "tgPayCount": 0,
@@ -544,6 +579,7 @@
      "tgNewUserPayCount": 0,
      "tgRoi0": null,
      "tgArpu": 0,
+     "tgRechargeUserRetain1": null,
      "tgPayAmount": 0
     },
     {
@@ -552,6 +588,7 @@
      "tgPayCountPrice": null,
      "tgRealCost": 0,
      "tgaArppu0": null,
+     "tgRetention1": 0,
      "tgRoi": 0,
      "tgShowCost": 0,
      "tgPayCount": 0,
@@ -574,6 +611,7 @@
      "tgNewUserPayCount": 0,
      "tgRoi0": null,
      "tgArpu": 0,
+     "tgRechargeUserRetain1": null,
      "tgPayAmount": 0
     },
     {
@@ -582,6 +620,7 @@
      "tgPayCountPrice": null,
      "tgRealCost": 0,
      "tgaArppu0": null,
+     "tgRetention1": null,
      "tgRoi": 0,
      "tgShowCost": 0,
      "tgPayCount": 0,
@@ -604,6 +643,7 @@
      "tgNewUserPayCount": 0,
      "tgRoi0": null,
      "tgArpu": 0,
+     "tgRechargeUserRetain1": null,
      "tgPayAmount": 0
     },
     {
@@ -612,6 +652,7 @@
      "tgPayCountPrice": null,
      "tgRealCost": 0,
      "tgaArppu0": null,
+     "tgRetention1": null,
      "tgRoi": 0,
      "tgShowCost": 0,
      "tgPayCount": 0,
@@ -634,6 +675,7 @@
      "tgNewUserPayCount": 0,
      "tgRoi0": null,
      "tgArpu": 0,
+     "tgRechargeUserRetain1": null,
      "tgPayAmount": 0
     },
     {
@@ -643,6 +685,7 @@
      "tgPayCountPrice": null,
      "tgRealCost": 0,
      "tgaArppu0": null,
+     "tgRetention1": 0,
      "tgRoi": 0,
      "tgShowCost": 0,
      "tgPayCount": 0,
@@ -665,6 +708,7 @@
      "tgNewUserPayCount": 0,
      "tgRoi0": null,
      "tgArpu": 0,
+     "tgRechargeUserRetain1": null,
      "tgPayAmount": 0
     },
     {
@@ -673,6 +717,7 @@
      "tgPayCountPrice": null,
      "tgRealCost": 0,
      "tgaArppu0": null,
+     "tgRetention1": null,
      "tgRoi": 0,
      "tgShowCost": 0,
      "tgPayCount": 0,
@@ -695,14 +740,15 @@
      "tgNewUserPayCount": 0,
      "tgRoi0": null,
      "tgArpu": 0,
+     "tgRechargeUserRetain1": null,
      "tgPayAmount": 0
     }
    ],
    "chart": [
     {
      "dateKey": "20260801",
-     "tgRealCost": 10607.073509860002,
-     "tgRechargeTotalAmount0d": 855.36,
+     "tgRealCost": 10616.235372607,
+     "tgRechargeTotalAmount0d": 865.36,
      "tgNewUserCount": 290
     }
    ]
@@ -711,37 +757,39 @@
    "detail": [
     {
      "tgNewUserCount": 1978,
-     "tgActiveConvertRate": 0.08391311725776344,
-     "tgMfRoi": 0.18935697468760565,
-     "tgPayCountPrice": 68.89684400487758,
-     "tgRealCost": 87223.40451017502,
-     "tgaArppu0": 15.018766066838047,
-     "tgRetention1": 0.1724340175953079,
-     "tgRoi": 0.13850961296277609,
-     "tgShowCost": 76.97502646204484,
+     "tgActiveConvertRate": 0.08390599813353694,
+     "tgMfRoi": 0.18945172298782642,
+     "tgPayCountPrice": 68.84969721619731,
+     "tgRealCost": 87232.566372922,
+     "tgaArppu0": 15.044473007712083,
+     "tgRetention1": 0.1486349848331648,
+     "tgRoi": 0.13860970166015057,
+     "tgShowCost": 76.97047746491253,
      "tgPayCount": 429,
      "gameName": "神将传说-8月12日上线",
-     "tgLtv0": 2.9536,
+     "tgLtv0": 2.9586,
      "tgPayRate": 0.21688574317492418,
      "dateKey": "20260726-20260801",
-     "tgOriginPrice": 44.096766688662804,
+     "tgOriginPrice": 44.10139857073913,
      "tgMfRechargeConvertRate": 0.19767441860465115,
      "tgRechargeConvertRate": 0.19666329625884732,
-     "tgMfLtv0": 3.8664,
+     "tgMfLtv0": 3.8714,
      "gameId": "13874",
      "tgActiveUserCountRate": 0.06167846309403438,
-     "tgStartCount": 2228,
-     "tgMfRoi0": 0.0876805949383442,
-     "tgStartPrice": 39.14874529182003,
-     "tgNewUserPayCountPrice": 224.22469025751934,
-     "tgRechargeTotalAmount0d": 5842.3,
-     "tgClickRate": 0.020802390527552225,
+     "tgStartCount": 2229,
+     "tgMfRoi0": 0.08778602210627005,
+     "tgMfRoi7": 0.26780528029378875,
+     "tgStartPrice": 39.135292226524,
+     "tgNewUserPayCountPrice": 224.2482426039126,
+     "tgRechargeTotalAmount0d": 5852.3,
+     "tgClickRate": 0.020800741181920455,
      "tgNewUserPayCount": 389,
-     "tgRoi0": 0.06698087552084106,
-     "tgArpu": 4.3132,
+     "tgRoi0": 0.06708847673907967,
+     "tgArpu": 4.3167,
      "tgRechargeUserRetain1": 0.4642857142857143,
-     "tgRechargeUserRetain2": 0.4259927797833935,
-     "tgPayAmount": 12081.28
+     "tgRechargeUserRetain2": 0.35119047619047616,
+     "tgRoi7": 0.1703615736035766,
+     "tgPayAmount": 12091.28
     },
     {
      "tgNewUserCount": 52,
@@ -750,7 +798,7 @@
      "tgPayCountPrice": 9.882020604864406,
      "tgRealCost": 583.039215687,
      "tgaArppu0": 8.710833333333333,
-     "tgRetention1": 0.3695652173913043,
+     "tgRetention1": 0.3269230769230769,
      "tgRoi": 0.32538120060494236,
      "tgShowCost": 105.60391517605507,
      "tgPayCount": 14,
@@ -766,6 +814,7 @@
      "tgActiveUserCountRate": 0.2692307692307692,
      "tgStartCount": 63,
      "tgMfRoi0": 0.20401715150470662,
+     "tgMfRoi7": null,
      "tgStartPrice": 9.254590725190477,
      "tgNewUserPayCountPrice": 48.58660130725,
      "tgRechargeTotalAmount0d": 104.53,
@@ -774,7 +823,8 @@
      "tgRoi0": 0.17928468135171907,
      "tgArpu": 1.9761,
      "tgRechargeUserRetain1": 0.75,
-     "tgRechargeUserRetain2": 0.3,
+     "tgRechargeUserRetain2": 0.25,
+     "tgRoi7": null,
      "tgPayAmount": 189.71
     },
     {
@@ -799,6 +849,7 @@
      "tgActiveUserCountRate": null,
      "tgStartCount": 0,
      "tgMfRoi0": null,
+     "tgMfRoi7": null,
      "tgStartPrice": 0,
      "tgNewUserPayCountPrice": null,
      "tgRechargeTotalAmount0d": 0,
@@ -808,6 +859,7 @@
      "tgArpu": 0,
      "tgRechargeUserRetain1": null,
      "tgRechargeUserRetain2": null,
+     "tgRoi7": null,
      "tgPayAmount": 0
     },
     {
@@ -832,6 +884,7 @@
      "tgActiveUserCountRate": 0,
      "tgStartCount": 1,
      "tgMfRoi0": null,
+     "tgMfRoi7": null,
      "tgStartPrice": 0,
      "tgNewUserPayCountPrice": null,
      "tgRechargeTotalAmount0d": 0,
@@ -841,6 +894,7 @@
      "tgArpu": 0,
      "tgRechargeUserRetain1": null,
      "tgRechargeUserRetain2": null,
+     "tgRoi7": null,
      "tgPayAmount": 0
     },
     {
@@ -883,7 +937,7 @@
      "tgPayCountPrice": 0,
      "tgRealCost": 0,
      "tgaArppu0": 8.285,
-     "tgRetention1": 0.24,
+     "tgRetention1": 0.2222222222222222,
      "tgRoi": 0,
      "tgShowCost": 0,
      "tgPayCount": 6,
@@ -899,6 +953,7 @@
      "tgActiveUserCountRate": 0.037037037037037035,
      "tgStartCount": 31,
      "tgMfRoi0": null,
+     "tgMfRoi7": null,
      "tgStartPrice": 0,
      "tgNewUserPayCountPrice": 0,
      "tgRechargeTotalAmount0d": 49.71,
@@ -908,6 +963,7 @@
      "tgArpu": 1.5709,
      "tgRechargeUserRetain1": 0.6666666666666666,
      "tgRechargeUserRetain2": 0.3333333333333333,
+     "tgRoi7": null,
      "tgPayAmount": 67.55
     },
     {
@@ -939,6 +995,7 @@
      "tgRoi0": null,
      "tgArpu": 0,
      "tgRechargeUserRetain1": null,
+     "tgRechargeUserRetain2": null,
      "tgPayAmount": 0
     },
     {
@@ -963,6 +1020,7 @@
      "tgActiveUserCountRate": null,
      "tgStartCount": 0,
      "tgMfRoi0": null,
+     "tgMfRoi7": null,
      "tgStartPrice": 0,
      "tgNewUserPayCountPrice": null,
      "tgRechargeTotalAmount0d": 0,
@@ -972,6 +1030,7 @@
      "tgArpu": 0,
      "tgRechargeUserRetain1": null,
      "tgRechargeUserRetain2": null,
+     "tgRoi7": null,
      "tgPayAmount": 0
     },
     {
@@ -996,6 +1055,7 @@
      "tgActiveUserCountRate": null,
      "tgStartCount": 0,
      "tgMfRoi0": null,
+     "tgMfRoi7": null,
      "tgStartPrice": 0,
      "tgNewUserPayCountPrice": null,
      "tgRechargeTotalAmount0d": 0,
@@ -1005,6 +1065,7 @@
      "tgArpu": 0,
      "tgRechargeUserRetain1": null,
      "tgRechargeUserRetain2": null,
+     "tgRoi7": null,
      "tgPayAmount": 0
     },
     {
@@ -1029,6 +1090,7 @@
      "tgActiveUserCountRate": null,
      "tgStartCount": 0,
      "tgMfRoi0": null,
+     "tgMfRoi7": null,
      "tgStartPrice": 0,
      "tgNewUserPayCountPrice": null,
      "tgRechargeTotalAmount0d": 0,
@@ -1038,6 +1100,7 @@
      "tgArpu": 0,
      "tgRechargeUserRetain1": null,
      "tgRechargeUserRetain2": null,
+     "tgRoi7": null,
      "tgPayAmount": 0
     },
     {
@@ -1095,6 +1158,7 @@
      "tgActiveUserCountRate": null,
      "tgStartCount": 0,
      "tgMfRoi0": null,
+     "tgMfRoi7": null,
      "tgStartPrice": 0,
      "tgNewUserPayCountPrice": null,
      "tgRechargeTotalAmount0d": 0,
@@ -1104,6 +1168,7 @@
      "tgArpu": 0,
      "tgRechargeUserRetain1": null,
      "tgRechargeUserRetain2": null,
+     "tgRoi7": null,
      "tgPayAmount": 0
     },
     {
@@ -1128,6 +1193,7 @@
      "tgActiveUserCountRate": null,
      "tgStartCount": 0,
      "tgMfRoi0": null,
+     "tgMfRoi7": null,
      "tgStartPrice": 0,
      "tgNewUserPayCountPrice": null,
      "tgRechargeTotalAmount0d": 0,
@@ -1137,6 +1203,7 @@
      "tgArpu": 0,
      "tgRechargeUserRetain1": null,
      "tgRechargeUserRetain2": null,
+     "tgRoi7": null,
      "tgPayAmount": 0
     },
     {
@@ -1146,7 +1213,7 @@
      "tgPayCountPrice": 0,
      "tgRealCost": 0,
      "tgaArppu0": 1.4,
-     "tgRetention1": 0.1,
+     "tgRetention1": 0.08,
      "tgRoi": 0,
      "tgShowCost": 0,
      "tgPayCount": 1,
@@ -1162,6 +1229,7 @@
      "tgActiveUserCountRate": 0.84,
      "tgStartCount": 47,
      "tgMfRoi0": null,
+     "tgMfRoi7": null,
      "tgStartPrice": 0,
      "tgNewUserPayCountPrice": 0,
      "tgRechargeTotalAmount0d": 1.4,
@@ -1170,7 +1238,8 @@
      "tgRoi0": null,
      "tgArpu": 0.0466,
      "tgRechargeUserRetain1": 0,
-     "tgRechargeUserRetain2": null,
+     "tgRechargeUserRetain2": 0,
+     "tgRoi7": null,
      "tgPayAmount": 1.4
     },
     {
@@ -1195,6 +1264,7 @@
      "tgActiveUserCountRate": null,
      "tgStartCount": 0,
      "tgMfRoi0": null,
+     "tgMfRoi7": null,
      "tgStartPrice": 0,
      "tgNewUserPayCountPrice": null,
      "tgRechargeTotalAmount0d": 0,
@@ -1204,6 +1274,7 @@
      "tgArpu": 0,
      "tgRechargeUserRetain1": null,
      "tgRechargeUserRetain2": null,
+     "tgRoi7": null,
      "tgPayAmount": 0
     },
     {
@@ -1212,7 +1283,7 @@
      "tgPayCountPrice": null,
      "tgRealCost": 0,
      "tgaArppu0": null,
-     "tgRetention1": null,
+     "tgRetention1": 0,
      "tgRoi": 0,
      "tgShowCost": 0,
      "tgPayCount": 0,
@@ -1228,6 +1299,7 @@
      "tgActiveUserCountRate": 0,
      "tgStartCount": 1,
      "tgMfRoi0": null,
+     "tgMfRoi7": null,
      "tgStartPrice": 0,
      "tgNewUserPayCountPrice": null,
      "tgRechargeTotalAmount0d": 0,
@@ -1237,6 +1309,7 @@
      "tgArpu": 0,
      "tgRechargeUserRetain1": null,
      "tgRechargeUserRetain2": null,
+     "tgRoi7": null,
      "tgPayAmount": 0
     },
     {
@@ -1262,6 +1335,7 @@
      "tgActiveUserCountRate": 0,
      "tgStartCount": 1,
      "tgMfRoi0": null,
+     "tgMfRoi7": null,
      "tgStartPrice": 0,
      "tgNewUserPayCountPrice": null,
      "tgRechargeTotalAmount0d": 0,
@@ -1271,6 +1345,7 @@
      "tgArpu": 0,
      "tgRechargeUserRetain1": null,
      "tgRechargeUserRetain2": null,
+     "tgRoi7": null,
      "tgPayAmount": 0
     },
     {
@@ -1295,6 +1370,7 @@
      "tgActiveUserCountRate": null,
      "tgStartCount": 0,
      "tgMfRoi0": null,
+     "tgMfRoi7": null,
      "tgStartPrice": 0,
      "tgNewUserPayCountPrice": null,
      "tgRechargeTotalAmount0d": 0,
@@ -1304,6 +1380,7 @@
      "tgArpu": 0,
      "tgRechargeUserRetain1": null,
      "tgRechargeUserRetain2": null,
+     "tgRoi7": null,
      "tgPayAmount": 0
     },
     {
@@ -1328,6 +1405,7 @@
      "tgActiveUserCountRate": 0,
      "tgStartCount": 4,
      "tgMfRoi0": null,
+     "tgMfRoi7": null,
      "tgStartPrice": 0,
      "tgNewUserPayCountPrice": null,
      "tgRechargeTotalAmount0d": 0,
@@ -1337,6 +1415,7 @@
      "tgArpu": 0,
      "tgRechargeUserRetain1": null,
      "tgRechargeUserRetain2": null,
+     "tgRoi7": null,
      "tgPayAmount": 0
     },
     {
@@ -1361,6 +1440,7 @@
      "tgActiveUserCountRate": null,
      "tgStartCount": 0,
      "tgMfRoi0": null,
+     "tgMfRoi7": null,
      "tgStartPrice": 0,
      "tgNewUserPayCountPrice": null,
      "tgRechargeTotalAmount0d": 0,
@@ -1370,6 +1450,7 @@
      "tgArpu": 0,
      "tgRechargeUserRetain1": null,
      "tgRechargeUserRetain2": null,
+     "tgRoi7": null,
      "tgPayAmount": 0
     },
     {
@@ -1379,7 +1460,7 @@
      "tgPayCountPrice": 0,
      "tgRealCost": 0,
      "tgaArppu0": 5.255,
-     "tgRetention1": 0.19047619047619047,
+     "tgRetention1": 0.17391304347826086,
      "tgRoi": 0,
      "tgShowCost": 0,
      "tgPayCount": 5,
@@ -1395,15 +1476,17 @@
      "tgActiveUserCountRate": 0.043478260869565216,
      "tgStartCount": 24,
      "tgMfRoi0": null,
+     "tgMfRoi7": null,
      "tgStartPrice": 0,
      "tgNewUserPayCountPrice": 0,
      "tgRechargeTotalAmount0d": 21.02,
      "tgClickRate": 0,
      "tgNewUserPayCount": 4,
      "tgRoi0": null,
-     "tgArpu": 0.771,
+     "tgArpu": 0.7453,
      "tgRechargeUserRetain1": 0.5,
      "tgRechargeUserRetain2": 0.25,
+     "tgRoi7": null,
      "tgPayAmount": 22.36
     },
     {
@@ -1413,7 +1496,7 @@
      "tgPayCountPrice": 0,
      "tgRealCost": 0,
      "tgaArppu0": null,
-     "tgRetention1": 0.6,
+     "tgRetention1": 0.5625,
      "tgRoi": 0,
      "tgShowCost": 0,
      "tgPayCount": 5,
@@ -1429,6 +1512,7 @@
      "tgActiveUserCountRate": 0,
      "tgStartCount": 16,
      "tgMfRoi0": null,
+     "tgMfRoi7": null,
      "tgStartPrice": 0,
      "tgNewUserPayCountPrice": null,
      "tgRechargeTotalAmount0d": 0,
@@ -1438,6 +1522,7 @@
      "tgArpu": 0.8777,
      "tgRechargeUserRetain1": null,
      "tgRechargeUserRetain2": null,
+     "tgRoi7": null,
      "tgPayAmount": 39.5
     },
     {
@@ -1462,6 +1547,7 @@
      "tgActiveUserCountRate": null,
      "tgStartCount": 0,
      "tgMfRoi0": null,
+     "tgMfRoi7": null,
      "tgStartPrice": 0,
      "tgNewUserPayCountPrice": null,
      "tgRechargeTotalAmount0d": 0,
@@ -1471,6 +1557,7 @@
      "tgArpu": 0,
      "tgRechargeUserRetain1": null,
      "tgRechargeUserRetain2": null,
+     "tgRoi7": null,
      "tgPayAmount": 0
     },
     {
@@ -1495,6 +1582,7 @@
      "tgActiveUserCountRate": null,
      "tgStartCount": 0,
      "tgMfRoi0": null,
+     "tgMfRoi7": null,
      "tgStartPrice": 0,
      "tgNewUserPayCountPrice": null,
      "tgRechargeTotalAmount0d": 0,
@@ -1504,6 +1592,7 @@
      "tgArpu": 0,
      "tgRechargeUserRetain1": null,
      "tgRechargeUserRetain2": null,
+     "tgRoi7": null,
      "tgPayAmount": 0
     },
     {
@@ -1528,6 +1617,7 @@
      "tgActiveUserCountRate": 0,
      "tgStartCount": 3,
      "tgMfRoi0": null,
+     "tgMfRoi7": null,
      "tgStartPrice": 0,
      "tgNewUserPayCountPrice": null,
      "tgRechargeTotalAmount0d": 0,
@@ -1537,6 +1627,7 @@
      "tgArpu": 0,
      "tgRechargeUserRetain1": null,
      "tgRechargeUserRetain2": null,
+     "tgRoi7": null,
      "tgPayAmount": 0
     },
     {
@@ -1693,6 +1784,7 @@
      "tgActiveUserCountRate": null,
      "tgStartCount": 0,
      "tgMfRoi0": null,
+     "tgMfRoi7": null,
      "tgStartPrice": 0,
      "tgNewUserPayCountPrice": null,
      "tgRechargeTotalAmount0d": 0,
@@ -1702,6 +1794,7 @@
      "tgArpu": 0,
      "tgRechargeUserRetain1": null,
      "tgRechargeUserRetain2": null,
+     "tgRoi7": null,
      "tgPayAmount": 0
     },
     {
@@ -1726,6 +1819,7 @@
      "tgActiveUserCountRate": null,
      "tgStartCount": 0,
      "tgMfRoi0": null,
+     "tgMfRoi7": null,
      "tgStartPrice": 0,
      "tgNewUserPayCountPrice": null,
      "tgRechargeTotalAmount0d": 0,
@@ -1735,6 +1829,7 @@
      "tgArpu": 0,
      "tgRechargeUserRetain1": null,
      "tgRechargeUserRetain2": null,
+     "tgRoi7": null,
      "tgPayAmount": 0
     },
     {
@@ -1773,7 +1868,7 @@
    "chart": [
     {
      "dateKey": "20260726",
-     "tgRealCost": 16175.185176513,
+     "tgRealCost": 16175.185176513001,
      "tgRechargeTotalAmount0d": 1604.6,
      "tgNewUserCount": 447
     },
@@ -1791,7 +1886,7 @@
     },
     {
      "dateKey": "20260729",
-     "tgRealCost": 13793.311843195,
+     "tgRealCost": 13793.311843195002,
      "tgRechargeTotalAmount0d": 687.01,
      "tgNewUserCount": 250
     },
@@ -1803,14 +1898,14 @@
     },
     {
      "dateKey": "20260731",
-     "tgRealCost": 11093.330294170999,
+     "tgRealCost": 11093.330294171,
      "tgRechargeTotalAmount0d": 929.91,
      "tgNewUserCount": 295
     },
     {
      "dateKey": "20260801",
-     "tgRealCost": 10607.073509859998,
-     "tgRechargeTotalAmount0d": 855.36,
+     "tgRealCost": 10616.235372607,
+     "tgRechargeTotalAmount0d": 865.36,
      "tgNewUserCount": 290
     }
    ]
@@ -1819,56 +1914,56 @@
    "detail": [
     {
      "tgNewUserCount": 11194,
-     "tgActiveConvertRate": 0.07505598691180218,
-     "tgMfRoi": 0.42715189936283965,
-     "tgPayCountPrice": 45.87507756097642,
-     "tgRealCost": 511461.23972732614,
-     "tgaArppu0": 20.129484732824427,
-     "tgRetention1": 0.20071422030949546,
-     "tgRoi": 0.29489800650467857,
-     "tgShowCost": 76.76842138615493,
+     "tgActiveConvertRate": 0.07505498042160597,
+     "tgMfRoi": 0.4274501893371012,
+     "tgPayCountPrice": 45.867671203486076,
+     "tgRealCost": 511470.40159007325,
+     "tgaArppu0": 20.13425572519084,
+     "tgRetention1": 0.19581918885117028,
+     "tgRoi": 0.2949190794443961,
+     "tgShowCost": 76.7676533554619,
      "tgPayCount": 2481,
      "gameName": "神将传说-8月12日上线",
-     "tgLtv0": 3.7691,
+     "tgLtv0": 3.77,
      "tgPayRate": 0.2216365910309094,
      "dateKey": "20260703-20260801",
-     "tgOriginPrice": 45.690659257399155,
+     "tgOriginPrice": 45.69147771932046,
      "tgMfRechargeConvertRate": 0.18911917098445596,
      "tgRechargeConvertRate": 0.18724316598177596,
-     "tgMfLtv0": 4.7013,
+     "tgMfLtv0": 4.7022,
      "gameId": "13874",
      "tgActiveUserCountRate": 0.057888154368411646,
-     "tgStartCount": 12597,
-     "tgMfRoi0": 0.10289624298423301,
-     "tgMfRoi7": 0.3544799344052477,
-     "tgStartPrice": 40.60182898526047,
-     "tgNewUserPayCountPrice": 244.01776704548004,
-     "tgRechargeTotalAmount0d": 42191.4,
-     "tgClickRate": 0.02238565704114334,
+     "tgStartCount": 12598,
+     "tgMfRoi0": 0.10291395129876388,
+     "tgMfRoi7": 0.3512966075837339,
+     "tgStartPrice": 40.59933335371275,
+     "tgNewUserPayCountPrice": 244.0221381632029,
+     "tgRechargeTotalAmount0d": 42201.4,
+     "tgClickRate": 0.022385332282088447,
      "tgNewUserPayCount": 2096,
-     "tgRoi0": 0.08249188154021873,
-     "tgArpu": 6.3972,
+     "tgRoi0": 0.08250995535382523,
+     "tgArpu": 6.3978,
      "tgRechargeUserRetain1": 0.5584924131179638,
-     "tgRechargeUserRetain2": 0.4571572580645161,
-     "tgRoi7": 0.2645976635783613,
-     "tgPayAmount": 150828.9
+     "tgRechargeUserRetain2": 0.44395496818404306,
+     "tgRoi7": 0.2611366255638852,
+     "tgPayAmount": 150842.38
     },
     {
      "tgNewUserCount": 7151,
      "tgActiveConvertRate": 0.03561875824969492,
-     "tgMfRoi": 0.46632769070581914,
-     "tgPayCountPrice": 19.019057421214995,
-     "tgRealCost": 501171.18210643635,
+     "tgMfRoi": 0.466397886282213,
+     "tgPayCountPrice": 19.01400645369286,
+     "tgRealCost": 501171.1821064364,
      "tgaArppu0": 19.210598341232227,
-     "tgRetention1": 0.23946815955213435,
-     "tgRoi": 0.2781130180194572,
-     "tgShowCost": 28.05528743860517,
+     "tgRetention1": 0.23926723535169905,
+     "tgRoi": 0.2781328914686011,
+     "tgShowCost": 28.055287438605173,
      "tgPayCount": 1999,
      "gameName": "上古王冠：先锋版",
      "tgLtv0": 4.5346,
      "tgPayRate": 0.27954132289190325,
      "dateKey": "20260703-20260801",
-     "tgOriginPrice": 70.08406965549382,
+     "tgOriginPrice": 70.08406965549383,
      "tgMfRechargeConvertRate": 0.23786882953433086,
      "tgRechargeConvertRate": 0.23605090197175221,
      "tgMfLtv0": 6.5198,
@@ -1877,17 +1972,17 @@
      "tgStartCount": 8679,
      "tgMfRoi0": 0.0930285731993632,
      "tgMfRoi7": 0.33422845182434663,
-     "tgStartPrice": 57.74526813071049,
+     "tgStartPrice": 57.7452681307105,
      "tgNewUserPayCountPrice": 296.90235906779407,
      "tgRechargeTotalAmount0d": 32427.49,
      "tgClickRate": 0.011238714402807302,
      "tgNewUserPayCount": 1688,
-     "tgRoi0": 0.0647034210221473,
-     "tgArpu": 6.9604,
+     "tgRoi0": 0.06470342102214728,
+     "tgArpu": 6.9598,
      "tgRechargeUserRetain1": 0.5939537640782454,
-     "tgRechargeUserRetain2": 0.4682492581602374,
+     "tgRechargeUserRetain2": 0.46769413159454654,
      "tgRoi7": 0.20656192414562846,
-     "tgPayAmount": 139382.23
+     "tgPayAmount": 139392.19
     },
     {
      "tgNewUserCount": 3920,
@@ -1896,7 +1991,7 @@
      "tgPayCountPrice": 23.446823933207614,
      "tgRealCost": 150317.588235794,
      "tgaArppu0": 10.796872727272728,
-     "tgRetention1": 0.23762123532414497,
+     "tgRetention1": 0.2375,
      "tgRoi": 0.17820562659627148,
      "tgShowCost": 51.01950299846009,
      "tgPayCount": 921,
@@ -1912,17 +2007,17 @@
      "tgActiveUserCountRate": 0.07066326530612245,
      "tgStartCount": 4118,
      "tgMfRoi0": 0.09523250185164459,
-     "tgMfRoi7": 0.24866551172552187,
+     "tgMfRoi7": 0.248667906654846,
      "tgStartPrice": 36.50257120830355,
      "tgNewUserPayCountPrice": 182.2031372555079,
      "tgRechargeTotalAmount0d": 8907.42,
      "tgClickRate": 0.011924880111408397,
      "tgNewUserPayCount": 825,
      "tgRoi0": 0.0592573371123243,
-     "tgArpu": 3.4093,
+     "tgArpu": 3.4089,
      "tgRechargeUserRetain1": 0.5721212121212121,
      "tgRechargeUserRetain2": 0.3781818181818182,
-     "tgRoi7": 0.1479442310178343,
+     "tgRoi7": 0.14794662594715843,
      "tgPayAmount": 26787.44
     },
     {
@@ -1932,7 +2027,7 @@
      "tgPayCountPrice": 22.029280958675784,
      "tgRealCost": 66043.78431411,
      "tgaArppu0": 7.279741784037559,
-     "tgRetention1": 0.22455989695148132,
+     "tgRetention1": 0.22436722436722437,
      "tgRoi": 0.33839096641870203,
      "tgShowCost": 82.17344560503017,
      "tgPayCount": 490,
@@ -1948,7 +2043,7 @@
      "tgActiveUserCountRate": 0.07550407550407551,
      "tgStartCount": 2494,
      "tgMfRoi0": 0.06870139328207187,
-     "tgMfRoi7": 0.35013499362815276,
+     "tgMfRoi7": 0.35019646799765114,
      "tgStartPrice": 26.481068289538893,
      "tgNewUserPayCountPrice": 155.03235754485917,
      "tgRechargeTotalAmount0d": 3101.17,
@@ -1958,7 +2053,7 @@
      "tgArpu": 5.0746,
      "tgRechargeUserRetain1": 0.49295774647887325,
      "tgRechargeUserRetain2": 0.3286384976525822,
-     "tgRoi7": 0.22521029275456406,
+     "tgRoi7": 0.2252717671240625,
      "tgPayAmount": 22348.62
     },
     {
@@ -2128,6 +2223,7 @@
      "tgRoi0": null,
      "tgArpu": 0,
      "tgRechargeUserRetain1": null,
+     "tgRechargeUserRetain2": null,
      "tgPayAmount": 0
     },
     {
@@ -2381,7 +2477,7 @@
      "tgPayCountPrice": 0,
      "tgRealCost": 0,
      "tgaArppu0": 2.222857142857143,
-     "tgRetention1": 0.3102189781021898,
+     "tgRetention1": 0.3046594982078853,
      "tgRoi": 0,
      "tgShowCost": 0,
      "tgPayCount": 17,
@@ -2406,7 +2502,7 @@
      "tgRoi0": null,
      "tgArpu": 0.1167,
      "tgRechargeUserRetain1": 0.8571428571428571,
-     "tgRechargeUserRetain2": 1,
+     "tgRechargeUserRetain2": 0.8571428571428571,
      "tgRoi7": null,
      "tgPayAmount": 101.93
     },
@@ -2451,7 +2547,7 @@
      "tgPayCountPrice": null,
      "tgRealCost": 0,
      "tgaArppu0": null,
-     "tgRetention1": 1,
+     "tgRetention1": 0.5,
      "tgRoi": 0,
      "tgShowCost": 0,
      "tgPayCount": 0,
@@ -2629,7 +2725,7 @@
      "tgPayCountPrice": 0,
      "tgRealCost": 0,
      "tgaArppu0": 0.7166666666666667,
-     "tgRetention1": 0.4927536231884058,
+     "tgRetention1": 0.4857142857142857,
      "tgRoi": 0,
      "tgShowCost": 0,
      "tgPayCount": 28,
@@ -3152,7 +3248,7 @@
    "chart": [
     {
      "dateKey": "20260703",
-     "tgRealCost": 92997.18849622099,
+     "tgRealCost": 92997.188496221,
      "tgRechargeTotalAmount0d": 7357.83,
      "tgNewUserCount": 1385
     },
@@ -3164,7 +3260,7 @@
     },
     {
      "dateKey": "20260705",
-     "tgRealCost": 67618.898788684,
+     "tgRealCost": 67618.89878868397,
      "tgRechargeTotalAmount0d": 5536.33,
      "tgNewUserCount": 1392
     },
@@ -3176,7 +3272,7 @@
     },
     {
      "dateKey": "20260707",
-     "tgRealCost": 49940.63432107102,
+     "tgRealCost": 49940.63432107099,
      "tgRechargeTotalAmount0d": 4762.49,
      "tgNewUserCount": 1006
     },
@@ -3200,19 +3296,19 @@
     },
     {
      "dateKey": "20260711",
-     "tgRealCost": 42869.60384570999,
+     "tgRealCost": 42869.60384571,
      "tgRechargeTotalAmount0d": 4357.69,
      "tgNewUserCount": 837
     },
     {
      "dateKey": "20260712",
-     "tgRealCost": 44918.34406658901,
+     "tgRealCost": 44918.344066589,
      "tgRechargeTotalAmount0d": 3779.82,
      "tgNewUserCount": 807
     },
     {
      "dateKey": "20260713",
-     "tgRealCost": 29705.693357193002,
+     "tgRealCost": 29705.693357193,
      "tgRechargeTotalAmount0d": 1932.58,
      "tgNewUserCount": 639
     },
@@ -3224,7 +3320,7 @@
     },
     {
      "dateKey": "20260715",
-     "tgRealCost": 63990.94874319298,
+     "tgRealCost": 63990.948743192996,
      "tgRechargeTotalAmount0d": 4498.98,
      "tgNewUserCount": 1628
     },
@@ -3242,25 +3338,25 @@
     },
     {
      "dateKey": "20260718",
-     "tgRealCost": 49661.053980571,
+     "tgRealCost": 49661.05398057101,
      "tgRechargeTotalAmount0d": 3103.28,
      "tgNewUserCount": 1072
     },
     {
      "dateKey": "20260719",
-     "tgRealCost": 50016.1429218,
+     "tgRealCost": 50016.142921800005,
      "tgRechargeTotalAmount0d": 3283.34,
      "tgNewUserCount": 994
     },
     {
      "dateKey": "20260720",
-     "tgRealCost": 36015.344529646005,
+     "tgRealCost": 36015.344529646,
      "tgRechargeTotalAmount0d": 1730.61,
      "tgNewUserCount": 728
     },
     {
      "dateKey": "20260721",
-     "tgRealCost": 43428.959608206,
+     "tgRealCost": 43428.959608205994,
      "tgRechargeTotalAmount0d": 2974.96,
      "tgNewUserCount": 941
     },
@@ -3272,7 +3368,7 @@
     },
     {
      "dateKey": "20260723",
-     "tgRealCost": 38730.815431703995,
+     "tgRealCost": 38730.815431704,
      "tgRechargeTotalAmount0d": 2653.81,
      "tgNewUserCount": 759
     },
@@ -3284,7 +3380,7 @@
     },
     {
      "dateKey": "20260725",
-     "tgRealCost": 18553.341176513994,
+     "tgRealCost": 18553.341176514,
      "tgRechargeTotalAmount0d": 2382.87,
      "tgNewUserCount": 491
     },
@@ -3296,7 +3392,7 @@
     },
     {
      "dateKey": "20260727",
-     "tgRealCost": 14928.184137313005,
+     "tgRealCost": 14928.184137313001,
      "tgRechargeTotalAmount0d": 849.19,
      "tgNewUserCount": 347
     },
@@ -3308,26 +3404,26 @@
     },
     {
      "dateKey": "20260729",
-     "tgRealCost": 13793.311843195,
+     "tgRealCost": 13793.311843195002,
      "tgRechargeTotalAmount0d": 687.01,
      "tgNewUserCount": 250
     },
     {
      "dateKey": "20260730",
-     "tgRealCost": 9631.348137302999,
+     "tgRealCost": 9631.348137303,
      "tgRechargeTotalAmount0d": 623.5,
      "tgNewUserCount": 234
     },
     {
      "dateKey": "20260731",
-     "tgRealCost": 11093.330294170995,
+     "tgRealCost": 11093.330294170997,
      "tgRechargeTotalAmount0d": 929.91,
      "tgNewUserCount": 295
     },
     {
      "dateKey": "20260801",
-     "tgRealCost": 10607.073509859998,
-     "tgRechargeTotalAmount0d": 855.36,
+     "tgRealCost": 10616.235372607001,
+     "tgRechargeTotalAmount0d": 865.36,
      "tgNewUserCount": 290
     }
    ]
