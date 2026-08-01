@@ -706,9 +706,11 @@ button { font-family: inherit; border: none; cursor: pointer; background: none; 
 
 .x-labels {
 
-  display: grid;
+  display: flex;
 
-  grid-template-columns: repeat(7, 1fr);
+  justify-content: space-between;
+
+  padding: 0 40px;  /* 与 SVG 数据点对齐：第一个点 x=40，最后一个 x=520 */
 
   height: 18px;
 
@@ -1121,13 +1123,10 @@ button { font-family: inherit; border: none; cursor: pointer; background: none; 
       </div>
 
       <div class="dropdown" data-key="date" style="position:relative">
-        <div style="display:flex;align-items:center;gap:6px">
-          <button class="pill dropdown-trigger" type="button" aria-haspopup="listbox" aria-expanded="false">
+        <button class="pill dropdown-trigger" type="button" aria-haspopup="listbox" aria-expanded="false">
             <span class="label" data-bind="date-label">今日</span>
             <span class="arrow">▾</span>
           </button>
-          <input type="date" id="datePicker" class="date-input" title="选具体日期"/>
-        </div>
         <div class="dropdown-menu" role="listbox" id="dd-date"></div>
       </div>
 
@@ -1496,15 +1495,11 @@ button { font-family: inherit; border: none; cursor: pointer; background: none; 
             <line x1="40" y1="55"  x2="520" y2="55"  stroke="#1C1C20" stroke-width="1"/>
 
             <!-- cost line -->
-
-            <path d="M 40 45.0 L 120 66.8 L 200 78.2 L 280 108.9 L 360 88.6 L 440 126.8 L 520 144.0"
-
+            <polyline class="line-cost" points=""
                   stroke="#22D3EE" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" fill="none"/>
 
             <!-- first-day revenue line -->
-
-            <path d="M 40 185.0 L 120 188.8 L 200 190.9 L 280 196.3 L 360 192.7 L 440 199.4 L 520 202.5"
-
+            <polyline class="line-r" points=""
                   stroke="#3B82F6" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" fill="none"/>
 
             <!-- cost dots -->
@@ -2213,18 +2208,12 @@ function updateChartFromList(list) {
 
   if (!svg) return;
 
-  // 用属性遍历选 path（避免 querySelector 兼容性 + 颜色匹配问题）
-  const paths = svg.querySelectorAll('path');
-  let costPath = null, rPath = null;
-  paths.forEach(p => {
-    const stroke = p.getAttribute('stroke') || '';
-    if (stroke.indexOf('22D3EE') >= 0) costPath = p;
-    if (stroke.indexOf('3B82F6') >= 0) rPath = p;
-  });
+  // 用 polyline（class 区分，比 path + stroke 属性更可靠）
+  const costLine = svg.querySelector('polyline.line-cost');
+  const rLine    = svg.querySelector('polyline.line-r');
 
-  if (costPath) costPath.setAttribute('d', 'M ' + costPts.map(p=>p.join(' ')).join(' L '));
-
-  if (rPath)    rPath.setAttribute('d', 'M ' + rPts.map(p=>p.join(' ')).join(' L '));
+  if (costLine) costLine.setAttribute('points', costPts.map(p => p.join(',')).join(' '));
+  if (rLine)    rLine.setAttribute('points',    rPts.map(p => p.join(',')).join(' '));
 
   // 更新点
 
@@ -2705,20 +2694,6 @@ async function __autoRefreshCheck() {
   } catch (e) {}
 }
 setTimeout(__recordDataUpdate, 3000);
-
-/* ============ 日历日期选择 ============ */
-document.addEventListener('DOMContentLoaded', () => {
-  const dp = document.getElementById('datePicker');
-  if (!dp) return;
-  dp.max = new Date().toISOString().slice(0, 10); // 不能选未来
-  dp.addEventListener('change', () => {
-    if (!dp.value) return;
-    state.date = dp.value;
-    // 触发重新渲染
-    if (state.snapshot) applySnapshot(state.snapshot);
-    fetchDashboardData();
-  });
-});
 setInterval(__autoRefreshCheck, 5 * 60 * 1000);
 setTimeout(() => window.location.reload(), 30 * 60 * 1000);
 
