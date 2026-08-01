@@ -1,11 +1,12 @@
 name: auto-trigger-sync
 
-# 独立 cron 工作流：每 10 分钟触发 sync-data 工作流
-# （主 sync-data.yml 的 cron schedule 偶尔不触发，加这个保证实时性）
+# 独立 cron 工作流：错峰触发 sync-data 工作流
+#（主 sync-data.yml 的 cron 偶发失效，加这个做兜底）
 
 on:
   schedule:
-    - cron: '*/10 * * * *'
+    - cron: '*/15 * * * *'   # 每 15 分钟（比 */10 触发更稳）
+    - cron: '5,20,35,50 * * * *'  # 备用错峰触发
   workflow_dispatch:
 
 permissions:
