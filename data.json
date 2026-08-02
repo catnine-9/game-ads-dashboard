@@ -1,38 +1,38 @@
 {
- "updatedAt": "2026-08-02T14:02:01.066Z",
+ "updatedAt": "2026-08-02T14:11:34.280Z",
  "ranges": {
   "today": {
    "detail": [
     {
-     "tgNewUserCount": 216,
-     "tgActiveConvertRate": 0.11483253588516747,
-     "tgMfRoi": 0.19906795923809067,
-     "tgPayCountPrice": 129.2759818347941,
-     "tgRealCost": 8790.766764765998,
-     "tgaArppu0": 32.15428571428571,
-     "tgRoi": 0.10241654955612575,
-     "tgShowCost": 91.91901339209083,
-     "tgPayCount": 28,
+     "tgNewUserCount": 219,
+     "tgActiveConvertRate": 0.114900314795383,
+     "tgMfRoi": 0.19638661722175446,
+     "tgPayCountPrice": 129.8798616092319,
+     "tgRealCost": 8961.710451037,
+     "tgaArppu0": 31.39034482758621,
+     "tgRoi": 0.10157882303535735,
+     "tgShowCost": 92.48697535565601,
+     "tgPayCount": 29,
      "gameName": "神将传说-8月12日上线",
-     "tgLtv0": 4.1681,
-     "tgPayRate": 0.12962962962962962,
+     "tgLtv0": 4.1567,
+     "tgPayRate": 0.1324200913242009,
      "dateKey": "20260802-20260802",
-     "tgOriginPrice": 40.697994281324064,
-     "tgMfRechargeConvertRate": 0.12962962962962962,
-     "tgRechargeConvertRate": 0.12962962962962962,
-     "tgMfLtv0": 8.1016,
+     "tgOriginPrice": 40.92105228784018,
+     "tgMfRechargeConvertRate": 0.1324200913242009,
+     "tgRechargeConvertRate": 0.1324200913242009,
+     "tgMfLtv0": 8.0363,
      "gameId": "13874",
-     "tgActiveUserCountRate": 0.10648148148148148,
-     "tgStartCount": 235,
-     "tgMfRoi0": 0.19906795923809067,
-     "tgStartPrice": 37.407518147940415,
-     "tgNewUserPayCountPrice": 313.95595588449993,
-     "tgRechargeTotalAmount0d": 900.32,
-     "tgClickRate": 0.019668325735078842,
-     "tgNewUserPayCount": 28,
-     "tgRoi0": 0.10241654955612575,
-     "tgArpu": 4.1681,
-     "tgPayAmount": 900.32
+     "tgActiveUserCountRate": 0.1050228310502283,
+     "tgStartCount": 237,
+     "tgMfRoi0": 0.19638661722175446,
+     "tgStartPrice": 37.81312426597891,
+     "tgNewUserPayCountPrice": 309.02449831162073,
+     "tgRechargeTotalAmount0d": 910.32,
+     "tgClickRate": 0.019670371631732665,
+     "tgNewUserPayCount": 29,
+     "tgRoi0": 0.10157882303535735,
+     "tgArpu": 4.1567,
+     "tgPayAmount": 910.32
     },
     {
      "tgNewUserCount": 0,
@@ -672,47 +672,47 @@
    "chart": [
     {
      "dateKey": "20260802",
-     "tgRealCost": 8790.766764766002,
-     "tgRechargeTotalAmount0d": 1007.3,
-     "tgNewUserCount": 228
+     "tgRealCost": 8961.710451037,
+     "tgRechargeTotalAmount0d": 1017.3,
+     "tgNewUserCount": 231
     }
    ]
   },
   "last7d": {
    "detail": [
     {
-     "tgNewUserCount": 1773,
-     "tgActiveConvertRate": 0.08208333333333333,
-     "tgMfRoi": 0.18821427237817664,
-     "tgPayCountPrice": 68.01954262317292,
-     "tgRealCost": 79854.94303960502,
-     "tgaArppu0": 15.704756097560976,
+     "tgNewUserCount": 1776,
+     "tgActiveConvertRate": 0.0821271676300578,
+     "tgMfRoi": 0.1879371865196333,
+     "tgPayCountPrice": 68.10713763904339,
+     "tgRealCost": 80025.88672587599,
+     "tgaArppu0": 15.68741641337386,
      "tgRetention1": 0.17597944765574824,
-     "tgRoi": 0.13752461127614024,
-     "tgShowCost": 77.4233842343413,
-     "tgPayCount": 360,
+     "tgRoi": 0.13735580384947843,
+     "tgShowCost": 77.49437788355392,
+     "tgPayCount": 361,
      "gameName": "神将传说-8月12日上线",
-     "tgLtv0": 2.9053,
-     "tgPayRate": 0.20304568527918782,
+     "tgLtv0": 2.906,
+     "tgPayRate": 0.20326576576576577,
      "dateKey": "20260727-20260802",
-     "tgOriginPrice": 45.03944897890864,
-     "tgMfRechargeConvertRate": 0.18612521150592218,
-     "tgRechargeConvertRate": 0.18499717992103779,
-     "tgMfLtv0": 4.2969,
+     "tgOriginPrice": 45.05962090420945,
+     "tgMfRechargeConvertRate": 0.18637387387387389,
+     "tgRechargeConvertRate": 0.18524774774774774,
+     "tgMfLtv0": 4.2952,
      "gameId": "13874",
-     "tgActiveUserCountRate": 0.06824591088550479,
-     "tgStartCount": 1997,
-     "tgMfRoi0": 0.0954034867474834,
-     "tgStartPrice": 39.98745269885078,
-     "tgNewUserPayCountPrice": 243.46019219391772,
-     "tgRechargeTotalAmount0d": 5151.16,
-     "tgClickRate": 0.020942286548653002,
-     "tgNewUserPayCount": 328,
-     "tgRoi0": 0.06450646389472997,
-     "tgArpu": 4.3475,
+     "tgActiveUserCountRate": 0.06813063063063063,
+     "tgStartCount": 1999,
+     "tgMfRoi0": 0.09532465446000962,
+     "tgStartPrice": 40.03295984285942,
+     "tgNewUserPayCountPrice": 243.23977728229784,
+     "tgRechargeTotalAmount0d": 5161.16,
+     "tgClickRate": 0.020940922872523283,
+     "tgNewUserPayCount": 329,
+     "tgRoi0": 0.06449363088820563,
+     "tgArpu": 4.3429,
      "tgRechargeUserRetain1": 0.4866666666666667,
      "tgRechargeUserRetain2": 0.41700404858299595,
-     "tgPayAmount": 10982.02
+     "tgPayAmount": 10992.02
     },
     {
      "tgNewUserCount": 50,
@@ -1712,13 +1712,13 @@
    "chart": [
     {
      "dateKey": "20260727",
-     "tgRealCost": 14928.184137313,
+     "tgRealCost": 14928.184137313001,
      "tgRechargeTotalAmount0d": 849.19,
      "tgNewUserCount": 347
     },
     {
      "dateKey": "20260728",
-     "tgRealCost": 11578.010627507001,
+     "tgRealCost": 11578.010627507003,
      "tgRechargeTotalAmount0d": 586.39,
      "tgNewUserCount": 270
     },
@@ -1736,133 +1736,133 @@
     },
     {
      "dateKey": "20260731",
-     "tgRealCost": 11093.330294170999,
+     "tgRealCost": 11093.330294171,
      "tgRechargeTotalAmount0d": 929.91,
      "tgNewUserCount": 295
     },
     {
      "dateKey": "20260801",
-     "tgRealCost": 10623.030451036999,
+     "tgRealCost": 10623.030451036997,
      "tgRechargeTotalAmount0d": 865.36,
      "tgNewUserCount": 290
     },
     {
      "dateKey": "20260802",
-     "tgRealCost": 8790.766764766,
-     "tgRechargeTotalAmount0d": 1007.3,
-     "tgNewUserCount": 228
+     "tgRealCost": 8961.710451036999,
+     "tgRechargeTotalAmount0d": 1017.3,
+     "tgNewUserCount": 231
     }
    ]
   },
   "last30d": {
    "detail": [
     {
-     "tgNewUserCount": 11039,
-     "tgActiveConvertRate": 0.07678609934405932,
-     "tgMfRoi": 0.44240898949814295,
-     "tgPayCountPrice": 45.09842995113869,
-     "tgRealCost": 498878.8321194962,
-     "tgaArppu0": 20.301755241345685,
+     "tgNewUserCount": 11042,
+     "tgActiveConvertRate": 0.07679361281887223,
+     "tgMfRoi": 0.44227748553463886,
+     "tgPayCountPrice": 45.10980527937876,
+     "tgRealCost": 499049.7758057673,
+     "tgaArppu0": 20.296734892787526,
      "tgRetention1": 0.19957497921093967,
-     "tgRoi": 0.30205346528694915,
-     "tgShowCost": 78.72676457765397,
-     "tgPayCount": 2429,
+     "tgRoi": 0.3019700384729808,
+     "tgShowCost": 78.7380722623132,
+     "tgPayCount": 2430,
      "gameName": "神将传说-8月12日上线",
-     "tgLtv0": 3.7719,
-     "tgPayRate": 0.22003804692454026,
+     "tgLtv0": 3.7718,
+     "tgPayRate": 0.2200688281108495,
      "dateKey": "20260704-20260802",
-     "tgOriginPrice": 45.19239352473016,
-     "tgMfRechargeConvertRate": 0.1876981610653139,
-     "tgRechargeConvertRate": 0.18579581483830057,
-     "tgMfLtv0": 4.7687,
+     "tgOriginPrice": 45.19559643232814,
+     "tgMfRechargeConvertRate": 0.18773772867234198,
+     "tgRechargeConvertRate": 0.18583589929360622,
+     "tgMfLtv0": 4.7683,
      "gameId": "13874",
-     "tgActiveUserCountRate": 0.05960684844641725,
-     "tgStartCount": 12393,
-     "tgMfRoi0": 0.10552165498052353,
-     "tgMfRoi7": 0.35932080228316876,
-     "tgStartPrice": 40.25488841438685,
-     "tgNewUserPayCountPrice": 243.2368757286671,
-     "tgRechargeTotalAmount0d": 41638.9,
-     "tgClickRate": 0.02268686327678516,
-     "tgNewUserPayCount": 2051,
-     "tgRoi0": 0.08346495645665371,
-     "tgArpu": 6.4962,
+     "tgActiveUserCountRate": 0.05959065386705307,
+     "tgStartCount": 12395,
+     "tgMfRoi0": 0.10550554784838262,
+     "tgMfRoi7": 0.35932080228316887,
+     "tgStartPrice": 40.262184413535074,
+     "tgNewUserPayCountPrice": 243.2016451295162,
+     "tgRechargeTotalAmount0d": 41648.9,
+     "tgClickRate": 0.022686293999779113,
+     "tgNewUserPayCount": 2052,
+     "tgRoi0": 0.08345640458960944,
+     "tgArpu": 6.495,
      "tgRechargeUserRetain1": 0.5546218487394958,
      "tgRechargeUserRetain2": 0.4482233502538071,
-     "tgRoi7": 0.26609912443140216,
-     "tgPayAmount": 150688.08
+     "tgRoi7": 0.2660991244314022,
+     "tgPayAmount": 150698.08
     },
     {
      "tgNewUserCount": 6153,
      "tgActiveConvertRate": 0.03577887226483227,
-     "tgMfRoi": 0.46370246523196534,
-     "tgPayCountPrice": 19.321839012414006,
-     "tgRealCost": 429563.1249239882,
+     "tgMfRoi": 0.46387827175635754,
+     "tgPayCountPrice": 19.31836323637292,
+     "tgRealCost": 429563.1249239883,
      "tgaArppu0": 18.374293628808864,
      "tgRetention1": 0.2409364331003089,
-     "tgRoi": 0.26625339412045296,
-     "tgShowCost": 28.053523411224344,
+     "tgRoi": 0.26642920064484527,
+     "tgShowCost": 28.05352341122435,
      "tgPayCount": 1712,
      "gameName": "上古王冠：先锋版",
      "tgLtv0": 4.3121,
      "tgPayRate": 0.2782382577604421,
      "dateKey": "20260704-20260802",
-     "tgOriginPrice": 69.81360717113411,
+     "tgOriginPrice": 69.81360717113414,
      "tgMfRechargeConvertRate": 0.23581992523972045,
      "tgRechargeConvertRate": 0.23468226881196164,
      "tgMfLtv0": 6.2192,
      "gameId": "13341",
      "tgActiveUserCountRate": 0.5818300016252235,
      "tgStartCount": 7482,
-     "tgMfRoi0": 0.08908422948727607,
-     "tgMfRoi7": 0.32943298467261534,
-     "tgStartPrice": 57.412874221329616,
-     "tgNewUserPayCountPrice": 297.4813884515154,
+     "tgMfRoi0": 0.08908422948727604,
+     "tgMfRoi7": 0.3294329846726153,
+     "tgStartPrice": 57.41287422132963,
+     "tgNewUserPayCountPrice": 297.48138845151544,
      "tgRechargeTotalAmount0d": 26532.48,
      "tgClickRate": 0.011231058491001008,
      "tgNewUserPayCount": 1444,
-     "tgRoi0": 0.06176619560790969,
-     "tgArpu": 6.5535,
+     "tgRoi0": 0.06176619560790967,
+     "tgArpu": 6.5575,
      "tgRechargeUserRetain1": 0.5939015939015939,
      "tgRechargeUserRetain2": 0.47193347193347196,
-     "tgRoi7": 0.20021917767624228,
-     "tgPayAmount": 114372.64
+     "tgRoi7": 0.20021917767624223,
+     "tgPayAmount": 114448.16
     },
     {
      "tgNewUserCount": 3921,
      "tgActiveConvertRate": 0.11160129788808562,
-     "tgMfRoi": 0.31334816206679944,
-     "tgPayCountPrice": 23.287000501284894,
-     "tgRealCost": 150317.58823579398,
+     "tgMfRoi": 0.3133947301369911,
+     "tgPayCountPrice": 23.28339346898915,
+     "tgRealCost": 150317.58823579396,
      "tgaArppu0": 10.796872727272728,
      "tgRetention1": 0.2375,
-     "tgRoi": 0.18011092592525452,
-     "tgShowCost": 51.019502998460084,
+     "tgRoi": 0.18012130395232584,
+     "tgShowCost": 51.01950299846007,
      "tgPayCount": 921,
      "gameName": "御剑九宫",
      "tgLtv0": 2.2717,
      "tgPayRate": 0.23488905891354248,
      "dateKey": "20260704-20260802",
-     "tgOriginPrice": 38.33654379897832,
+     "tgOriginPrice": 38.33654379897831,
      "tgMfRechargeConvertRate": 0.21678143330782965,
      "tgRechargeConvertRate": 0.21040550879877581,
      "tgMfLtv0": 3.6508,
      "gameId": "14122",
      "tgActiveUserCountRate": 0.07064524356031625,
      "tgStartCount": 4119,
-     "tgMfRoi0": 0.0952325018516446,
-     "tgMfRoi7": 0.24866790665484606,
-     "tgStartPrice": 36.493709209952414,
-     "tgNewUserPayCountPrice": 182.20313725550787,
+     "tgMfRoi0": 0.09523250185164461,
+     "tgMfRoi7": 0.2486679066548461,
+     "tgStartPrice": 36.49370920995241,
+     "tgNewUserPayCountPrice": 182.2031372555078,
      "tgRechargeTotalAmount0d": 8907.42,
      "tgClickRate": 0.011924880111408397,
      "tgNewUserPayCount": 825,
-     "tgRoi0": 0.05925733711232432,
-     "tgArpu": 3.4123,
+     "tgRoi0": 0.05925733711232433,
+     "tgArpu": 3.4117,
      "tgRechargeUserRetain1": 0.5721212121212121,
      "tgRechargeUserRetain2": 0.3781818181818182,
-     "tgRoi7": 0.14794662594715846,
-     "tgPayAmount": 27073.84
+     "tgRoi7": 0.1479466259471585,
+     "tgPayAmount": 27075.4
     },
     {
      "tgNewUserCount": 2332,
@@ -1894,7 +1894,7 @@
      "tgClickRate": 0.0149842232043319,
      "tgNewUserPayCount": 426,
      "tgRoi0": 0.04695627351168378,
-     "tgArpu": 5.0316,
+     "tgArpu": 5.0304,
      "tgRechargeUserRetain1": 0.49295774647887325,
      "tgRechargeUserRetain2": 0.3286384976525822,
      "tgRoi7": 0.2252717671240625,
@@ -3091,7 +3091,7 @@
    "chart": [
     {
      "dateKey": "20260704",
-     "tgRealCost": 71639.01132356802,
+     "tgRealCost": 71639.01132356799,
      "tgRechargeTotalAmount0d": 5873.24,
      "tgNewUserCount": 1511
     },
@@ -3103,31 +3103,31 @@
     },
     {
      "dateKey": "20260706",
-     "tgRealCost": 55673.394528083,
+     "tgRealCost": 55673.394528083016,
      "tgRechargeTotalAmount0d": 2831.8,
      "tgNewUserCount": 1142
     },
     {
      "dateKey": "20260707",
-     "tgRealCost": 49940.63432107101,
+     "tgRealCost": 49940.634321071,
      "tgRechargeTotalAmount0d": 4762.49,
      "tgNewUserCount": 1006
     },
     {
      "dateKey": "20260708",
-     "tgRealCost": 40700.61088578201,
+     "tgRealCost": 40700.610885782,
      "tgRechargeTotalAmount0d": 3452.49,
      "tgNewUserCount": 831
     },
     {
      "dateKey": "20260709",
-     "tgRealCost": 72937.09170341698,
+     "tgRealCost": 72937.09170341701,
      "tgRechargeTotalAmount0d": 4225.39,
      "tgNewUserCount": 826
     },
     {
      "dateKey": "20260710",
-     "tgRealCost": 68878.41672592299,
+     "tgRealCost": 68878.416725923,
      "tgRechargeTotalAmount0d": 3114.02,
      "tgNewUserCount": 811
     },
@@ -3145,19 +3145,19 @@
     },
     {
      "dateKey": "20260713",
-     "tgRealCost": 29705.69335719299,
+     "tgRealCost": 29705.693357193,
      "tgRechargeTotalAmount0d": 1932.58,
      "tgNewUserCount": 639
     },
     {
      "dateKey": "20260714",
-     "tgRealCost": 18618.266948368004,
+     "tgRealCost": 18618.266948368,
      "tgRechargeTotalAmount0d": 2259.63,
      "tgNewUserCount": 495
     },
     {
      "dateKey": "20260715",
-     "tgRealCost": 63990.94874319301,
+     "tgRealCost": 63990.948743193,
      "tgRechargeTotalAmount0d": 4498.98,
      "tgNewUserCount": 1628
     },
@@ -3169,7 +3169,7 @@
     },
     {
      "dateKey": "20260717",
-     "tgRealCost": 53880.316098285,
+     "tgRealCost": 53880.31609828498,
      "tgRechargeTotalAmount0d": 2911.95,
      "tgNewUserCount": 1369
     },
@@ -3181,7 +3181,7 @@
     },
     {
      "dateKey": "20260719",
-     "tgRealCost": 50016.1429218,
+     "tgRealCost": 50016.14292179999,
      "tgRechargeTotalAmount0d": 3283.34,
      "tgNewUserCount": 994
     },
@@ -3193,7 +3193,7 @@
     },
     {
      "dateKey": "20260721",
-     "tgRealCost": 43428.959608206,
+     "tgRealCost": 43428.959608205994,
      "tgRechargeTotalAmount0d": 2974.96,
      "tgNewUserCount": 941
     },
@@ -3211,19 +3211,19 @@
     },
     {
      "dateKey": "20260724",
-     "tgRealCost": 20410.025098205002,
+     "tgRealCost": 20410.025098204995,
      "tgRechargeTotalAmount0d": 933.86,
      "tgNewUserCount": 455
     },
     {
      "dateKey": "20260725",
-     "tgRealCost": 18553.341176513997,
+     "tgRealCost": 18553.341176514004,
      "tgRechargeTotalAmount0d": 2382.87,
      "tgNewUserCount": 491
     },
     {
      "dateKey": "20260726",
-     "tgRealCost": 16175.185176513001,
+     "tgRealCost": 16175.185176513,
      "tgRechargeTotalAmount0d": 1604.6,
      "tgNewUserCount": 447
     },
@@ -3235,13 +3235,13 @@
     },
     {
      "dateKey": "20260728",
-     "tgRealCost": 11578.010627507,
+     "tgRealCost": 11578.010627507001,
      "tgRechargeTotalAmount0d": 586.39,
      "tgNewUserCount": 270
     },
     {
      "dateKey": "20260729",
-     "tgRealCost": 13793.311843194999,
+     "tgRealCost": 13793.311843195002,
      "tgRechargeTotalAmount0d": 687.01,
      "tgNewUserCount": 250
     },
@@ -3253,7 +3253,7 @@
     },
     {
      "dateKey": "20260731",
-     "tgRealCost": 11093.330294170999,
+     "tgRealCost": 11093.330294171,
      "tgRechargeTotalAmount0d": 929.91,
      "tgNewUserCount": 295
     },
@@ -3265,9 +3265,9 @@
     },
     {
      "dateKey": "20260802",
-     "tgRealCost": 8790.766764766,
-     "tgRechargeTotalAmount0d": 1007.3,
-     "tgNewUserCount": 228
+     "tgRealCost": 8961.710451036999,
+     "tgRechargeTotalAmount0d": 1017.3,
+     "tgNewUserCount": 231
     }
    ]
   }
