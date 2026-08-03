@@ -2619,15 +2619,16 @@ function renderSlotList(slotList) {
   const legendEl = document.getElementById('slotLegend');
   const subEl = document.getElementById('slot-sub');
   if (!legendEl) return;
-  // 过滤：保留有消耗的行（汇总行 csite 空但 cost>0 也保留）
+  // 数据源：sync-data.js 用 platform 维度（头条/快手/广点通等）；列名兼容 csite/platform
   const valid = slotList.filter(s => (parseFloat(s.tgRealCost) || 0) > 0);
   const total = valid.reduce((a, s) => a + (parseFloat(s.tgRealCost) || 0), 0);
-  // 按消耗降序，汇总行（csite 空）排第一
+  // 提取名称（汇总行 platform+csite 都空）
+  const labelOf = s => String(s.csite || '').trim() || String(s.platform || '').trim() || '汇总';
   const sorted = valid
     .slice()
     .sort((a, b) => {
-      const aEmpty = !String(a.csite || '').trim();
-      const bEmpty = !String(b.csite || '').trim();
+      const aEmpty = labelOf(a) === '汇总';
+      const bEmpty = labelOf(b) === '汇总';
       if (aEmpty !== bEmpty) return aEmpty ? -1 : 1;
       return (parseFloat(b.tgRealCost) || 0) - (parseFloat(a.tgRealCost) || 0);
     })
@@ -2643,12 +2644,11 @@ function renderSlotList(slotList) {
   }
   const html = sorted.map((s, i) => {
     const pct = total > 0 ? ((parseFloat(s.tgRealCost) || 0) / total * 100).toFixed(1) : '0.0';
-    const name = (s.csite || '').trim() || '汇总';
+    const name = labelOf(s);
     const cost = '¥' + Math.round(parseFloat(s.tgRealCost) || 0).toLocaleString('zh-CN');
-    const plat = s.platform ? ` <span style="opacity:.5;font-size:10px">${s.platform}</span>` : '';
     return `<div class="slot-legend-row">
       <span class="swatch" style="background:${SLOT_COLORS[i]}"></span>
-      <span class="name" title="${name}">${name}${plat}</span>
+      <span class="name" title="${name}">${name}</span>
       <span class="pct">${cost}</span>
       <span class="val">${pct}%</span>
     </div>`;
