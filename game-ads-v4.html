@@ -2585,7 +2585,6 @@ function renderDist(gameId, gameName) {
   }
   const sub = document.getElementById('dist-sub');
   const paynote = document.getElementById('dist-paycount-note');
-  const d = __distData && __distData.games ? __distData.games[String(gameId)] : null;
   const setName = (sel, val, fallback) => {
     const el = document.querySelector(sel);
     if (el) el.textContent = (val != null && !isNaN(val)) ? val.toFixed(2) + '%' : (fallback || '—');
