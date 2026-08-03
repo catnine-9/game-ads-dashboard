@@ -1624,39 +1624,11 @@ button { font-family: inherit; border: none; cursor: pointer; background: none; 
 
           <div class="donut">
 
-            <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-
-              <path d="M 100 12 A 88 88 0 0 1 142.4 177.1 L 127 149.1 A 56 56 0 0 0 100 44 Z" fill="#22D3EE"/>
-
-              <path d="M 142.4 177.1 A 88 88 0 0 1 20.3 137.3 L 49.3 123.8 A 56 56 0 0 0 127 149.1 Z" fill="#3B82F6"/>
-
-              <path d="M 20.3 137.3 A 88 88 0 0 1 20.3 62.7 L 49.3 76.2 A 56 56 0 0 0 49.3 123.8 Z" fill="#A78BFA"/>
-
-              <path d="M 20.3 62.7 A 88 88 0 0 1 57.6 22.9 L 73 50.9 A 56 56 0 0 0 49.3 76.2 Z" fill="#F59E0B"/>
-
-              <path d="M 57.6 22.9 A 88 88 0 0 1 83.2 13.6 L 89.3 45 A 56 56 0 0 0 73 50.9 Z" fill="#F43F5E"/>
-
-              <path d="M 83.2 13.6 A 88 88 0 0 1 100 12 L 100 44 A 56 56 0 0 0 89.3 45 Z" fill="#34D399"/>
-
-            </svg>
+            <svg id="slotDonut" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"></svg>
 
           </div>
 
-          <div class="slot-legend">
-
-            <div class="slot-legend-row"><span class="swatch" style="background:#22D3EE"></span><span class="name">消耗</span><span class="pct">¥7,792</span><span class="val">100%</span></div>
-
-            <div class="slot-legend-row"><span class="swatch" style="background:#3B82F6"></span><span class="name">新增数</span><span class="pct">158</span><span class="val">100%</span></div>
-
-            <div class="slot-legend-row"><span class="swatch" style="background:#A78BFA"></span><span class="name">首日R 厂商流水</span><span class="pct" data-bind="slot-mfFirstR">¥0</span><span class="val" data-bind="slot-mfFirstR-pct">—</span></div>
-
-            <div class="slot-legend-row"><span class="swatch" style="background:#F59E0B"></span><span class="name">首日LTV 厂商流水</span><span class="pct" data-bind="slot-mfLtv0">¥2.83</span><span class="val" data-bind="slot-mfLtv0-pct">—</span></div>
-
-            <div class="slot-legend-row"><span class="swatch" style="background:#F43F5E"></span><span class="name">付费用户</span><span class="pct">26人</span><span class="val">16.5%</span></div>
-
-            <div class="slot-legend-row"><span class="swatch" style="background:#34D399"></span><span class="name">首日付费用户</span><span class="pct">26人</span><span class="val">16.5%</span></div>
-
-          </div>
+          <div class="slot-legend" id="slotLegend"></div>
 
         </div>
 
@@ -2485,22 +2457,27 @@ function applySnapshot(snap) {
   const { range, chart7, key } = getRangeData();
 
   // 数据行：全部游戏 → 求和；单游戏 → 匹配行
-
   const list = range.detail || [];
+  const slot = range.slot || [];
 
   let data = null;
 
   if (state.game === 'all') {
-
     data = sumGames(list);
-
   } else {
-
     data = list.find(x => String(x.gameId) === String(state.game)) || null;
-
   }
 
   if (!data && list.length) data = sumGames(list); // 找不到该游戏（无消耗）→ 汇总兜底
+
+  // 流量版位（按游戏筛选 + 汇总）
+  let slotList = slot;
+  if (state.game !== 'all' && data) {
+    // 单游戏：保留 csite 在该游戏的 row（即 csite 行 cost > 0）
+    // 但 slot 数据是 csite 维度，无 gameId；按 gameName==data.gameName 过滤
+    const gameName = data.gameName;
+    slotList = slot.filter(s => s.gameName === gameName);
+  }
 
   if (data) updateKPIsFromDetail(list, data);
 
@@ -2562,8 +2539,70 @@ function applySnapshot(snap) {
 
   }
 
-  console.log('[snapshot]', key, 'games:', list.length, 'chart:', chart7.length, 'updatedAt:', snap.updatedAt);
+  console.log('[snapshot]', key, 'games:', list.length, 'chart:', chart7.length, 'slot:', slotList.length, 'updatedAt:', snap.updatedAt);
 
+  // 流量版位渲染
+  renderSlotList(slotList);
+
+}
+
+
+
+/* ============ 流量版位：donut + legend 动态渲染 ============ */
+const SLOT_COLORS = ['#22D3EE', '#3B82F6', '#A78BFA', '#F59E0B', '#F43F5E', '#34D399'];
+
+function renderDonut(top6) {
+  const svg = document.getElementById('slotDonut');
+  if (!svg) return;
+  const total = top6.reduce((a, s) => a + (parseFloat(s.tgRealCost) || 0), 0) || 1;
+  const R = 88, r = 56, cx = 100, cy = 100;
+  const paths = [];
+  let angle = -Math.PI / 2; // 12 点钟
+  for (let i = 0; i < top6.length; i++) {
+    const pct = (parseFloat(top6[i].tgRealCost) || 0) / total;
+    if (pct <= 0) continue;
+    const next = angle + pct * Math.PI * 2;
+    const x1 = cx + R * Math.cos(angle), y1 = cy + R * Math.sin(angle);
+    const x2 = cx + R * Math.cos(next),  y2 = cy + R * Math.sin(next);
+    const x3 = cx + r * Math.cos(next),  y3 = cy + r * Math.sin(next);
+    const x4 = cx + r * Math.cos(angle), y4 = cy + r * Math.sin(angle);
+    const large = (next - angle) > Math.PI ? 1 : 0;
+    const d = `M ${x1.toFixed(1)} ${y1.toFixed(1)} A ${R} ${R} 0 ${large} 1 ${x2.toFixed(1)} ${y2.toFixed(1)} L ${x3.toFixed(1)} ${y3.toFixed(1)} A ${r} ${r} 0 ${large} 0 ${x4.toFixed(1)} ${y4.toFixed(1)} Z`;
+    paths.push(`<path d="${d}" fill="${SLOT_COLORS[i]}"/>`);
+    angle = next;
+  }
+  svg.innerHTML = paths.join('');
+}
+
+function renderSlotList(slotList) {
+  const legendEl = document.getElementById('slotLegend');
+  if (!legendEl) return;
+  // 按消耗降序，过滤掉无消耗和空白 csite
+  const sorted = slotList
+    .filter(s => (parseFloat(s.tgRealCost) || 0) > 0 && String(s.csite || '').trim() !== '')
+    .sort((a, b) => (parseFloat(b.tgRealCost) || 0) - (parseFloat(a.tgRealCost) || 0))
+    .slice(0, 6);
+  const total = sorted.reduce((a, s) => a + (parseFloat(s.tgRealCost) || 0), 0);
+  if (sorted.length === 0) {
+    legendEl.innerHTML = '<div style="color:#6B7280;font-size:11.5px;padding:8px 0">暂无版位数据</div>';
+    const svg = document.getElementById('slotDonut');
+    if (svg) svg.innerHTML = '';
+    return;
+  }
+  const html = sorted.map((s, i) => {
+    const pct = total > 0 ? ((parseFloat(s.tgRealCost) || 0) / total * 100).toFixed(1) : '0.0';
+    const name = (s.csite || '').trim();
+    const cost = '¥' + Math.round(parseFloat(s.tgRealCost) || 0).toLocaleString('zh-CN');
+    const plat = s.platform ? ` <span style="opacity:.5;font-size:10px">${s.platform}</span>` : '';
+    return `<div class="slot-legend-row">
+      <span class="swatch" style="background:${SLOT_COLORS[i]}"></span>
+      <span class="name" title="${name}">${name}${plat}</span>
+      <span class="pct">${cost}</span>
+      <span class="val">${pct}%</span>
+    </div>`;
+  }).join('');
+  legendEl.innerHTML = html;
+  renderDonut(sorted);
 }
 
 
