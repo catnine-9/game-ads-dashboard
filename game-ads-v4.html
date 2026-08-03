@@ -2042,54 +2042,6 @@ function updateKPIsFromDetail(list, forcedData, snapData) {
 
   setText('.dist-section-head.dist-section-amount .note', '今日新增 ' + fmtN(newU, 0));
 
-  const setDist = (i, range, val, color) => {
-
-    const rows = document.querySelectorAll('.dist-row');
-
-    if (!rows[i]) return;
-
-    const r = rows[i].querySelector('.range');
-
-    const p = rows[i].querySelector('.pct');
-
-    const f = rows[i].querySelector('.bar-fill');
-
-    if (r) r.textContent = range;
-
-    if (p) p.textContent = val;
-
-    if (f) {
-
-      const numMatch = val.match(/(\d+\.?\d*)/);
-
-      if (numMatch) {
-
-        const n = parseFloat(numMatch[1]);
-
-        const max = Math.max(cost, firstR, payAmt, 100);
-
-        f.style.width = Math.max(8, (n / max) * 100) + 'px';
-
-        f.style.background = color;
-
-      }
-
-    }
-
-  };
-
-  setDist(0, '付费用户',         fmtN(data.tgPayCount,0)+'人',           '#22D3EE');
-
-  setDist(1, '首日付费',         fmtN(data.tgNewUserPayCount,0)+'人',   '#3B82F6');
-
-  setDist(2, '首日付费率',       fmtPct(data.tgRechargeConvertRate),    '#A78BFA');
-
-  setDist(3, '首日R 厂商流水',   '¥'+fmtN(mfFirstR,0),                  '#F59E0B');
-
-  setDist(4, '首日LTV 厂商流水', '¥'+mfLtv0.toFixed(2),                 '#F43F5E');
-
-  setDist(5, '首日LTV',          '¥'+(data.tgLtv0||0).toFixed(2),       '#34D399');
-
   // 头部副标题更新
 
   const gName = state.game === 'all' ? '各游戏汇总（按游戏维度）' : ((GAMES.find(g => g.id === state.game) || {}).name || '');
