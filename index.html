@@ -1161,99 +1161,59 @@ button { font-family: inherit; border: none; cursor: pointer; background: none; 
       <!-- 充值分布卡 -->
 
       <section class="card dist-card">
-
         <div class="card-head">
-
           <h2 class="card-title">在投单游戏充值分布</h2>
-
-          <p class="card-sub">今日付费用户数 · 付费金额 · 转化指标</p>
-
+          <p class="card-sub" id="dist-sub">神将传说-8月12日上线 · 厂商流水 · 今日</p>
         </div>
 
-
-
-        <div class="dist-section-head dist-section-amount">
-
-          <span class="label">付费用户分布</span>
-
-          <div class="spacer"></div>
-
-          <span class="note">今日新增 158</span>
-
-        </div>
-
-        <div class="dist-row">
-
-          <div class="range">付费用户</div>
-
-          <div class="bar-track"><div class="bar-fill" style="width:87px; background:#22D3EE"></div></div>
-
-          <div class="pct">26人</div>
-
-        </div>
-
-        <div class="dist-row">
-
-          <div class="range">首日付费</div>
-
-          <div class="bar-track"><div class="bar-fill" style="width:77px; background:#3B82F6"></div></div>
-
-          <div class="pct">26人</div>
-
-        </div>
-
-        <div class="dist-row">
-
-          <div class="range">首日付费率</div>
-
-          <div class="bar-track"><div class="bar-fill" style="width:16px; background:#A78BFA"></div></div>
-
-          <div class="pct">16.46%</div>
-
-        </div>
-
-
-
+        <!-- 人数区间分布 -->
         <div class="dist-section-head dist-section-people">
-
-          <span class="label">金额产出分布</span>
-
+          <span class="label">充值人数区间分布</span>
           <div class="spacer"></div>
-
-          <span class="note">单游戏内消费</span>
-
+          <span class="note" id="dist-paycount-note">付费 127 人</span>
         </div>
-
         <div class="dist-row">
-
-          <div class="range">首日R 厂商流水</div>
-
-          <div class="bar-track"><div class="bar-fill" style="width:39px; background:#F59E0B"></div></div>
-
-          <div class="pct" data-bind="dist-mfFirstR">0%</div>
-
+          <div class="range">0-100元</div>
+          <div class="bar-track"><div class="bar-fill" style="width:91px; background:#22D3EE"></div></div>
+          <div class="pct" data-bind="dist-people-0">91.34%</div>
         </div>
-
         <div class="dist-row">
-
-          <div class="range">首日LTV 厂商流水</div>
-
-          <div class="bar-track"><div class="bar-fill" style="width:100px; background:#F43F5E"></div></div>
-
-          <div class="pct" data-bind="dist-mfLtv0">2.83</div>
-
+          <div class="range">100-1000元</div>
+          <div class="bar-track"><div class="bar-fill" style="width:8px; background:#3B82F6"></div></div>
+          <div class="pct" data-bind="dist-people-100">7.87%</div>
         </div>
-
         <div class="dist-row">
-
-          <div class="range">首日LTV</div>
-
-          <div class="bar-track"><div class="bar-fill" style="width:18px; background:#34D399"></div></div>
-
-          <div class="pct">¥2.15</div>
-
+          <div class="range">1000-10000元</div>
+          <div class="bar-track"><div class="bar-fill" style="width:1px; background:#A78BFA"></div></div>
+          <div class="pct" data-bind="dist-people-1000">0.79%</div>
+        </div>
+        <div class="dist-row">
+          <div class="range">1万元以上</div>
+          <div class="bar-track"><div class="bar-fill" style="width:0px; background:#34D399"></div></div>
+          <div class="pct" data-bind="dist-people-10000">0.00%</div>
         </div>
 
+        <!-- 金额区间分布 -->
+        <div class="dist-section-head dist-section-amount">
+          <span class="label">充值金额区间分布</span>
+          <div class="spacer"></div>
+          <span class="note">厂商流水口径</span>
+        </div>
+        <div class="dist-row">
+          <div class="range">0-100元</div>
+          <div class="bar-track"><div class="bar-fill" style="width:25px; background:#F59E0B"></div></div>
+          <div class="pct" data-bind="dist-amount-0">24.79%</div>
+        </div>
+        <div class="dist-row">
+          <div class="range">100-1000元</div>
+          <div class="bar-track"><div class="bar-fill" style="width:0px; background:#F43F5E"></div></div>
+          <div class="pct" data-bind="dist-amount-100">—</div>
+        </div>
+        <div class="dist-row">
+          <div class="range">1000元以上</div>
+          <div class="bar-track"><div class="bar-fill" style="width:0px; background:#7CC2FF"></div></div>
+          <div class="pct" data-bind="dist-amount-1000">—</div>
+        </div>
       </section>
 
 
