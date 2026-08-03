@@ -1,0 +1,2801 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+
+<meta http-equiv="Pragma" content="no-cache">
+
+<meta http-equiv="Expires" content="0">
+
+<meta http-equiv="refresh" content="0;url=dashboard.html?v=2026-08-03">
+
+<meta http-equiv="refresh" content="0;url=live.html?v=v3"><meta name="data-build-ts" content="2026-08-03 17:19:40"><title>游戏投放数据看板 · GAME AD ANALYTICS</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+<style>
+
+:root {
+
+  --bg: #0A0A0B;
+
+  --bg-elev: #13141C;
+
+  --header-bg: rgba(31, 36, 51, 0.9);
+
+  --card-bg: rgba(255, 255, 255, 0.08);
+
+  --card-bg-soft: rgba(255, 255, 255, 0.05);
+
+  --card-bg-hover: rgba(255, 255, 255, 0.1);
+
+  --border: rgba(255, 255, 255, 0.1);
+
+  --border-soft: rgba(255, 255, 255, 0.06);
+
+  --text-primary: #FAFAFA;
+
+  --text-secondary: #A1A1AA;
+
+  --text-muted: #71717A;
+
+  --accent: #7CC2FF;
+
+  --accent-2: #A8D8FF;
+
+  --green: #34D399;
+
+  --orange: #F59E0B;
+
+  --red: #F87171;
+
+  --pink: #F43F5E;
+
+  --purple: #A78BFA;
+
+  --cyan: #22D3EE;
+
+  --blue: #3B82F6;
+
+  --r-sm: 4px;
+
+  --r-md: 12px;
+
+  --r-lg: 14px;
+
+  --r-xl: 20px;
+
+  --r-card: 28px;
+
+  --r-pill: 999px;
+
+  --space-1: 4px;
+
+  --space-2: 8px;
+
+  --space-3: 12px;
+
+  --space-4: 16px;
+
+  --space-5: 18px;
+
+  --space-6: 20px;
+
+  --space-7: 24px;
+
+  --shadow-card: 0 16px 32px rgba(0, 0, 0, 0.4);
+
+  --shadow-cta: 0 4px 12px rgba(77, 111, 212, 0.35);
+
+  --font-sans: "Noto Sans SC", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+
+  --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body { background: var(--bg); color: var(--text-primary); font-family: var(--font-sans); -webkit-font-smoothing: antialiased; font-size: 14px; line-height: 1.5; }
+
+body { min-height: 100vh; padding: 0; }
+
+button { font-family: inherit; border: none; cursor: pointer; background: none; color: inherit; }
+
+
+
+/* ============ Dropdown ============ */
+
+.dropdown { position: relative; display: inline-flex; }
+.date-input { padding: 4px 8px; border-radius: 4px; background: rgba(10,24,56,0.6); border: 1px solid rgba(46,167,255,0.3); color: #fff; font-size: 12px; cursor: pointer; }
+.date-input::-webkit-calendar-picker-indicator { filter: invert(1); }
+
+.dropdown-trigger { display: inline-flex; align-items: center; gap: 6px; }
+
+.dropdown-arrow { transition: transform 0.15s; }
+
+.dropdown.open .dropdown-arrow { transform: rotate(180deg); }
+
+.dropdown-menu {
+
+  display: none;
+
+  position: absolute;
+
+  top: calc(100% + 6px);
+
+  left: 0;
+
+  min-width: 100%;
+
+  background: #1C1C24;
+
+  border: 1px solid rgba(255, 255, 255, 0.14);
+
+  border-radius: var(--r-md);
+
+  padding: 6px;
+
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+
+  z-index: 100;
+
+  max-height: 320px;
+
+  overflow-y: auto;
+
+}
+
+.dropdown.open .dropdown-menu { display: block; }
+
+.dropdown-item {
+
+  display: flex; align-items: center; justify-content: space-between;
+
+  padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 13px; color: #E4E4E7;
+
+  white-space: nowrap; gap: 12px;
+
+  transition: background 0.1s;
+
+}
+
+.dropdown-item:hover { background: rgba(255, 255, 255, 0.08); }
+
+.dropdown-item.active { background: rgba(124, 194, 255, 0.15); color: var(--accent); }
+
+.dropdown-item .check { color: var(--accent); font-weight: 700; }
+
+.dropdown-divider { height: 1px; background: rgba(255, 255, 255, 0.08); margin: 4px 6px; }
+
+.dropdown-item .meta { color: var(--text-muted); font-size: 11px; font-family: var(--font-mono); }
+
+
+
+/* ============ Layout ============ */
+
+.dashboard {
+
+  width: 100%;
+
+  min-width: 320px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  background: var(--bg);
+
+}
+
+.header {
+
+  height: 72px;
+
+  display: flex;
+
+  align-items: center;
+
+  padding: 0 24px;
+
+  gap: 16px;
+
+  background: var(--header-bg);
+
+  border-bottom: 1px solid var(--border-soft);
+
+  flex-shrink: 0;
+
+}
+
+.logo {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+
+}
+
+.logo-icon {
+
+  width: 32px;
+
+  height: 32px;
+
+  border-radius: 9px;
+
+  background: linear-gradient(135deg, #7CC2FF 0%, #5C70ED 100%);
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  flex-shrink: 0;
+
+}
+
+.logo-icon svg { width: 22px; height: 22px; }
+
+.title-block { display: flex; flex-direction: column; gap: 2px; }
+
+.title-main { font-size: 20px; font-weight: 700; color: var(--text-primary); letter-spacing: 0.5px; }
+
+.title-sub { font-size: 11px; color: var(--text-muted); letter-spacing: 1.5px; }
+
+.spacer { flex: 1; }
+
+.filters { display: flex; align-items: center; gap: 12px; }
+
+.pill {
+
+  height: 38px;
+
+  padding: 0 14px;
+
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  border-radius: var(--r-pill);
+
+  background: var(--card-bg-hover);
+
+  border: 1px solid rgba(255, 255, 255, 0.14);
+
+  font-size: 13px;
+
+  color: #E4E4E7;
+
+  font-weight: 500;
+
+  cursor: pointer;
+
+  transition: background 0.15s;
+
+  white-space: nowrap;
+
+}
+
+.pill:hover { background: rgba(255, 255, 255, 0.12); }
+
+.pill .label { font-weight: 500; }
+
+.pill .arrow { color: var(--text-secondary); transition: transform 0.15s; }
+
+.pill[aria-expanded="true"] .arrow { transform: rotate(180deg); }
+
+.pill:focus { outline: none; border-color: var(--accent); }
+
+.update-time {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  padding: 0 16px;
+
+  height: 38px;
+
+  font-size: 12px;
+
+  color: var(--text-secondary);
+
+}
+
+.update-time .dot {
+
+  width: 8px; height: 8px; border-radius: 50%;
+
+  background: var(--green);
+
+  box-shadow: 0 0 8px var(--green);
+
+}
+
+.btn-refresh {
+
+  width: auto;
+
+  height: 38px;
+
+  padding: 0 18px;
+
+  border-radius: var(--r-pill);
+
+  background: var(--accent);
+
+  color: #fff;
+
+  font-size: 13px;
+
+  font-weight: 500;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 6px;
+
+  box-shadow: var(--shadow-cta);
+
+  transition: filter 0.15s;
+
+}
+
+.btn-refresh:hover { filter: brightness(1.1); }
+
+
+
+.body {
+
+  display: grid;
+
+  grid-template-columns: 400px 1fr 400px;
+
+  gap: 24px;
+
+  padding: 24px;
+
+  flex: 1;
+
+  min-height: 0;
+
+}
+
+.col { display: flex; flex-direction: column; gap: 24px; min-width: 0; }
+
+.col-left, .col-right { min-width: 0; }
+
+.col-center { min-width: 0; }
+
+
+
+/* ============ Card ============ */
+
+.card {
+
+  background: var(--card-bg);
+
+  border: 1px solid var(--border);
+
+  border-radius: var(--r-card);
+
+  padding: 24px;
+
+  box-shadow: var(--shadow-card);
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 18px;
+
+  backdrop-filter: blur(20px);
+
+  -webkit-backdrop-filter: blur(20px);
+
+}
+
+.card-head { display: flex; flex-direction: column; gap: 4px; }
+
+.card-title { font-size: 18px; font-weight: 600; color: var(--text-primary); }
+
+.card-sub { font-size: 11px; color: var(--text-muted); }
+
+.card-pad-sm { padding: 22px; gap: 16px; }
+
+.card-pad-xs { padding: 22px; gap: 12px; }
+
+
+
+/* ============ Main KPI Panel (Center) ============ */
+
+.main-card { gap: 20px; }
+
+.main-head { flex-direction: row; align-items: center; gap: 12px; }
+
+.main-head .card-head { flex: 0 0 auto; }
+
+.main-head .spacer { flex: 1; }
+
+.game-badge {
+
+  height: 34px;
+
+  padding: 0 14px;
+
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  border-radius: var(--r-pill);
+
+  background: rgba(34, 211, 238, 0.15);
+
+  border: 1px solid rgba(34, 211, 238, 0.4);
+
+  font-size: 12.5px;
+
+  color: #E4E4E7;
+
+  font-weight: 500;
+
+}
+
+.game-badge .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--cyan); }
+
+.date-pill {
+
+  height: 34px;
+
+  padding: 0 14px;
+
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 6px;
+
+  border-radius: var(--r-pill);
+
+  background: var(--card-bg-hover);
+
+  border: 1px solid rgba(255, 255, 255, 0.12);
+
+  font-size: 12.5px;
+
+  color: #E4E4E7;
+
+  font-weight: 500;
+
+}
+
+.kpi-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; }
+
+.kpi {
+
+  background: var(--card-bg-soft);
+
+  border: 1px solid rgba(255, 255, 255, 0.12);
+
+  border-radius: var(--r-xl);
+
+  padding: 18px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 10px;
+
+  min-width: 0;
+
+}
+
+.kpi.kpi-accent {
+
+  background: rgba(124, 194, 255, 0.1);
+
+  border-color: rgba(124, 194, 255, 0.25);
+
+}
+
+.kpi-label { font-size: 12px; color: var(--text-secondary); }
+
+.kpi-value {
+
+  font-family: var(--font-mono);
+
+  font-size: 32px;
+
+  font-weight: 700;
+
+  color: var(--text-primary);
+
+  letter-spacing: -0.01em;
+
+  line-height: 1.1;
+
+  word-break: break-all;
+
+}
+
+
+
+.stack-section { display: flex; flex-direction: column; gap: 10px; }
+
+.stack-label-row { display: flex; align-items: center; gap: 8px; }
+
+.stack-title { font-size: 11px; color: var(--text-secondary); }
+
+.stack-total { font-family: var(--font-mono); font-size: 11px; font-weight: 500; color: var(--text-muted); }
+
+.stack-bar {
+
+  display: flex;
+
+  height: 14px;
+
+  border-radius: var(--r-sm);
+
+  overflow: hidden;
+
+  gap: 2px;
+
+}
+
+.stack-seg { height: 100%; border-radius: var(--r-sm); transition: transform 0.2s; }
+
+.stack-seg:hover { transform: scaleY(1.15); }
+
+.legend-row { display: flex; gap: 20px; flex-wrap: wrap; align-items: center; }
+
+.legend-item { display: flex; align-items: center; gap: 6px; font-size: 11.5px; color: #E4E4E7; }
+
+.legend-item .dot { width: 8px; height: 8px; border-radius: 50%; }
+
+.legend-item .pct { font-family: var(--font-mono); color: var(--text-secondary); margin-left: 2px; }
+
+
+
+/* ============ Chart Card (分日数据明细) ============ */
+
+.chart-card { gap: 16px; }
+
+.chart-toolbar {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+
+  flex-wrap: wrap;
+
+}
+
+.chart-toolbar .spacer { flex: 1; }
+
+.mini-pill {
+
+  height: 32px;
+
+  padding: 0 12px;
+
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 4px;
+
+  border-radius: 16px;
+
+  background: var(--card-bg-hover);
+
+  border: 1px solid rgba(255, 255, 255, 0.12);
+
+  font-size: 11.5px;
+
+  color: #E4E4E7;
+
+  font-weight: 500;
+
+  cursor: pointer;
+
+}
+
+.mini-pill .arrow { color: var(--text-secondary); }
+
+.chart-legend { display: flex; gap: 20px; align-items: center; flex-wrap: wrap; }
+
+.chart-legend-item {
+
+  display: flex; align-items: center; gap: 8px;
+
+  font-size: 12px; color: #E4E4E7;
+
+}
+
+.chart-legend-item .swatch { width: 10px; height: 10px; border-radius: 3px; }
+
+.chart-legend-item .name { font-weight: 500; }
+
+.chart-legend-item .total { font-family: var(--font-mono); color: var(--text-muted); font-size: 11px; }
+
+.chart-wrap {
+
+  display: flex; flex-direction: column; gap: 10px;
+
+  width: 100%;
+
+}
+
+.line-chart {
+
+  width: 100%;
+
+  height: 220px;
+
+  display: block;
+
+  position: relative;
+
+}
+
+.chart-tooltip {
+
+  position: absolute;
+
+  background: #1C1C24;
+
+  border: 1px solid rgba(255,255,255,0.14);
+
+  border-radius: 8px;
+
+  padding: 8px 12px;
+
+  font-size: 11.5px;
+
+  color: #E4E4E7;
+
+  pointer-events: none;
+
+  z-index: 200;
+
+  box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+
+  white-space: nowrap;
+
+  opacity: 0;
+
+  transition: opacity 0.1s;
+
+  z-index: 999;
+
+  font-family: var(--font-mono);
+
+}
+
+.chart-tooltip.show { opacity: 1; }
+
+.chart-tooltip .tt-date { color: var(--accent); font-weight: 600; margin-bottom: 4px; }
+
+.chart-tooltip .tt-row { display: flex; align-items: center; gap: 6px; margin: 2px 0; }
+
+.chart-tooltip .tt-dot { width: 8px; height: 8px; border-radius: 50%; }
+
+.chart-tooltip .tt-label { color: var(--text-muted); flex: 1; }
+
+.chart-tooltip .tt-val { font-weight: 600; }
+
+.line-chart circle { transition: r 0.1s; cursor: crosshair; }
+
+.line-chart circle:hover { r: 6; }
+
+.x-labels {
+
+  display: flex;
+
+  justify-content: space-between;
+
+  padding: 0 40px;  /* 与 SVG 数据点对齐：第一个点 x=40，最后一个 x=520 */
+
+  height: 18px;
+
+  font-family: var(--font-mono);
+
+  font-size: 10.5px;
+
+  color: var(--text-secondary);
+
+  font-weight: 500;
+
+}
+
+.x-labels > div { text-align: center; }
+
+
+
+/* ============ Dist Card (Left top) ============ */
+
+.dist-card { gap: 14px; }
+
+.dist-section-head {
+
+  display: flex; align-items: center; gap: 8px;
+
+  margin-top: 4px;
+
+}
+
+.dist-section-head .label { font-size: 12px; font-weight: 600; }
+
+.dist-section-head .spacer { flex: 1; }
+
+.dist-section-head .note { font-size: 10.5px; color: var(--text-muted); }
+
+.dist-section-amount .label { color: var(--accent); }
+
+.dist-section-people .label { color: var(--green); }
+
+.dist-row {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+
+  height: 22px;
+
+}
+
+.dist-row .range {
+
+  width: 76px;
+
+  font-family: var(--font-mono);
+
+  font-size: 11.5px;
+
+  font-weight: 500;
+
+  color: #E4E4E7;
+
+  flex-shrink: 0;
+
+}
+
+.dist-row .bar-track {
+
+  width: 150px;
+
+  height: 8px;
+
+  border-radius: var(--r-sm);
+
+  background: #1C1C22;
+
+  overflow: hidden;
+
+  flex-shrink: 0;
+
+}
+
+.dist-row .bar-fill {
+
+  height: 100%;
+
+  border-radius: var(--r-sm);
+
+  transition: width 0.4s;
+
+}
+
+.dist-row .pct {
+
+  flex: 1;
+
+  text-align: right;
+
+  font-family: var(--font-mono);
+
+  font-size: 11.5px;
+
+  font-weight: 500;
+
+  color: var(--text-primary);
+
+}
+
+
+
+/* ============ Metrics Card (Left bottom) ============ */
+
+.metrics-card { gap: 12px; }
+
+.metric-row {
+
+  height: 56px;
+
+  padding: 0 16px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  border-radius: var(--r-lg);
+
+  background: var(--card-bg-soft);
+
+  border: 1px solid rgba(255, 255, 255, 0.08);
+
+  transition: background 0.15s;
+
+}
+
+.metric-row:hover { background: rgba(255, 255, 255, 0.07); }
+
+.metric-row.accent { background: rgba(34, 211, 238, 0.08); border-color: rgba(34, 211, 238, 0.2); }
+
+.metric-row .label { font-size: 12px; color: var(--text-secondary); }
+
+.metric-row .value {
+
+  font-family: var(--font-mono);
+
+  font-size: 20px;
+
+  font-weight: 700;
+
+}
+
+.metric-row .value.neutral { color: var(--text-primary); }
+
+.metric-row .value.green { color: var(--green); }
+
+
+
+/* ============ Right Column ============ */
+
+.conv-card { gap: 14px; }
+
+.conv-row {
+
+  height: 56px;
+
+  padding: 12px 16px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  justify-content: center;
+
+  gap: 8px;
+
+  border-radius: var(--r-lg);
+
+  background: rgba(255, 255, 255, 0.04);
+
+}
+
+.conv-row.accent { background: rgba(52, 211, 153, 0.08); }
+
+.conv-row .top { display: flex; align-items: center; justify-content: space-between; }
+
+.conv-row .label { font-size: 12px; color: var(--text-secondary); }
+
+.conv-row .value { font-family: var(--font-mono); font-size: 18px; font-weight: 700; }
+
+.conv-row .track {
+
+  width: 100%;
+
+  height: 6px;
+
+  border-radius: 3px;
+
+  background: #1C1C22;
+
+  overflow: hidden;
+
+}
+
+.conv-row .fill { height: 100%; border-radius: 3px; }
+
+
+
+.slot-card { gap: 16px; }
+
+.slot-layout {
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 14px;
+
+}
+
+.donut {
+
+  width: 100%;
+
+  display: flex;
+
+  justify-content: center;
+
+}
+
+.donut svg { width: 200px; height: 200px; }
+
+.slot-legend { display: flex; flex-direction: column; gap: 6px; }
+
+.slot-legend-row {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  height: 22px;
+
+  font-size: 11.5px;
+
+}
+
+.slot-legend-row .swatch { width: 10px; height: 10px; border-radius: 3px; flex-shrink: 0; }
+
+.slot-legend-row .name { font-weight: 500; color: #E4E4E7; width: 70px; flex-shrink: 0; }
+
+.slot-legend-row .pct {
+
+  flex: 1;
+
+  text-align: right;
+
+  font-family: var(--font-mono);
+
+  font-weight: 500;
+
+  color: var(--text-primary);
+
+}
+
+.slot-legend-row .val { font-family: var(--font-mono); color: var(--text-muted); font-size: 10.5px; width: 56px; text-align: right; }
+
+
+
+/* ============ Responsive ============ */
+
+@media (max-width: 1400px) {
+
+  .body { grid-template-columns: 360px 1fr 360px; gap: 20px; padding: 20px; }
+
+  .card { padding: 22px; }
+
+  .kpi-value { font-size: 28px; }
+
+}
+
+@media (max-width: 1200px) {
+
+  .body { grid-template-columns: 320px 1fr 320px; gap: 16px; padding: 16px; }
+
+  .card { padding: 20px; gap: 16px; }
+
+  .col { gap: 16px; }
+
+  .kpi-value { font-size: 24px; }
+
+  .card-title { font-size: 16px; }
+
+  .dist-row .bar-track { width: 120px; }
+
+  .line-chart { height: 200px; }
+
+}
+
+@media (max-width: 960px) {
+
+  .body { grid-template-columns: 1fr; }
+
+  .col-left, .col-right { order: 2; }
+
+  .col-center { order: 1; }
+
+  .kpi-row { grid-template-columns: repeat(3, 1fr); }
+
+  .kpi:nth-child(4), .kpi:nth-child(5) { grid-column: span 1; }
+
+  .filters { flex-wrap: wrap; }
+
+  .update-time { display: none; }
+
+}
+
+@media (max-width: 600px) {
+
+  .body { padding: 12px; gap: 12px; }
+
+  .card { padding: 16px; gap: 12px; }
+
+  .kpi-row { grid-template-columns: repeat(2, 1fr); }
+
+  .kpi { padding: 14px; }
+
+  .kpi-value { font-size: 22px; }
+
+  .title-main { font-size: 16px; }
+
+  .title-sub { display: none; }
+
+  .header { padding: 0 12px; gap: 8px; }
+
+  .pill, .update-time { padding: 0 10px; height: 34px; font-size: 12px; }
+
+  .btn-refresh { padding: 0 12px; }
+
+  .filters { gap: 8px; }
+
+  .stack-bar { height: 12px; }
+
+  .dist-row .bar-track { width: 100%; }
+
+  .line-chart { height: 180px; }
+
+  .x-labels { font-size: 9.5px; }
+
+  .slot-legend-row .name { width: 60px; }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="dashboard">
+
+
+
+  <!-- ============ HEADER ============ -->
+
+  <header class="header">
+
+    <div class="logo">
+
+      <div class="logo-icon">
+
+        <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+
+          <path d="M16 4L26 9.5V16.5C26 22 21.6 26.5 16 28C10.4 26.5 6 22 6 16.5V9.5L16 4Z" fill="white" fill-opacity="0.92"/>
+
+          <path d="M11 13L15.5 17L21 10.5" stroke="#3B6FD4" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+
+        </svg>
+
+      </div>
+
+      <div class="title-block">
+
+        <div class="title-main">游戏投放数据看板</div>
+
+        <div class="title-sub">GAME AD ANALYTICS · 各游戏汇总（按游戏维度） · 今日</div>
+
+      </div>
+
+    </div>
+
+    <div class="spacer"></div>
+
+    <div class="filters">
+
+      <div class="dropdown" data-key="game">
+
+        <button class="pill dropdown-trigger" type="button" aria-haspopup="listbox" aria-expanded="false">
+
+          <span class="label" data-bind="game-label">神将传说</span>
+
+          <span class="arrow">▾</span>
+
+        </button>
+
+        <div class="dropdown-menu" role="listbox" id="dd-game"></div>
+
+      </div>
+
+      <div class="dropdown" data-key="date" style="position:relative">
+        <button class="pill dropdown-trigger" type="button" aria-haspopup="listbox" aria-expanded="false">
+            <span class="label" data-bind="date-label">今日</span>
+            <span class="arrow">▾</span>
+          </button>
+        <div class="dropdown-menu" role="listbox" id="dd-date"></div>
+      </div>
+
+      <div class="update-time"><span class="dot"></span>最后更新 <span data-bind="updated-at">--:--:--</span> · 每10分钟自动刷新</div>
+
+      <button class="btn-refresh" id="btn-refresh" title="点击调用 API 重新拉数据">
+
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M13.5 8C13.5 11.04 11.04 13.5 8 13.5C4.96 13.5 2.5 11.04 2.5 8C2.5 4.96 4.96 2.5 8 2.5C10.02 2.5 11.83 3.53 12.87 5.06" stroke="white" stroke-width="1.6" stroke-linecap="round"/><path d="M12.9 1.5V5.1H9.3" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+
+        <span data-bind="refresh-text">刷新数据</span>
+
+      </button>
+
+    </div>
+
+  </header>
+
+
+
+  <!-- ============ BODY ============ -->
+
+  <div class="body">
+
+
+
+    <!-- ============ LEFT COLUMN ============ -->
+
+    <div class="col col-left">
+
+
+
+      <!-- 充值分布卡 -->
+
+      <section class="card dist-card">
+        <div class="card-head">
+          <h2 class="card-title">在投单游戏充值分布</h2>
+          <p class="card-sub" id="dist-sub">神将传说-8月12日上线 · 厂商流水 · 今日</p>
+        </div>
+
+        <!-- 人数区间分布 -->
+        <div class="dist-section-head dist-section-people">
+          <span class="label">充值人数区间分布</span>
+          <div class="spacer"></div>
+          <span class="note" id="dist-paycount-note">付费 127 人</span>
+        </div>
+        <div class="dist-row">
+          <div class="range">0-100元</div>
+          <div class="bar-track"><div class="bar-fill" style="width:91px; background:#22D3EE"></div></div>
+          <div class="pct" data-bind="dist-people-0">91.34%</div>
+        </div>
+        <div class="dist-row">
+          <div class="range">100-1000元</div>
+          <div class="bar-track"><div class="bar-fill" style="width:8px; background:#3B82F6"></div></div>
+          <div class="pct" data-bind="dist-people-100">7.87%</div>
+        </div>
+        <div class="dist-row">
+          <div class="range">1000-10000元</div>
+          <div class="bar-track"><div class="bar-fill" style="width:1px; background:#A78BFA"></div></div>
+          <div class="pct" data-bind="dist-people-1000">0.79%</div>
+        </div>
+        <div class="dist-row">
+          <div class="range">1万元以上</div>
+          <div class="bar-track"><div class="bar-fill" style="width:0px; background:#34D399"></div></div>
+          <div class="pct" data-bind="dist-people-10000">0.00%</div>
+        </div>
+
+        <!-- 金额区间分布 -->
+        <div class="dist-section-head dist-section-amount">
+          <span class="label">充值金额区间分布</span>
+          <div class="spacer"></div>
+          <span class="note">厂商流水口径</span>
+        </div>
+        <div class="dist-row">
+          <div class="range">0-100元</div>
+          <div class="bar-track"><div class="bar-fill" style="width:25px; background:#F59E0B"></div></div>
+          <div class="pct" data-bind="dist-amount-0">24.79%</div>
+        </div>
+        <div class="dist-row">
+          <div class="range">100-1000元</div>
+          <div class="bar-track"><div class="bar-fill" style="width:0px; background:#F43F5E"></div></div>
+          <div class="pct" data-bind="dist-amount-100">—</div>
+        </div>
+        <div class="dist-row">
+          <div class="range">1000元以上</div>
+          <div class="bar-track"><div class="bar-fill" style="width:0px; background:#7CC2FF"></div></div>
+          <div class="pct" data-bind="dist-amount-1000">—</div>
+        </div>
+      </section>
+
+
+
+      <!-- 核心指标卡 -->
+
+      <section class="card metrics-card card-pad-xs">
+
+        <div class="card-head">
+
+          <h2 class="card-title">核心指标</h2>
+
+          <p class="card-sub">近7日口径 · 留存/付费/LTV</p>
+
+        </div>
+
+        <div class="metric-row">
+
+          <span class="label">首日ARPPU</span>
+
+          <span class="value neutral">¥16.66</span>
+
+        </div>
+
+        <div class="metric-row">
+
+          <span class="label">ARPU</span>
+
+          <span class="value neutral">¥5.91</span>
+
+        </div>
+
+        <div class="metric-row">
+
+          <span class="label">首日LTV（厂商流水）</span>
+
+          <span class="value neutral">¥4.89</span>
+
+        </div>
+
+        <div class="metric-row">
+
+          <span class="label">付费率（近7日）</span>
+
+          <span class="value neutral">22.19%</span>
+
+        </div>
+
+        <div class="metric-row accent">
+
+          <span class="label">次留</span>
+
+          <span class="value green">19.01%</span>
+
+        </div>
+
+        <div class="metric-row">
+
+          <span class="label">付费次日留</span>
+
+          <span class="value neutral">52.25%</span>
+
+        </div>
+
+        <div class="metric-row">
+
+          <span class="label">付费3日留</span>
+
+          <span class="value neutral">40.42%</span>
+
+        </div>
+
+      </section>
+
+    </div>
+
+
+
+    <!-- ============ CENTER COLUMN ============ -->
+
+    <div class="col col-center">
+
+
+
+      <!-- 单款总数据主面板 -->
+
+      <section class="card main-card">
+
+        <div class="main-head">
+
+          <div class="card-head">
+
+            <h2 class="card-title">单款总数据</h2>
+
+            <p class="card-sub" data-bind="main-sub">各游戏汇总（按游戏维度）</p>
+
+          </div>
+
+        </div>
+
+
+
+        <div class="kpi-row">
+
+          <div class="kpi kpi-accent">
+
+            <div class="kpi-label">消耗 (¥)</div>
+
+            <div class="kpi-value">7,792</div>
+
+          </div>
+
+          <div class="kpi">
+
+            <div class="kpi-label">新增数</div>
+
+            <div class="kpi-value">158</div>
+
+          </div>
+
+          <div class="kpi">
+
+            <div class="kpi-label">单价 (¥)</div>
+
+            <div class="kpi-value">49.32</div>
+
+          </div>
+
+          <div class="kpi">
+
+            <div class="kpi-label">首日ROI · 厂商流水</div>
+
+            <div class="kpi-value" data-field="mfFirstR">0</div>
+
+          </div>
+
+          <div class="kpi kpi-accent">
+
+            <div class="kpi-label">首日LTV · 厂商流水</div>
+
+            <div class="kpi-value" data-field="mfLtv0">2.83</div>
+
+          </div>
+
+        </div>
+
+
+
+        <div class="stack-section">
+
+          <div class="stack-label-row">
+
+            <span class="stack-title">今日游戏消耗分布（仅1款在投）</span>
+
+            <div class="spacer" style="flex:1"></div>
+
+            <span class="stack-total">总消耗 ¥7,792</span>
+
+          </div>
+
+          <div class="stack-bar">
+
+            <div class="stack-seg" style="width:100%; background:linear-gradient(90deg,#22D3EE,#3B82F6)" title="神将传说 ¥7,792"></div>
+
+          </div>
+
+          <div class="legend-row">
+
+            <span class="legend-item"><span class="dot" style="background:#22D3EE"></span>神将传说消耗<span class="pct">¥7,792 · 100%</span></span>
+
+            <span class="legend-item"><span class="dot" style="background:#3B82F6"></span>首日R·厂商流水<span class="pct" data-bind="legend-mfFirstR">¥0</span></span>
+
+            <span class="legend-item"><span class="dot" style="background:#A78BFA"></span>新增数<span class="pct">158</span></span>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+
+      <!-- 分日数据明细（折线图） -->
+
+      <section class="card chart-card">
+
+        <div class="card-head">
+
+          <h2 class="card-title">分日数据明细</h2>
+
+          <p class="card-sub">分日消耗趋势 · 按顶部筛选实时刷新</p>
+
+        </div>
+
+        <div class="chart-legend">
+
+          <div class="chart-legend-item">
+
+            <span class="swatch" style="background:#22D3EE"></span>
+
+            <span class="name">消耗（元）</span>
+
+            <span class="total">近7日 ¥91,855</span>
+
+          </div>
+
+          <div class="chart-legend-item">
+
+            <span class="swatch" style="background:#3B82F6"></span>
+
+            <span class="name">首日R（单游戏）</span>
+
+            <span class="total">近7日 ¥6,679</span>
+
+          </div>
+
+        </div>
+
+        <div class="chart-wrap" style="position:relative">
+
+          <svg class="line-chart" id="lineChart" viewBox="0 0 560 220" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+
+            <!-- grid -->
+
+            <line x1="40" y1="220" x2="520" y2="220" stroke="#27272A" stroke-width="1"/>
+
+            <line x1="40" y1="165" x2="520" y2="165" stroke="#1C1C20" stroke-width="1"/>
+
+            <line x1="40" y1="110" x2="520" y2="110" stroke="#1C1C20" stroke-width="1"/>
+
+            <line x1="40" y1="55"  x2="520" y2="55"  stroke="#1C1C20" stroke-width="1"/>
+
+            <!-- cost line -->
+            <polyline class="line-cost" points=""
+                  stroke="#22D3EE" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" fill="none"/>
+
+            <!-- first-day revenue line -->
+            <polyline class="line-r" points=""
+                  stroke="#3B82F6" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" fill="none"/>
+
+            <!-- cost dots -->
+
+            <circle cx="40"  cy="30"  r="4.5" fill="#22D3EE"/>
+
+            <circle cx="120" cy="57"  r="4.5" fill="#22D3EE"/>
+
+            <circle cx="200" cy="74"  r="4.5" fill="#22D3EE"/>
+
+            <circle cx="280" cy="108.9" r="4.5" fill="#22D3EE"/>
+
+            <circle cx="360" cy="87"  r="4.5" fill="#22D3EE"/>
+
+            <circle cx="440" cy="126.8" r="4.5" fill="#22D3EE"/>
+
+            <circle cx="520" cy="144.0" r="4.5" fill="#22D3EE"/>
+
+            <!-- first-day revenue dots -->
+
+            <circle cx="40"  cy="150" r="4.5" fill="#3B82F6"/>
+
+            <circle cx="120" cy="188.8" r="4.5" fill="#3B82F6"/>
+
+            <circle cx="200" cy="190.9" r="4.5" fill="#3B82F6"/>
+
+            <circle cx="280" cy="196.3" r="4.5" fill="#3B82F6"/>
+
+            <circle cx="360" cy="192.7" r="4.5" fill="#3B82F6"/>
+
+            <circle cx="440" cy="199.4" r="4.5" fill="#3B82F6"/>
+
+            <circle cx="520" cy="202.5" r="4.5" fill="#3B82F6"/>
+
+          </svg>
+
+          <div class="x-labels">
+
+            <div>07-25</div><div>07-26</div><div>07-27</div>
+
+            <div>07-28</div><div>07-29</div><div>07-30</div><div>07-31</div>
+
+          </div>
+
+          <div class="chart-tooltip" id="chartTooltip"></div>
+
+        </div>
+
+      </section>
+
+    </div>
+
+
+
+    <!-- ============ RIGHT COLUMN ============ -->
+
+    <div class="col col-right">
+
+
+
+      <!-- 平台转化数据 -->
+
+      <section class="card conv-card card-pad-sm">
+
+        <div class="card-head">
+
+          <h2 class="card-title">平台转化数据</h2>
+
+          <p class="card-sub">今日口径 · 点击率 · 激活率 · 付费率</p>
+
+        </div>
+
+        <div class="conv-row">
+
+          <div class="top"><span class="label">点击率（CTR）</span><span class="value" style="color:#7CC2FF">2.01%</span></div>
+
+          <div class="track"><div class="fill" style="width:2%; background:#7CC2FF"></div></div>
+
+        </div>
+
+        <div class="conv-row">
+
+          <div class="top"><span class="label">激活率（新增/点击）</span><span class="value" style="color:#A78BFA">7.61%</span></div>
+
+          <div class="track"><div class="fill" style="width:7.6%; background:#A78BFA"></div></div>
+
+        </div>
+
+        <div class="conv-row">
+
+          <div class="top"><span class="label">付费率（今日）</span><span class="value" style="color:#22D3EE">16.46%</span></div>
+
+          <div class="track"><div class="fill" style="width:16.5%; background:#22D3EE"></div></div>
+
+        </div>
+
+        <div class="conv-row">
+
+          <div class="top"><span class="label">首日ROI</span><span class="value" style="color:#F59E0B">4.36%</span></div>
+
+          <div class="track"><div class="fill" style="width:4.4%; background:#F59E0B"></div></div>
+
+        </div>
+
+        <div class="conv-row accent">
+
+          <div class="top"><span class="label">首日ROI（厂商流水）</span><span class="value" style="color:#34D399">5.74%</span></div>
+
+          <div class="track"><div class="fill" style="width:5.7%; background:#34D399"></div></div>
+
+        </div>
+
+      </section>
+
+
+
+      <!-- 流量版位分布 -->
+
+      <section class="card slot-card card-pad-sm">
+
+        <div class="card-head">
+
+          <h2 class="card-title">分析流量版位分布</h2>
+
+          <p class="card-sub" id="slot-sub">今日消耗 ¥0 · 加载中</p>
+
+        </div>
+
+        <div class="slot-layout">
+
+          <div class="donut">
+
+            <svg id="slotDonut" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"></svg>
+
+          </div>
+
+          <div class="slot-legend" id="slotLegend"></div>
+
+        </div>
+
+      </section>
+
+    </div>
+
+
+
+  </div>
+
+</div>
+
+<script>
+
+/* ============ Dropdown & Filter Logic ============ */
+
+/* 游戏列表：默认只有「全部游戏」，BI 快照加载后按有数据的游戏动态重建 */
+
+let GAMES = [
+
+  { id: 'all', name: '全部游戏（汇总）', tag: '全部' },
+
+];
+
+const DATES = [
+
+  { id: 'today',   label: '今日',     range: null },
+
+  { id: 'd7',      label: '最近 7 日', range: null },
+
+  { id: 'd30',     label: '最近 30 日', range: null },
+
+];
+
+/* 日期范围由 sync 脚本在 data.json 里给出（跟随真实当天） */
+
+const state = { game: 'all', date: 'today', snapshot: null };
+
+
+
+function renderMenu(el, items, currentId, formatter) {
+
+  el.innerHTML = items.map(it => {
+
+    const label = formatter ? formatter(it) : (it.name || it.label || (it.range ? `${it.range[0].slice(5)} ~ ${it.range[1].slice(5)}` : '（无标题）'));
+
+    const active = it.id === currentId;
+
+    const meta = it.tag ? `<span class="meta">${it.tag}</span>` : (it.range ? `<span class="meta">${it.range[0].slice(5)} ~ ${it.range[1].slice(5)}</span>` : '');
+
+    return `<div class="dropdown-item ${active?'active':''}" data-id="${it.id}" role="option" aria-selected="${active}">
+
+      <span>${label}</span>${meta}
+
+    </div>`;
+
+  }).join('<div class="dropdown-divider"></div>') + `
+
+    <div class="dropdown-item" data-action="manage" style="color:#7CC2FF">
+
+      <span>＋ 管理 / 搜索…</span><span class="meta">长按编辑</span>
+
+    </div>`;
+
+  el.querySelectorAll('.dropdown-item').forEach(it => {
+
+    it.addEventListener('click', e => {
+
+      e.stopPropagation();
+
+      const id = it.dataset.id;
+
+      if (!id || id === 'manage') return;
+
+      if (el.dataset.kind === 'game') state.game = id;
+
+      if (el.dataset.kind === 'date') state.date = id;
+
+      updateLabels();
+
+      document.querySelectorAll('.dropdown.open').forEach(d => d.classList.remove('open'));
+
+      triggerRefresh();
+
+    });
+
+  });
+
+}
+
+function updateLabels() {
+
+  const g = GAMES.find(x => x.id === state.game) || GAMES[0];
+
+  const d = DATES.find(x => x.id === state.date) || DATES[0];
+
+  const dateText = d.range ? `${d.label} (${d.range[0].slice(5)} ~ ${d.range[1].slice(5)})` : d.label;
+
+  document.querySelectorAll('[data-bind="game-label"]').forEach(n => n.textContent = g.name);
+
+  document.querySelectorAll('[data-bind="game-label-c"]').forEach(n => n.textContent = g.name);
+
+  document.querySelectorAll('[data-bind="game-label-ch"]').forEach(n => n.textContent = g.name);
+
+  document.querySelectorAll('[data-bind="date-label"]').forEach(n => n.textContent = dateText);
+
+  document.querySelectorAll('[data-bind="date-label-c"]').forEach(n => n.textContent = d.range ? d.range.join(' ~ ') : d.label);
+
+  document.querySelectorAll('[data-bind="date-label-ch"]').forEach(n => n.textContent = d.label);
+
+}
+
+function openDropdown(el) {
+
+  document.querySelectorAll('.dropdown.open').forEach(d => d.classList.remove('open'));
+
+  el.classList.add('open');
+
+  el.querySelector('.dropdown-trigger').setAttribute('aria-expanded', 'true');
+
+}
+
+function closeDropdown(el) { el.classList.remove('open'); el.querySelector('.dropdown-trigger').setAttribute('aria-expanded', 'false'); }
+
+
+
+function init() {
+
+  const ddGame = document.getElementById('dd-game');
+
+  const ddDate = document.getElementById('dd-date');
+
+  ddGame.dataset.kind = 'game';
+
+  ddDate.dataset.kind = 'date';
+
+  renderMenu(ddGame, GAMES, state.game);
+
+  renderMenu(ddDate, DATES, state.date);
+
+
+
+  document.querySelectorAll('.dropdown').forEach(dd => {
+
+    const trigger = dd.querySelector('.dropdown-trigger');
+
+    trigger.addEventListener('click', e => {
+
+      e.stopPropagation();
+
+      if (dd.classList.contains('open')) closeDropdown(dd);
+
+      else openDropdown(dd);
+
+    });
+
+  });
+
+  document.addEventListener('click', () => {
+
+    document.querySelectorAll('.dropdown.open').forEach(closeDropdown);
+
+  });
+
+  document.getElementById('btn-refresh').addEventListener('click', triggerRefresh);
+
+  updateLabels();
+
+  // 默认当天自动拉一次（失败时保留页面硬编码数据）
+
+  fetchDashboardData().catch(e => {
+
+    console.warn('BI 接口未连通（CORS / 跨域 / 登录态失效），使用页面默认数据：', e.message);
+
+  });
+
+}
+
+function triggerRefresh() {
+
+  const txt = document.querySelector('[data-bind="refresh-text"]');
+
+  const orig = txt.textContent;
+
+  txt.textContent = '刷新中…';
+
+  fetchDashboardData().finally(() => {
+
+    setTimeout(() => { txt.textContent = orig; }, 600);
+
+  });
+
+}
+
+/* 实时调用 BI API：依赖用户浏览器已登录 mailiang.4399dev.com（同源 cookie） */
+
+const BI_BASE = 'https://mailiang.4399dev.com/user-growth';
+
+const COMMON = {
+
+  customId: 594,
+
+  dateType: 6,
+
+  isCompare: false,
+
+  channelTypeList: ['付费渠道'],
+
+  deptList: ['社区市场部'],
+
+};
+
+/* 图表调色板（与设计稿一致） */
+
+const PALETTE = ['#22D3EE','#3B82F6','#A78BFA','#F59E0B','#F43F5E','#34D399'];
+
+function fmtN(v, n=0){ return (v==null||isNaN(v))?'-':Number(v).toLocaleString('zh-CN',{minimumFractionDigits:n,maximumFractionDigits:n}); }
+
+function fmtPct(v){ if(v==null){return '—';} const n=Number(v); if(isNaN(n)){return '—';} return (n*100).toFixed(2)+'%'; }
+
+
+
+async function apiPost(path, body) {
+
+  const res = await fetch(BI_BASE + path, {
+
+    method: 'POST',
+
+    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json, text/plain, */*', 'orgId': '43' },
+
+    credentials: 'include',     // 带 BI 域 cookie
+
+    body: JSON.stringify(body),
+
+  });
+
+  if (!res.ok) throw new Error('HTTP ' + res.status);
+
+  const json = await res.json();
+
+  if (json.code !== 1) throw new Error(json.msg || '接口错误');
+
+  return json.data;
+
+}
+
+
+
+function setText(sel, txt){ const el=document.querySelector(sel); if(el) el.textContent=txt; }
+
+function updateKPIsFromDetail(list, forcedData, snapData) {
+
+  // forcedData 优先（快照模式：all=求和行 / 单游戏=匹配行）；否则从 list 取
+
+  let data = forcedData;
+  data = data || ({});
+  data._snap = snapData || data._snap;  // 优先用快照数据
+
+  if (!data) {
+
+    const summary = list[0] || {};
+
+    data = state.game && state.game !== 'all'
+
+      ? list.find(x => String(x.gameId) === String(state.game)) || summary
+
+      : summary;
+
+  }
+
+  const cost   = data.tgRealCost || 0;
+
+  const newU   = data.tgNewUserCount || 0;
+
+  const price  = data.tgOriginPrice || 0;
+
+  const firstR = data.tgRechargeTotalAmount0d || 0;
+
+  const payAmt = data.tgPayAmount || 0;
+
+  // 第 4 个 KPI 改为「首日R·厂商流水」
+
+  const mfFirstR = (data._snap && data._snap.tgMfRoi0 != null) ? (data._snap.tgMfRoi0 * 100).toFixed(2) + '%' : (data.tgMfRoi0 != null && !isNaN(data.tgMfRoi0) ? (data.tgMfRoi0 * 100).toFixed(2) + '%' : '—');
+
+  // 第 5 个 KPI 改为「首日LTV·厂商流水」
+
+  const mfLtv0 = (data._snap && data._snap.tgMfLtv0 != null) ? data._snap.tgMfLtv0 : (data.tgMfLtv0 || 0);
+
+  // 更新中栏 KPI
+
+  setText('.kpi.kpi-accent .kpi-value', fmtN(cost, 0));
+
+  setText('.kpi:nth-child(2) .kpi-value', fmtN(newU, 0));
+
+  setText('.kpi:nth-child(3) .kpi-value', price.toFixed(2));
+
+  setText('.kpi:nth-child(4) [data-field="mfFirstR"]', mfFirstR);
+
+  setText('.kpi:nth-child(5) [data-field="mfLtv0"]', mfLtv0.toFixed(2));
+
+  // 堆叠条
+
+  setText('[data-bind="main-sub"]', `${state.game==='all'?'各游戏汇总（按游戏维度）':GAMES.find(g=>g.id===state.game).name+' · '+DATES.find(d=>d.id===state.date).label}`);
+
+  // 核心指标
+
+  const setMetric = (n, label, val, accent=false) => {
+
+    const rows = document.querySelectorAll('.metric-row');
+
+    if (rows[n]) {
+
+      const lab = rows[n].querySelector('.label');
+
+      const v   = rows[n].querySelector('.value');
+
+      if (lab) lab.textContent = label;
+
+      if (v)   v.textContent = val;
+
+      if (accent) rows[n].classList.add('accent'); else rows[n].classList.remove('accent');
+
+    }
+
+  };
+
+  const y = v => (v != null && !isNaN(v)) ? '¥' + Number(v).toFixed(2) : '—';
+
+  const p = v => (v != null && !isNaN(v)) ? (Number(v)*100).toFixed(2) + '%' : '—';
+
+  setMetric(0, '首日ARPPU',          y(data.tgaArppu0));
+
+  setMetric(1, 'ARPU',               y(data.tgArpu));
+
+  setMetric(2, '首日LTV（厂商流水）', y(data.tgMfLtv0));
+
+  setMetric(3, '付费率',             p(data.tgPayRate));
+
+  // 留存
+
+  if (data.tgRetention1 != null) {
+
+    setMetric(4, '次留', fmtPct(data.tgRetention1), true);
+
+  } else {
+
+    setMetric(4, '次留（数据产生中）', '—', true);
+
+  }
+
+  if (data.tgRechargeUserRetain1 != null) {
+
+    setMetric(5, '付费次日留', fmtPct(data.tgRechargeUserRetain1));
+
+  } else {
+
+    setMetric(5, '付费次日留（待产生）', '—');
+
+  }
+
+  if (data.tgRechargeUserRetain2 != null) {
+
+    setMetric(6, '付费3日留', fmtPct(data.tgRechargeUserRetain2));
+
+  } else {
+
+    setMetric(6, '付费3日留（待产生）', '—');
+
+  }
+
+  // 平台转化
+
+  const setConv = (i, label, val, color) => {
+
+    const rows = document.querySelectorAll('.conv-row');
+
+    if (!rows[i]) return;
+
+    const lab = rows[i].querySelector('.label');
+
+    const v   = rows[i].querySelector('.value');
+
+    const fill= rows[i].querySelector('.fill');
+
+    if (lab)  lab.textContent = label;
+
+    if (v)    { v.textContent = val; v.style.color = color; }
+
+    if (fill && data.tgRealCost){
+
+      // 进度条按当前指标值填充（简化）
+
+    }
+
+  };
+
+  setConv(0, '点击率（CTR）', fmtPct(data.tgClickRate), '#7CC2FF');
+
+  setConv(1, '激活率（新增/点击）', fmtPct(data.tgActiveConvertRate), '#A78BFA');
+
+  setConv(2, '付费率', fmtPct(data.tgPayRate), '#22D3EE');
+
+  setConv(3, '首日ROI', fmtPct(data.tgRoi0), '#F59E0B');
+
+  setConv(4, '首日ROI（厂商流水）', fmtPct(data.tgMfRoi0), '#34D399');
+
+  // 右侧流量版位
+
+  setText('[data-bind="legend-mfFirstR"]', mfFirstR);
+
+  setText('[data-bind="slot-mfFirstR"]', mfFirstR);
+
+  setText('[data-bind="slot-mfFirstR-pct"]', '—');
+
+  setText('[data-bind="slot-mfLtv0"]', mfLtv0.toFixed(2));
+
+  setText('[data-bind="slot-mfLtv0-pct"]', mfLtv0 ? ((mfLtv0/(data.tgOriginPrice||1))*100).toFixed(1)+'%' : '—');
+
+  setText('[data-bind="dist-mfFirstR"]', mfFirstR);
+
+  setText('[data-bind="dist-mfLtv0"]', mfLtv0.toFixed(2));
+
+  // 右侧流量版位
+
+  setText('.slot-legend-row:nth-child(1) .pct', '¥' + fmtN(cost, 0));
+
+  setText('.slot-legend-row:nth-child(1) .val', '100%');
+
+  setText('.slot-legend-row:nth-child(2) .pct', fmtN(newU, 0));
+
+  setText('.slot-legend-row:nth-child(2) .val', '100%');
+
+  setText('.slot-legend-row:nth-child(5) .pct', fmtN(data.tgPayCount, 0) + '人');
+
+  setText('.slot-legend-row:nth-child(5) .val', fmtPct(data.tgPayRate));
+
+  setText('.slot-legend-row:nth-child(6) .pct', fmtN(data.tgNewUserPayCount, 0) + '人');
+
+  setText('.slot-legend-row:nth-child(6) .val', fmtPct(data.tgRechargeConvertRate));
+
+  // 左侧充值分布
+
+  setText('.dist-section-head.dist-section-amount .note', '今日新增 ' + fmtN(newU, 0));
+
+  const setDist = (i, range, val, color) => {
+
+    const rows = document.querySelectorAll('.dist-row');
+
+    if (!rows[i]) return;
+
+    const r = rows[i].querySelector('.range');
+
+    const p = rows[i].querySelector('.pct');
+
+    const f = rows[i].querySelector('.bar-fill');
+
+    if (r) r.textContent = range;
+
+    if (p) p.textContent = val;
+
+    if (f) {
+
+      const numMatch = val.match(/(\d+\.?\d*)/);
+
+      if (numMatch) {
+
+        const n = parseFloat(numMatch[1]);
+
+        const max = Math.max(cost, firstR, payAmt, 100);
+
+        f.style.width = Math.max(8, (n / max) * 100) + 'px';
+
+        f.style.background = color;
+
+      }
+
+    }
+
+  };
+
+  setDist(0, '付费用户',         fmtN(data.tgPayCount,0)+'人',           '#22D3EE');
+
+  setDist(1, '首日付费',         fmtN(data.tgNewUserPayCount,0)+'人',   '#3B82F6');
+
+  setDist(2, '首日付费率',       fmtPct(data.tgRechargeConvertRate),    '#A78BFA');
+
+  setDist(3, '首日R 厂商流水',   '¥'+fmtN(mfFirstR,0),                  '#F59E0B');
+
+  setDist(4, '首日LTV 厂商流水', '¥'+mfLtv0.toFixed(2),                 '#F43F5E');
+
+  setDist(5, '首日LTV',          '¥'+(data.tgLtv0||0).toFixed(2),       '#34D399');
+
+  // 头部副标题更新
+
+  const gName = state.game === 'all' ? '各游戏汇总（按游戏维度）' : ((GAMES.find(g => g.id === state.game) || {}).name || '');
+
+  const dName = (DATES.find(d => d.id === state.date) || DATES[0]).label;
+
+  setText('.title-sub', `GAME AD ANALYTICS · ${gName} · ${dName}`);
+
+  setText('[data-bind="main-sub"]', state.game === 'all' ? '各游戏汇总（按游戏维度）' : `${gName} · ${dName}`);
+
+  // 堆叠条：总消耗
+
+  setText('.stack-total', '总消耗 ¥' + fmtN(cost, 0));
+
+  setText('.stack-title', `${state.game==='all' ? '全游戏消耗分布' : gName + ' 消耗分布'} · ${dName}`);
+
+}
+
+
+
+function updateChartFromList(list) {
+
+  // 重新画折线图：分日消耗
+
+  const points = list.slice().sort((a,b)=>String(a.dateKey).localeCompare(String(b.dateKey)));
+
+  if (points.length === 0) return;
+
+  const costs = points.map(p => p.tgRealCost || 0);
+
+  const maxC = Math.max(...costs, 1);
+
+  const xs = points.map((_,i)=>40 + i*80);
+
+  const costPts = points.map((p,i)=> [xs[i], 215 - ((p.tgRealCost||0)/maxC)*170]);
+
+  // 首日R 用相对值
+
+  const rFirstR = points.map(p=>p.tgRechargeTotalAmount0d||0);
+
+  const maxR = Math.max(...rFirstR, 1);
+
+  const rPts = points.map((p,i)=> [xs[i], 215 - ((p.tgRechargeTotalAmount0d||0)/maxR)*30]);
+
+  // 更新 path
+
+  const svg = document.querySelector('svg.line-chart');
+
+  if (!svg) return;
+
+  // 用 polyline（class 区分，比 path + stroke 属性更可靠）
+  const costLine = svg.querySelector('polyline.line-cost');
+  const rLine    = svg.querySelector('polyline.line-r');
+
+  if (costLine) costLine.setAttribute('points', costPts.map(p => p.join(',')).join(' '));
+  if (rLine)    rLine.setAttribute('points',    rPts.map(p => p.join(',')).join(' '));
+
+  // 更新点
+
+  const costDots = svg.querySelectorAll('circle[fill="#22D3EE"]');
+
+  const rDots    = svg.querySelectorAll('circle[fill="#3B82F6"]');
+
+  costDots.forEach((c,i)=>{ if (costPts[i]) { c.setAttribute('cx', costPts[i][0]); c.setAttribute('cy', costPts[i][1]); }});
+
+  rDots.forEach((c,i)=>{ if (rPts[i])    { c.setAttribute('cx', rPts[i][0]); c.setAttribute('cy', rPts[i][1]); }});
+
+  // 折线图 hover tooltip
+
+  const tip   = document.getElementById('chartTooltip');
+
+  const wrap  = svg.parentElement;
+
+  if (tip && wrap) {
+
+    costDots.forEach((c, i) => {
+
+      c.onmouseenter = c.onmouseleave = c.onmousemove = null;
+
+      c.addEventListener('mouseenter', e => {
+
+        const p = points[i] || {};
+
+        tip.innerHTML = `
+
+          <div class="tt-date">${p.dateKey || ''}</div>
+
+          <div class="tt-row"><span class="tt-dot" style="background:#22D3EE"></span><span class="tt-label">消耗</span><span class="tt-val">¥${fmtN(p.tgRealCost||0,0)}</span></div>
+
+          <div class="tt-row"><span class="tt-dot" style="background:#3B82F6"></span><span class="tt-label">首日R</span><span class="tt-val">¥${fmtN(p.tgRechargeTotalAmount0d||0,0)}</span></div>
+
+          <div class="tt-row"><span class="tt-dot" style="background:#34D399"></span><span class="tt-label">新增数</span><span class="tt-val">${fmtN(p.tgNewUserCount||0,0)}</span></div>
+
+        `;
+
+        tip.classList.add('show');
+
+      });
+
+      c.addEventListener('mousemove', e => {
+
+        const rect = wrap.getBoundingClientRect();
+
+        tip.style.left = (e.clientX - rect.left + 12) + 'px';
+
+        tip.style.top  = (e.clientY - rect.top - 8)  + 'px';
+
+      });
+
+      c.addEventListener('mouseleave', () => tip.classList.remove('show'));
+
+    });
+
+    rDots.forEach((c, i) => {
+
+      c.onmouseenter = c.onmouseleave = c.onmousemove = null;
+
+      c.addEventListener('mouseenter', e => {
+
+        const p = points[i] || {};
+
+        tip.innerHTML = `
+
+          <div class="tt-date">${p.dateKey || ''}</div>
+
+          <div class="tt-row"><span class="tt-dot" style="background:#3B82F6"></span><span class="tt-label">首日R</span><span class="tt-val">¥${fmtN(p.tgRechargeTotalAmount0d||0,0)}</span></div>
+
+        `;
+
+        tip.classList.add('show');
+
+      });
+
+      c.addEventListener('mousemove', e => {
+
+        const rect = wrap.getBoundingClientRect();
+
+        tip.style.left = (e.clientX - rect.left + 12) + 'px';
+
+        tip.style.top  = (e.clientY - rect.top - 8)  + 'px';
+
+      });
+
+      c.addEventListener('mouseleave', () => tip.classList.remove('show'));
+
+    });
+
+  }
+
+  // X 轴日期
+
+  const xLbls = document.querySelectorAll('.x-labels > div');
+
+  points.forEach((p,i)=>{ if (xLbls[i]) xLbls[i].textContent = String(p.dateKey).slice(4); });
+
+  // 图例总额
+
+  const sumCost = costs.reduce((a,b)=>a+b,0);
+
+  const sumFirstR = rFirstR.reduce((a,b)=>a+b,0);
+
+  const legendItems = document.querySelectorAll('.chart-legend-item .total');
+
+  if (legendItems[0]) legendItems[0].textContent = '共 ' + fmtN(sumCost, 0);
+
+  if (legendItems[1]) legendItems[1].textContent = '共 ' + fmtN(sumFirstR, 0);
+
+}
+
+
+
+/* ============ 快照数据渲染（GitHub Actions 每 10 分钟生成 data.json） ============ */
+
+function sumGames(list) {
+
+  /* 全部游戏模式：各游戏数值指标求和，比率字段用加权公式重算，跨游戏无意义的留存指标保持空 */
+
+  const summable = ['tgRealCost','tgNewUserCount','tgStartCount','tgPayCount','tgPayAmount',
+
+    'tgRechargeTotalAmount0d','tgNewUserPayCount','tgShow','tgClick','tgActiveCount',
+
+    'tgActivePayCount','tgActivePayAmount','tgMfPayAmount','tgMfPayCount','tgMfNewUserPayCount',
+
+    'tgMfRechargeTotalAmount0d','tgNewUserPayCountPrice','tgPayCountPrice'];
+
+  const s = {};
+
+  (list || []).forEach(g => {
+
+    const nm = String(g.gameName || '');
+
+    if (nm.includes('汇总') || nm.includes('合计') || nm.includes('总计')) return; // 跳过汇总行
+
+    summable.forEach(f => {
+
+      const v = parseFloat(g[f]);
+
+      if (!isNaN(v)) s[f] = (s[f] || 0) + v;
+
+    });
+
+  });
+
+  /* 派生比率字段（加权公式） */
+
+  s.tgOriginPrice  = s.tgNewUserCount ? s.tgRealCost / s.tgNewUserCount : 0;            // 单价
+
+  s.tgStartPrice   = s.tgStartCount  ? s.tgRealCost / s.tgStartCount  : 0;
+
+  s.tgClickRate    = s.tgShow        ? s.tgClick    / s.tgShow        : 0;              // 点击率
+
+  s.tgActiveConvertRate = s.tgClick ? s.tgActiveCount / s.tgClick   : 0;              // 激活率
+
+  s.tgPayRate      = s.tgStartCount  ? s.tgPayCount  / s.tgStartCount : 0;             // 付费率
+
+  s.tgRechargeConvertRate = s.tgNewUserCount ? s.tgNewUserPayCount / s.tgNewUserCount : 0; // 首日付费率
+
+  s.tgMfRechargeConvertRate = s.tgNewUserCount ? (() => {
+
+    // 首日厂商流水付费率 = 新增的厂商流水首日付费用户（近似用 mfNewUserPayCount）
+
+    const n = parseFloat(s.tgMfNewUserPayCount || 0);
+
+    return s.tgNewUserCount ? n / s.tgNewUserCount : 0;
+
+  })() : 0;
+
+  s.tgActiveUserCountRate = s.tgNewUserCount ? s.tgNewUserCount / s.tgNewUserCount : 0; // 新增回传比例（无源数据，保持 0）
+
+  s.tgRoi0     = s.tgRealCost ? s.tgRechargeTotalAmount0d / s.tgRealCost : 0;          // 首日ROI
+
+  /* tgMfRoi0 / tgMfLtv0 加权平均（按新增量/消耗加权），保留 BI 原值 */
+  let mfRoiSum=0, mfRoiWeight=0, mfLtvSum=0, mfLtvWeight=0;
+  (list || []).forEach(g => {
+    const vR = parseFloat(g.tgMfRoi0), wR = parseFloat(g.tgRealCost);
+    if (!isNaN(vR) && !isNaN(wR) && wR > 0) { mfRoiSum += vR * wR; mfRoiWeight += wR; }
+    const vL = parseFloat(g.tgMfLtv0), wL = parseFloat(g.tgNewUserCount);
+    if (!isNaN(vL) && !isNaN(wL) && wL > 0) { mfLtvSum += vL * wL; mfLtvWeight += wL; }
+  });
+  s.tgMfRoi0   = mfRoiWeight > 0 ? mfRoiSum / mfRoiWeight : 0;                          // 首日ROI厂商流水（加权平均）
+  s.tgMfLtv0   = mfLtvWeight > 0 ? mfLtvSum / mfLtvWeight : 0;                          // 首日LTV厂商流水（加权平均）
+  s.tgLtv0     = s.tgNewUserCount ? s.tgPayAmount / s.tgNewUserCount : 0;             // 首日LTV（补回）
+
+  s.tgArpu     = s.tgNewUserCount ? s.tgPayAmount / s.tgNewUserCount : 0;             // ARPU ≈ LTV
+
+  s.tgaArppu0  = s.tgPayCount     ? s.tgRechargeTotalAmount0d / s.tgPayCount : 0;    // 首日ARPPU
+
+  /* 留存/付费留存：跨游戏无意义，不在汇总行计算（保持 undefined → 全部显示 —） */
+
+  s.gameName = '全部游戏';
+
+  return s;
+
+}
+
+
+
+function getRangeData() {
+
+  const snap = state.snapshot || {};
+
+  const ranges = snap.ranges || {};
+
+  let key;
+if (/^\d{4}-\d{2}-\d{2}$/.test(state.date)) {
+  key = 'today';  // 自定义日期走实时 BI（不读 snap）
+} else {
+  key = state.date === 'today' ? 'today' : state.date === 'd30' ? 'last30d' : 'last7d';
+}
+
+  if (!ranges[key] || (!ranges[key].detail.length && !ranges[key].chart.length)) {
+
+    key = ranges.last7d ? 'last7d' : (ranges.today ? 'today' : null);
+
+  }
+
+  const range = (key && ranges[key]) || { detail: [], chart: [] };
+
+  // 折线图最多展示最近 7 个分日点
+
+  const chart7 = (range.chart || []).slice(-7);
+
+  return { range, chart7, key };
+
+}
+
+
+
+function rebuildGameDropdown() {
+
+  const snap = state.snapshot || {};
+
+  const seen = {};
+
+  const games = [];
+
+  Object.values(snap.ranges || {}).forEach(r => {
+
+    (r.detail || []).forEach(g => {
+
+      const id = String(g.gameId);
+
+      const nm = String(g.gameName || '');
+
+      if (nm.includes('汇总') || nm.includes('合计')) return;
+
+      if (seen[id]) return;
+
+      seen[id] = 1;
+
+      if (parseFloat(g.tgRealCost) > 0) games.push({ id, name: nm, tag: '在投' });
+
+    });
+
+  });
+
+  games.sort((a, b) => a.name.localeCompare(b.name, 'zh'));
+
+  GAMES = [{ id: 'all', name: '全部游戏（汇总）', tag: '全部' }].concat(games);
+
+  const dd = document.getElementById('dd-game');
+
+  if (dd) renderMenu(dd, GAMES, state.game);
+
+}
+
+
+
+function applySnapshot(snap) {
+
+  state.snapshot = snap;
+
+  rebuildGameDropdown();
+
+  const { range, chart7, key } = getRangeData();
+
+  // 数据行：全部游戏 → 求和；单游戏 → 匹配行
+  const list = range.detail || [];
+  const slot = range.slot || [];
+
+  let data = null;
+
+  if (state.game === 'all') {
+    data = sumGames(list);
+  } else {
+    data = list.find(x => String(x.gameId) === String(state.game)) || null;
+  }
+
+  if (!data && list.length) data = sumGames(list); // 找不到该游戏（无消耗）→ 汇总兜底
+
+  // 流量版位（按游戏筛选 + 汇总）
+  let slotList = slot;
+  if (state.game !== 'all' && data) {
+    // 单游戏：保留 csite 在该游戏的 row（即 csite 行 cost > 0）
+    // 但 slot 数据是 csite 维度，无 gameId；按 gameName==data.gameName 过滤
+    const gameName = data.gameName;
+    slotList = slot.filter(s => s.gameName === gameName);
+  }
+
+  if (data) updateKPIsFromDetail(list, data);
+
+  // 堆叠条：游戏消耗分布（top 6）
+
+  const active = (range.detail || []).filter(g => parseFloat(g.tgRealCost) > 0)
+
+    .sort((a, b) => b.tgRealCost - a.tgRealCost).slice(0, 6);
+
+  const totalCost = (range.detail || []).reduce((a, g) => a + (parseFloat(g.tgRealCost) || 0), 0);
+
+  const barEl = document.querySelector('.stack-bar');
+
+  const legendEl = document.querySelector('.stack-section .legend-row');
+
+  if (barEl && totalCost > 0) {
+
+    barEl.innerHTML = active.map(g => {
+
+      const w = ((g.tgRealCost / totalCost) * 100).toFixed(1);
+
+      const color = PALETTE[(active.indexOf(g)) % PALETTE.length];
+
+      return `<div class="stack-seg" style="width:${w}%; background:${color}" title="${g.gameName} ${w}%"></div>`;
+
+    }).join('');
+
+    if (legendEl) {
+
+      legendEl.innerHTML = active.map(g => {
+
+        const w = ((g.tgRealCost / totalCost) * 100).toFixed(1);
+
+        const color = PALETTE[active.indexOf(g) % PALETTE.length];
+
+        return `<span class="legend-item"><span class="dot" style="background:${color}"></span>${g.gameName}<span class="pct">${w}%</span></span>`;
+
+      }).join('');
+
+    }
+
+  }
+
+  // 折线图
+
+  if (chart7.length) updateChartFromList(chart7);
+
+  // 更新时间戳（data.json 的同步时间）
+
+  const upd = snap.updatedAt ? new Date(snap.updatedAt) : null;
+
+  if (upd && !isNaN(upd)) {
+
+    setText('[data-bind="updated-at"]', upd.toLocaleTimeString('zh-CN', { hour12: false }));
+
+  } else {
+
+    setText('[data-bind="updated-at"]', new Date().toLocaleTimeString('zh-CN', { hour12: false }));
+
+  }
+
+  console.log('[snapshot]', key, 'games:', list.length, 'chart:', chart7.length, 'slot:', slotList.length, 'updatedAt:', snap.updatedAt);
+
+  // 流量版位渲染
+  renderSlotList(slotList);
+  // 充值分布（按游戏）
+  renderDist(data && data.gameId ? data.gameId : (state.game === 'all' ? '' : state.game), data ? data.gameName : '');
+
+}
+
+
+
+/* ============ 流量版位：donut + legend 动态渲染 ============ */
+const SLOT_COLORS = ['#22D3EE', '#3B82F6', '#A78BFA', '#F59E0B', '#F43F5E', '#34D399'];
+
+function renderDonut(top6) {
+  const svg = document.getElementById('slotDonut');
+  if (!svg) return;
+  const total = top6.reduce((a, s) => a + (parseFloat(s.tgRealCost) || 0), 0) || 1;
+  const R = 88, r = 56, cx = 100, cy = 100;
+  const paths = [];
+  let angle = -Math.PI / 2; // 12 点钟
+  for (let i = 0; i < top6.length; i++) {
+    const pct = (parseFloat(top6[i].tgRealCost) || 0) / total;
+    if (pct <= 0) continue;
+    const next = angle + pct * Math.PI * 2;
+    const x1 = cx + R * Math.cos(angle), y1 = cy + R * Math.sin(angle);
+    const x2 = cx + R * Math.cos(next),  y2 = cy + R * Math.sin(next);
+    const x3 = cx + r * Math.cos(next),  y3 = cy + r * Math.sin(next);
+    const x4 = cx + r * Math.cos(angle), y4 = cy + r * Math.sin(angle);
+    const large = (next - angle) > Math.PI ? 1 : 0;
+    const d = `M ${x1.toFixed(1)} ${y1.toFixed(1)} A ${R} ${R} 0 ${large} 1 ${x2.toFixed(1)} ${y2.toFixed(1)} L ${x3.toFixed(1)} ${y3.toFixed(1)} A ${r} ${r} 0 ${large} 0 ${x4.toFixed(1)} ${y4.toFixed(1)} Z`;
+    paths.push(`<path d="${d}" fill="${SLOT_COLORS[i]}"/>`);
+    angle = next;
+  }
+  svg.innerHTML = paths.join('');
+}
+
+/* ============ 充值分布：按游戏读取 dist_data.json ============ */
+let __distData = null;
+async function loadDistData() {
+  try {
+    const res = await fetch('./dist_data.json?t=' + Date.now(), { cache: 'reload' });
+    if (res.ok) __distData = await res.json();
+  } catch (e) {}
+}
+function sumDistGames(games) {
+  // 汇总多个游戏的充值分布（按权重：付费人数）
+  const total = (k) => k === 'people_10000' || k === 'amount_1000' ? games.reduce((a, g) => a + (g[g._totalField] || 0) * (g[k] || 0) / 100, 0) : 0;
+  const w = games.reduce((a, g) => a + (g.payCount || 0), 0) || 1;
+  const avg = (k) => games.reduce((a, g) => a + (g[k] || 0) * (g.payCount || 0), 0) / w;
+  return {
+    payCount: w,
+    people_0_100: avg('people_0_100'),
+    people_100_1000: avg('people_100_1000'),
+    people_1000_10000: avg('people_1000_10000'),
+    people_10000: avg('people_10000'),
+    amount_0_100: avg('amount_0_100'),
+    amount_100_1000: avg('amount_100_1000'),
+    amount_1000: avg('amount_1000'),
+  };
+}
+function renderDist(gameId, gameName) {
+  // state.game === 'all' 时汇总所有游戏；否则按 gameId 找
+  let d = null;
+  if (state.game === 'all' && __distData && __distData.games) {
+    const gs = Object.values(__distData.games);
+    if (gs.length === 1) d = gs[0];
+    else if (gs.length > 1) {
+      d = sumDistGames(gs);
+      d.gameName = '全部游戏汇总';
+    }
+  } else {
+    d = (__distData && __distData.games) ? __distData.games[String(gameId)] : null;
+  }
+  const sub = document.getElementById('dist-sub');
+  const paynote = document.getElementById('dist-paycount-note');
+  const d = __distData && __distData.games ? __distData.games[String(gameId)] : null;
+  const setName = (sel, val, fallback) => {
+    const el = document.querySelector(sel);
+    if (el) el.textContent = (val != null && !isNaN(val)) ? val.toFixed(2) + '%' : (fallback || '—');
+  };
+  const setWidth = (sel, pct) => {
+    const el = document.querySelector(sel);
+    if (el) el.style.width = (pct != null && !isNaN(pct)) ? Math.min(pct, 100) + 'px' : '0px';
+  };
+  if (sub) sub.textContent = (gameName || '') + ' · 厂商流水 · 今日' + (d ? '' : '（数据抓取中）');
+  if (paynote) paynote.textContent = d ? ('付费 ' + (d.payCount != null ? d.payCount : '—') + ' 人') : '付费 — 人';
+  if (!d) {
+    // 无数据：显示占位
+    ['dist-people-0','dist-people-100','dist-people-1000','dist-people-10000',
+     'dist-amount-0','dist-amount-100','dist-amount-1000'].forEach(id => {
+      const el = document.querySelector('[data-bind="' + id + '"]');
+      if (el) el.textContent = '—';
+    });
+    return;
+  }
+  setName('[data-bind="dist-people-0"]', d.people_0_100);
+  setName('[data-bind="dist-people-100"]', d.people_100_1000);
+  setName('[data-bind="dist-people-1000"]', d.people_1000_10000);
+  setName('[data-bind="dist-people-10000"]', d.people_10000);
+  setName('[data-bind="dist-amount-0"]', d.amount_0_100);
+  setName('[data-bind="dist-amount-100"]', d.amount_100_1000);
+  setName('[data-bind="dist-amount-1000"]', d.amount_1000);
+  // 进度条宽度（相对 100% 缩放，最大值 100px）
+  const bars = [
+    ['.dist-section-people + .dist-row .bar-fill', d.people_0_100],
+    ['.dist-section-people + .dist-row + .dist-row .bar-fill', d.people_100_1000],
+    ['.dist-section-people + .dist-row + .dist-row + .dist-row .bar-fill', d.people_1000_10000],
+    ['.dist-section-people + .dist-row + .dist-row + .dist-row + .dist-row .bar-fill', d.people_10000],
+    ['.dist-section-amount + .dist-row .bar-fill', d.amount_0_100],
+    ['.dist-section-amount + .dist-row + .dist-row .bar-fill', d.amount_100_1000],
+    ['.dist-section-amount + .dist-row + .dist-row + .dist-row .bar-fill', d.amount_1000],
+  ];
+  bars.forEach(([sel, pct]) => { const el = document.querySelector(sel); if (el) el.style.width = (pct != null && !isNaN(pct)) ? Math.min(pct, 100) + 'px' : '0px'; });
+}
+
+function renderSlotList(slotList) {
+  const legendEl = document.getElementById('slotLegend');
+  const subEl = document.getElementById('slot-sub');
+  if (!legendEl) return;
+  // 数据源：sync-data.js 用 platform 维度（头条/快手/广点通等）；列名兼容 csite/platform
+  const valid = slotList.filter(s => (parseFloat(s.tgRealCost) || 0) > 0);
+  const total = valid.reduce((a, s) => a + (parseFloat(s.tgRealCost) || 0), 0);
+  // 提取名称（汇总行 platform+csite 都空）
+  const labelOf = s => String(s.csite || '').trim() || String(s.platform || '').trim() || '汇总';
+  const sorted = valid
+    .slice()
+    .sort((a, b) => {
+      const aEmpty = labelOf(a) === '汇总';
+      const bEmpty = labelOf(b) === '汇总';
+      if (aEmpty !== bEmpty) return aEmpty ? -1 : 1;
+      return (parseFloat(b.tgRealCost) || 0) - (parseFloat(a.tgRealCost) || 0);
+    })
+    .slice(0, 6);
+  if (subEl) {
+    subEl.textContent = '今日消耗 ¥' + Math.round(total).toLocaleString('zh-CN');
+  }
+  if (sorted.length === 0) {
+    legendEl.innerHTML = '<div style="color:#6B7280;font-size:11.5px;padding:8px 0">暂无版位数据</div>';
+    const svg = document.getElementById('slotDonut');
+    if (svg) svg.innerHTML = '';
+    return;
+  }
+  const html = sorted.map((s, i) => {
+    const pct = total > 0 ? ((parseFloat(s.tgRealCost) || 0) / total * 100).toFixed(1) : '0.0';
+    const name = labelOf(s);
+    const cost = '¥' + Math.round(parseFloat(s.tgRealCost) || 0).toLocaleString('zh-CN');
+    return `<div class="slot-legend-row">
+      <span class="swatch" style="background:${SLOT_COLORS[i]}"></span>
+      <span class="name" title="${name}">${name}</span>
+      <span class="pct">${cost}</span>
+      <span class="val">${pct}%</span>
+    </div>`;
+  }).join('');
+  legendEl.innerHTML = html;
+  renderDonut(sorted);
+}
+
+
+
+/* 加载充值分布数据 */
+loadDistData();
+
+/* ============ 数据获取：快照兜底 + 实时直连 BI（CORS 已放行） ============ */
+
+async function fetchDashboardData() {
+
+  // 1) 快照兜底渲染（data.json 来自 GitHub Actions，先展示）
+
+  try {
+
+    const res = await fetch('./data.json?t=' + Date.now(), { cache: 'reload' });
+
+    if (res.ok) {
+
+      const snap = await res.json();
+
+      if (snap && snap.ranges) {
+
+        try { applySnapshot(snap); console.log('[snapshot-ok]'); }
+
+        catch (e) { console.error('[snapshot-fail]', e && e.message); }
+
+      }
+
+    }
+
+  } catch (e) { console.error('[snapshot-fetch-fail]', e && e.message); }
+
+
+
+  // 2) 实时直连 BI（浏览器已登录 mailiang.4399dev.com + CORS 放行时覆盖为实时数据；失败保留快照）
+
+  try {
+
+    const d = DATES.find(x => x.id === state.date) || DATES[0];
+
+    const now = new Date();
+
+    const fmt = dt => `${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,'0')}-${String(dt.getDate()).padStart(2,'0')}`;
+
+    const end = fmt(now);
+
+    let start;
+    if (/^\d{4}-\d{2}-\d{2}$/.test(state.date)) {
+      start = state.date;
+    } else if (state.date === 'today') {
+      start = end;
+    } else if (state.date === 'd30') {
+      start = fmt(new Date(now.getTime() - 29*86400000));
+    } else {
+      start = fmt(new Date(now.getTime() - 6*86400000));
+    }
+
+    const dimension = (state.game === 'all') ? 'dateKey' : 'gameName';
+
+    const detailBody = { ...COMMON, dimension, startDate: start, endDate: end, pageNum: 1, pageSize: 60 };
+
+    if (dimension === 'gameName' && state.game !== 'all') detailBody.gameIds = [String(state.game)];
+
+    const detail = await apiPost('/reportChannel/detailData', detailBody);
+
+    const list = (detail && detail.list) || [];
+
+    updateKPIsFromDetail(list, null, snap);
+
+    try {
+
+      const chartBody = { ...COMMON, dimension: 'dateKey', startDate: start, endDate: end, summaryType: 3,
+
+        indicatorFields: ['tgRealCost','tgRechargeTotalAmount0d','tgNewUserCount'] };
+
+      const chart = await apiPost('/reportChannel/chartData', chartBody);
+
+      if (chart && chart.length) updateChartFromList(chart);
+
+    } catch (e) { console.warn('chart 拉取失败', e); }
+
+    setText('[data-bind="updated-at"]', new Date().toLocaleTimeString('zh-CN', { hour12: false }));
+
+  } catch (e) {
+
+    console.warn('BI 未连通，保留当前展示数据：', e.message);
+
+  }
+
+}
+
+
+
+/* 每 10 分钟自动刷新（600,000 ms） */
+
+setInterval(() => { fetchDashboardData(); }, 600000);
+
+/* ============ 可靠自动更新：data.json 变化即整页刷新（与 GitHub Actions 每 10 分钟同步联动） ============ */
+let __lastDataUpdatedAt = null;
+async function __recordDataUpdate() {
+  try {
+    const res = await fetch('./data.json?t=' + Date.now(), { cache: 'reload' });
+    if (!res.ok) return;
+    const snap = await res.json();
+    if (snap && snap.updatedAt) __lastDataUpdatedAt = snap.updatedAt;
+  } catch (e) {}
+}
+async function __autoRefreshCheck() {
+  try {
+    const res = await fetch('./data.json?t=' + Date.now(), { cache: 'reload' });
+    if (!res.ok) return;
+    const snap = await res.json();
+    if (!snap || !snap.updatedAt) return;
+    if (__lastDataUpdatedAt && snap.updatedAt !== __lastDataUpdatedAt) {
+      console.log('[auto-refresh] data.json 已更新 (' + snap.updatedAt + ')，整页刷新');
+      window.location.reload();
+      return;
+    }
+    __lastDataUpdatedAt = snap.updatedAt;
+  } catch (e) {}
+}
+setTimeout(__recordDataUpdate, 3000);
+setInterval(__autoRefreshCheck, 5 * 60 * 1000);
+setTimeout(() => window.location.reload(), 30 * 60 * 1000);
+
+document.addEventListener('DOMContentLoaded', init);
+
+</script>
+
+</body>
+
+</html>
+
