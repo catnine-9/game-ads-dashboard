@@ -1272,14 +1272,6 @@ button { font-family: inherit; border: none; cursor: pointer; background: none; 
 
         <div class="metric-row">
 
-          <span class="label">首日LTV（单游戏）</span>
-
-          <span class="value neutral">¥3.30</span>
-
-        </div>
-
-        <div class="metric-row">
-
           <span class="label">首日ARPPU</span>
 
           <span class="value neutral">¥16.66</span>
@@ -1994,45 +1986,43 @@ function updateKPIsFromDetail(list, forcedData) {
 
   const p = v => (v != null && !isNaN(v)) ? (Number(v)*100).toFixed(2) + '%' : '—';
 
-  setMetric(0, '首日LTV（单游戏）',   y(data.tgLtv0));
+  setMetric(0, '首日ARPPU',          y(data.tgaArppu0));
 
-  setMetric(1, '首日ARPPU',          y(data.tgaArppu0));
+  setMetric(1, 'ARPU',               y(data.tgArpu));
 
-  setMetric(2, 'ARPU',               y(data.tgArpu));
+  setMetric(2, '首日LTV（厂商流水）', y(data.tgMfLtv0));
 
-  setMetric(3, '首日LTV（厂商流水）', y(data.tgMfLtv0));
-
-  setMetric(4, '付费率',             p(data.tgPayRate));
+  setMetric(3, '付费率',             p(data.tgPayRate));
 
   // 留存
 
   if (data.tgRetention1 != null) {
 
-    setMetric(5, '次留', fmtPct(data.tgRetention1), true);
+    setMetric(4, '次留', fmtPct(data.tgRetention1), true);
 
   } else {
 
-    setMetric(5, '次留（数据产生中）', '—', true);
+    setMetric(4, '次留（数据产生中）', '—', true);
 
   }
 
   if (data.tgRechargeUserRetain1 != null) {
 
-    setMetric(6, '付费次日留', fmtPct(data.tgRechargeUserRetain1));
+    setMetric(5, '付费次日留', fmtPct(data.tgRechargeUserRetain1));
 
   } else {
 
-    setMetric(6, '付费次日留（待产生）', '—');
+    setMetric(5, '付费次日留（待产生）', '—');
 
   }
 
   if (data.tgRechargeUserRetain2 != null) {
 
-    setMetric(7, '付费3日留', fmtPct(data.tgRechargeUserRetain2));
+    setMetric(6, '付费3日留', fmtPct(data.tgRechargeUserRetain2));
 
   } else {
 
-    setMetric(7, '付费3日留（待产生）', '—');
+    setMetric(6, '付费3日留（待产生）', '—');
 
   }
 
