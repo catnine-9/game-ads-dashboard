@@ -2551,7 +2551,16 @@ let __distData = null;
 async function loadDistData() {
   try {
     const res = await fetch('./dist_data.json?t=' + Date.now(), { cache: 'reload' });
-    if (res.ok) __distData = await res.json();
+    if (res.ok) {
+      __distData = await res.json();
+      // fix(loadDistData): 异步加载完成后再触发渲染,避免 applySnapshot 跑在 fetch 之前时一直卡在数据抓取中
+      if (state.snapshot && typeof applySnapshot === 'function') applySnapshot(state.snapshot);
+      else if (state && typeof renderDist === 'function') {
+        const _gm = state.game === 'all' ? '' : state.game;
+        const _gn = state.game === 'all' ? '全部游戏' : ((GAMES.find(g => g.id === state.game) || {}).name || '');
+        renderDist(_gm, _gn);
+      }
+    }
   } catch (e) {}
 }
 function sumDistGames(games) {
