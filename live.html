@@ -1849,11 +1849,13 @@ async function apiPost(path, body) {
 
 function setText(sel, txt){ const el=document.querySelector(sel); if(el) el.textContent=txt; }
 
-function updateKPIsFromDetail(list, forcedData) {
+function updateKPIsFromDetail(list, forcedData, snapData) {
 
   // forcedData 优先（快照模式：all=求和行 / 单游戏=匹配行）；否则从 list 取
 
   let data = forcedData;
+  data = data || ({});
+  data._snap = snapData || data._snap;  // 优先用快照数据
 
   if (!data) {
 
@@ -1879,11 +1881,11 @@ function updateKPIsFromDetail(list, forcedData) {
 
   // 第 4 个 KPI 改为「首日R·厂商流水」
 
-  const mfFirstR = data.tgMfRoi0 != null && !isNaN(data.tgMfRoi0) ? (data.tgMfRoi0 * 100).toFixed(2) + '%' : '—';
+  const mfFirstR = (data._snap && data._snap.tgMfRoi0 != null) ? (data._snap.tgMfRoi0 * 100).toFixed(2) + '%' : (data.tgMfRoi0 != null && !isNaN(data.tgMfRoi0) ? (data.tgMfRoi0 * 100).toFixed(2) + '%' : '—');
 
   // 第 5 个 KPI 改为「首日LTV·厂商流水」
 
-  const mfLtv0 = data.tgMfLtv0 || 0;
+  const mfLtv0 = (data._snap && data._snap.tgMfLtv0 != null) ? data._snap.tgMfLtv0 : (data.tgMfLtv0 || 0);
 
   // 更新中栏 KPI
 
@@ -2732,7 +2734,7 @@ async function fetchDashboardData() {
 
     const list = (detail && detail.list) || [];
 
-    updateKPIsFromDetail(list);
+    updateKPIsFromDetail(list, null, snap);
 
     try {
 
