@@ -76,6 +76,16 @@ async function fetchChart(startDate, endDate) {
   return Object.values(merged).sort((a, b) => String(a.dateKey).localeCompare(String(b.dateKey)));
 }
 
+/* 把 BI 原始行转为统一格式：dateKey/gameName 保留；其他字段原样；
+   注：csite 行没有 gameName，用空串填充 */
+function toGameFormat(row) {
+  return Object.assign({
+    dateKey: row.dateKey || '',
+    gameName: row.gameName || '',
+    gameId: row.gameId || (row.gameName || '')  // csite 行无 gameId，用 gameName 占位
+  }, row);
+}
+
 async function fetchSlot(startDate, endDate) {
   // 流量版位维度（csite+platform）—— 单独请求，与 gameName detail 分开
   let slot = null, slotErr = null;
