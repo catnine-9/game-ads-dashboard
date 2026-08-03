@@ -2503,6 +2503,8 @@ function applySnapshot(snap) {
 
   // 流量版位渲染
   renderSlotList(slotList);
+  // 充值分布（按游戏）
+  renderDist(data && data.gameId ? data.gameId : (state.game === 'all' ? '' : state.game), data ? data.gameName : '');
 
 }
 
@@ -2532,6 +2534,57 @@ function renderDonut(top6) {
     angle = next;
   }
   svg.innerHTML = paths.join('');
+}
+
+/* ============ 充值分布：按游戏读取 dist_data.json ============ */
+let __distData = null;
+async function loadDistData() {
+  try {
+    const res = await fetch('./dist_data.json?t=' + Date.now(), { cache: 'no-store' });
+    if (res.ok) __distData = await res.json();
+  } catch (e) {}
+}
+function renderDist(gameId, gameName) {
+  const sub = document.getElementById('dist-sub');
+  const paynote = document.getElementById('dist-paycount-note');
+  const d = __distData && __distData.games ? __distData.games[String(gameId)] : null;
+  const setName = (sel, val, fallback) => {
+    const el = document.querySelector(sel);
+    if (el) el.textContent = (val != null && !isNaN(val)) ? val.toFixed(2) + '%' : (fallback || '—');
+  };
+  const setWidth = (sel, pct) => {
+    const el = document.querySelector(sel);
+    if (el) el.style.width = (pct != null && !isNaN(pct)) ? Math.min(pct, 100) + 'px' : '0px';
+  };
+  if (sub) sub.textContent = (gameName || '') + ' · 厂商流水 · 今日' + (d ? '' : '（数据抓取中）');
+  if (paynote) paynote.textContent = d ? ('付费 ' + (d.payCount != null ? d.payCount : '—') + ' 人') : '付费 — 人';
+  if (!d) {
+    // 无数据：显示占位
+    ['dist-people-0','dist-people-100','dist-people-1000','dist-people-10000',
+     'dist-amount-0','dist-amount-100','dist-amount-1000'].forEach(id => {
+      const el = document.querySelector('[data-bind="' + id + '"]');
+      if (el) el.textContent = '—';
+    });
+    return;
+  }
+  setName('[data-bind="dist-people-0"]', d.people_0_100);
+  setName('[data-bind="dist-people-100"]', d.people_100_1000);
+  setName('[data-bind="dist-people-1000"]', d.people_1000_10000);
+  setName('[data-bind="dist-people-10000"]', d.people_10000);
+  setName('[data-bind="dist-amount-0"]', d.amount_0_100);
+  setName('[data-bind="dist-amount-100"]', d.amount_100_1000);
+  setName('[data-bind="dist-amount-1000"]', d.amount_1000);
+  // 进度条宽度（相对 100% 缩放，最大值 100px）
+  const bars = [
+    ['.dist-section-people + .dist-row .bar-fill', d.people_0_100],
+    ['.dist-section-people + .dist-row + .dist-row .bar-fill', d.people_100_1000],
+    ['.dist-section-people + .dist-row + .dist-row + .dist-row .bar-fill', d.people_1000_10000],
+    ['.dist-section-people + .dist-row + .dist-row + .dist-row + .dist-row .bar-fill', d.people_10000],
+    ['.dist-section-amount + .dist-row .bar-fill', d.amount_0_100],
+    ['.dist-section-amount + .dist-row + .dist-row .bar-fill', d.amount_100_1000],
+    ['.dist-section-amount + .dist-row + .dist-row + .dist-row .bar-fill', d.amount_1000],
+  ];
+  bars.forEach(([sel, pct]) => { const el = document.querySelector(sel); if (el) el.style.width = (pct != null && !isNaN(pct)) ? Math.min(pct, 100) + 'px' : '0px'; });
 }
 
 function renderSlotList(slotList) {
@@ -2566,6 +2619,9 @@ function renderSlotList(slotList) {
 }
 
 
+
+/* 加载充值分布数据 */
+loadDistData();
 
 /* ============ 数据获取：快照兜底 + 实时直连 BI（CORS 已放行） ============ */
 
