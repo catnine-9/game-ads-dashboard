@@ -1576,7 +1576,7 @@ button { font-family: inherit; border: none; cursor: pointer; background: none; 
 
           <h2 class="card-title">分析流量版位分布</h2>
 
-          <p class="card-sub">今日消耗 ¥7,792 · 神将传说唯一在投</p>
+          <p class="card-sub" id="slot-sub">今日消耗 ¥0 · 加载中</p>
 
         </div>
 
@@ -2544,7 +2544,35 @@ async function loadDistData() {
     if (res.ok) __distData = await res.json();
   } catch (e) {}
 }
+function sumDistGames(games) {
+  // 汇总多个游戏的充值分布（按权重：付费人数）
+  const total = (k) => k === 'people_10000' || k === 'amount_1000' ? games.reduce((a, g) => a + (g[g._totalField] || 0) * (g[k] || 0) / 100, 0) : 0;
+  const w = games.reduce((a, g) => a + (g.payCount || 0), 0) || 1;
+  const avg = (k) => games.reduce((a, g) => a + (g[k] || 0) * (g.payCount || 0), 0) / w;
+  return {
+    payCount: w,
+    people_0_100: avg('people_0_100'),
+    people_100_1000: avg('people_100_1000'),
+    people_1000_10000: avg('people_1000_10000'),
+    people_10000: avg('people_10000'),
+    amount_0_100: avg('amount_0_100'),
+    amount_100_1000: avg('amount_100_1000'),
+    amount_1000: avg('amount_1000'),
+  };
+}
 function renderDist(gameId, gameName) {
+  // state.game === 'all' 时汇总所有游戏；否则按 gameId 找
+  let d = null;
+  if (state.game === 'all' && __distData && __distData.games) {
+    const gs = Object.values(__distData.games);
+    if (gs.length === 1) d = gs[0];
+    else if (gs.length > 1) {
+      d = sumDistGames(gs);
+      d.gameName = '全部游戏汇总';
+    }
+  } else {
+    d = (__distData && __distData.games) ? __distData.games[String(gameId)] : null;
+  }
   const sub = document.getElementById('dist-sub');
   const paynote = document.getElementById('dist-paycount-note');
   const d = __distData && __distData.games ? __distData.games[String(gameId)] : null;
@@ -2589,13 +2617,24 @@ function renderDist(gameId, gameName) {
 
 function renderSlotList(slotList) {
   const legendEl = document.getElementById('slotLegend');
+  const subEl = document.getElementById('slot-sub');
   if (!legendEl) return;
-  // 按消耗降序，过滤掉无消耗和空白 csite
-  const sorted = slotList
-    .filter(s => (parseFloat(s.tgRealCost) || 0) > 0 && String(s.csite || '').trim() !== '')
-    .sort((a, b) => (parseFloat(b.tgRealCost) || 0) - (parseFloat(a.tgRealCost) || 0))
+  // 过滤：保留有消耗的行（汇总行 csite 空但 cost>0 也保留）
+  const valid = slotList.filter(s => (parseFloat(s.tgRealCost) || 0) > 0);
+  const total = valid.reduce((a, s) => a + (parseFloat(s.tgRealCost) || 0), 0);
+  // 按消耗降序，汇总行（csite 空）排第一
+  const sorted = valid
+    .slice()
+    .sort((a, b) => {
+      const aEmpty = !String(a.csite || '').trim();
+      const bEmpty = !String(b.csite || '').trim();
+      if (aEmpty !== bEmpty) return aEmpty ? -1 : 1;
+      return (parseFloat(b.tgRealCost) || 0) - (parseFloat(a.tgRealCost) || 0);
+    })
     .slice(0, 6);
-  const total = sorted.reduce((a, s) => a + (parseFloat(s.tgRealCost) || 0), 0);
+  if (subEl) {
+    subEl.textContent = '今日消耗 ¥' + Math.round(total).toLocaleString('zh-CN');
+  }
   if (sorted.length === 0) {
     legendEl.innerHTML = '<div style="color:#6B7280;font-size:11.5px;padding:8px 0">暂无版位数据</div>';
     const svg = document.getElementById('slotDonut');
@@ -2604,7 +2643,7 @@ function renderSlotList(slotList) {
   }
   const html = sorted.map((s, i) => {
     const pct = total > 0 ? ((parseFloat(s.tgRealCost) || 0) / total * 100).toFixed(1) : '0.0';
-    const name = (s.csite || '').trim();
+    const name = (s.csite || '').trim() || '汇总';
     const cost = '¥' + Math.round(parseFloat(s.tgRealCost) || 0).toLocaleString('zh-CN');
     const plat = s.platform ? ` <span style="opacity:.5;font-size:10px">${s.platform}</span>` : '';
     return `<div class="slot-legend-row">
