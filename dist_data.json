@@ -1,0 +1,20 @@
+{
+  "updatedAt": "2026-08-03T12:00:00",
+  "games": {
+    "13874": {
+      "gameName": "神将传说-8月12日上线",
+      "newUsers": 151,
+      "rechargeAmount": 7649.0,
+      "payCount": 127,
+      "arpu": 50.66,
+      "arppu": 60.23,
+      "people_0_100": 91.34,
+      "people_100_1000": 7.87,
+      "people_1000_10000": 0.79,
+      "people_10000": 0.0,
+      "amount_0_100": 24.79,
+      "amount_100_1000": null,
+      "amount_1000": null
+    }
+  }
+}
