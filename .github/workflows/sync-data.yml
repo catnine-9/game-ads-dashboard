@@ -16,6 +16,9 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v4
+        with:
+          ref: main          # 显式 checkout 到 main 分支(避免 detached HEAD)
+          fetch-depth: 0     # 完整历史(避免 rebase 失败)
 
       - name: setup node
         uses: actions/setup-node@v4
@@ -35,8 +38,8 @@ jobs:
           if ! git diff --cached --quiet; then
             echo "data.json 有更新，提交..."
             git commit -m "sync: 更新 BI 数据 $(date -u +'%Y-%m-%dT%H:%M:%SZ')"
-            git pull --rebase origin main || echo "rebase 失败，继续尝试 push"
-            git push
+            # fix: detach HEAD rebase 失败时,直接 push 到 main 分支
+            git push origin HEAD:main
           else
             echo "data.json 无变化，跳过提交"
           fi
