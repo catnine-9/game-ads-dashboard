@@ -76,6 +76,26 @@ async function fetchChart(startDate, endDate) {
   return Object.values(merged).sort((a, b) => String(a.dateKey).localeCompare(String(b.dateKey)));
 }
 
+async function fetchSlot(startDate, endDate) {
+  // 流量版位维度（csite+platform）—— 单独请求，与 gameName detail 分开
+  let slot = null, slotErr = null;
+  for (let i = 0; i < 4; i++) {
+    try {
+      slot = await post('/reportChannel/detailData', {
+        ...COMMON, dimension: 'csite',
+        startDate, endDate,
+        pageNum: 1, pageSize: 100,
+      });
+      break;
+    } catch (e) {
+      slotErr = e;
+      if (e.message === 'RATE_LIMITED' && i < 3) { await sleep(12000 * (i + 1)); continue; }
+      if (i === 3) console.error('slot ' + startDate + ' failed: ' + e.message);
+    }
+  }
+  return ((slot && slot.list) || []).map(toGameFormat);
+}
+
 async function fetchRange(startDate, endDate) {
   let detail = null;
   let detailErr = null;
@@ -99,7 +119,8 @@ async function fetchRange(startDate, endDate) {
     throw new Error(detailErr ? detailErr.message : 'EMPTY_DETAIL');
   }
   const chart = await fetchChart(startDate, endDate);
-  return { detail: detailList, chart };
+  const slot = await fetchSlot(startDate, endDate);
+  return { detail: detailList.map(toGameFormat), chart, slot };
 }
 
 async function main() {
