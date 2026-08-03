@@ -99,11 +99,14 @@ async function fetchSlot(startDate, endDate) {
       break;
     } catch (e) {
       slotErr = e;
+      console.error('slot ' + startDate + ' retry ' + i + ' failed: ' + e.message);
       if (e.message === 'RATE_LIMITED' && i < 3) { await sleep(12000 * (i + 1)); continue; }
-      if (i === 3) console.error('slot ' + startDate + ' failed: ' + e.message);
+      if (i === 3) console.error('slot ' + startDate + ' all retries failed');
     }
   }
-  return ((slot && slot.list) || []).map(toGameFormat);
+  const list = (slot && slot.list) || [];
+  console.log('  slot ' + startDate + ' fetched ' + list.length + ' rows');
+  return list.map(toGameFormat);
 }
 
 async function fetchRange(startDate, endDate) {
