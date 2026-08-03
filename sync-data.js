@@ -188,6 +188,7 @@ async function main() {
   const cleanRange = (r) => ({
     detail: (r.detail || []).map(row => fillMissing(cleanRow(row))),
     chart: (r.chart || []).map(row => fillMissing(cleanRow(row))),
+    slot: (r.slot || []).map(row => fillMissing(cleanRow(row))),
   });
   out.ranges = Object.fromEntries(Object.entries(out.ranges).map(([k, r]) => [k, cleanRange(r)]));
   fs.writeFileSync('data.json', JSON.stringify(out, null, 1));
