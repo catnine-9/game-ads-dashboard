@@ -14,9 +14,9 @@
 
 <meta http-equiv="Expires" content="0">
 
-<meta http-equiv="refresh" content="0;url=dashboard.html?v=2026-08-03">
 
-<meta http-equiv="refresh" content="0;url=live.html?v=v3"><title>游戏投放数据看板 · GAME AD ANALYTICS</title>
+
+<meta name="data-build-ts" content="2026-08-03 17:41:37 (v5)"><title>游戏投放数据看板 · GAME AD ANALYTICS</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 
@@ -1079,7 +1079,6 @@ button { font-family: inherit; border: none; cursor: pointer; background: none; 
 </head>
 
 <body>
-<div id="cachebanner" style="position:fixed;top:0;left:0;right:0;background:#dc2626;color:#fff;padding:14px;text-align:center;z-index:99999;font-size:18px;font-weight:bold">⚠️ 您浏览器有旧版本缓存 访问新版：<a href="live.html?v=v3" style="color:#fff;text-decoration:underline;margin-left:8px">live.html</a></div>
 
 <div class="dashboard">
 
@@ -2551,7 +2550,7 @@ function renderDonut(top6) {
 let __distData = null;
 async function loadDistData() {
   try {
-    const res = await fetch('./dist_data.json?t=' + Date.now(), { cache: 'no-store' });
+    const res = await fetch('./dist_data.json?t=' + Date.now(), { cache: 'reload' });
     if (res.ok) __distData = await res.json();
   } catch (e) {}
 }
@@ -2681,7 +2680,7 @@ async function fetchDashboardData() {
 
   try {
 
-    const res = await fetch('./data.json?t=' + Date.now(), { cache: 'no-store' });
+    const res = await fetch('./data.json?t=' + Date.now(), { cache: 'reload' });
 
     if (res.ok) {
 
@@ -2768,7 +2767,7 @@ setInterval(() => { fetchDashboardData(); }, 600000);
 let __lastDataUpdatedAt = null;
 async function __recordDataUpdate() {
   try {
-    const res = await fetch('./data.json?t=' + Date.now(), { cache: 'no-store' });
+    const res = await fetch('./data.json?t=' + Date.now(), { cache: 'reload' });
     if (!res.ok) return;
     const snap = await res.json();
     if (snap && snap.updatedAt) __lastDataUpdatedAt = snap.updatedAt;
@@ -2776,7 +2775,7 @@ async function __recordDataUpdate() {
 }
 async function __autoRefreshCheck() {
   try {
-    const res = await fetch('./data.json?t=' + Date.now(), { cache: 'no-store' });
+    const res = await fetch('./data.json?t=' + Date.now(), { cache: 'reload' });
     if (!res.ok) return;
     const snap = await res.json();
     if (!snap || !snap.updatedAt) return;

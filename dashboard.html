@@ -14,9 +14,9 @@
 
 <meta http-equiv="Expires" content="0">
 
-<meta http-equiv="refresh" content="0;url=dashboard.html?v=2026-08-03">
 
-<meta http-equiv="refresh" content="0;url=live.html?v=v3"><title>游戏投放数据看板 · GAME AD ANALYTICS</title>
+
+<meta name="data-build-ts" content="2026-08-03 17:41:37 (v5)"><title>游戏投放数据看板 · GAME AD ANALYTICS</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 
@@ -1079,7 +1079,6 @@ button { font-family: inherit; border: none; cursor: pointer; background: none; 
 </head>
 
 <body>
-<div id="cachebanner" style="position:fixed;top:0;left:0;right:0;background:#dc2626;color:#fff;padding:14px;text-align:center;z-index:99999;font-size:18px;font-weight:bold">⚠️ 您浏览器有旧版本缓存 访问新版：<a href="live.html?v=v3" style="color:#fff;text-decoration:underline;margin-left:8px">live.html</a></div>
 
 <div class="dashboard">
 
@@ -1849,11 +1848,13 @@ async function apiPost(path, body) {
 
 function setText(sel, txt){ const el=document.querySelector(sel); if(el) el.textContent=txt; }
 
-function updateKPIsFromDetail(list, forcedData) {
+function updateKPIsFromDetail(list, forcedData, snapData) {
 
   // forcedData 优先（快照模式：all=求和行 / 单游戏=匹配行）；否则从 list 取
 
   let data = forcedData;
+  data = data || ({});
+  data._snap = snapData || data._snap;  // 优先用快照数据
 
   if (!data) {
 
@@ -1879,11 +1880,11 @@ function updateKPIsFromDetail(list, forcedData) {
 
   // 第 4 个 KPI 改为「首日R·厂商流水」
 
-  const mfFirstR = data.tgMfRoi0 != null && !isNaN(data.tgMfRoi0) ? (data.tgMfRoi0 * 100).toFixed(2) + '%' : '—';
+  const mfFirstR = (data._snap && data._snap.tgMfRoi0 != null) ? (data._snap.tgMfRoi0 * 100).toFixed(2) + '%' : (data.tgMfRoi0 != null && !isNaN(data.tgMfRoi0) ? (data.tgMfRoi0 * 100).toFixed(2) + '%' : '—');
 
   // 第 5 个 KPI 改为「首日LTV·厂商流水」
 
-  const mfLtv0 = data.tgMfLtv0 || 0;
+  const mfLtv0 = (data._snap && data._snap.tgMfLtv0 != null) ? data._snap.tgMfLtv0 : (data.tgMfLtv0 || 0);
 
   // 更新中栏 KPI
 
@@ -2549,7 +2550,7 @@ function renderDonut(top6) {
 let __distData = null;
 async function loadDistData() {
   try {
-    const res = await fetch('./dist_data.json?t=' + Date.now(), { cache: 'no-store' });
+    const res = await fetch('./dist_data.json?t=' + Date.now(), { cache: 'reload' });
     if (res.ok) __distData = await res.json();
   } catch (e) {}
 }
@@ -2679,7 +2680,7 @@ async function fetchDashboardData() {
 
   try {
 
-    const res = await fetch('./data.json?t=' + Date.now(), { cache: 'no-store' });
+    const res = await fetch('./data.json?t=' + Date.now(), { cache: 'reload' });
 
     if (res.ok) {
 
@@ -2732,7 +2733,7 @@ async function fetchDashboardData() {
 
     const list = (detail && detail.list) || [];
 
-    updateKPIsFromDetail(list);
+    updateKPIsFromDetail(list, null, snap);
 
     try {
 
@@ -2766,7 +2767,7 @@ setInterval(() => { fetchDashboardData(); }, 600000);
 let __lastDataUpdatedAt = null;
 async function __recordDataUpdate() {
   try {
-    const res = await fetch('./data.json?t=' + Date.now(), { cache: 'no-store' });
+    const res = await fetch('./data.json?t=' + Date.now(), { cache: 'reload' });
     if (!res.ok) return;
     const snap = await res.json();
     if (snap && snap.updatedAt) __lastDataUpdatedAt = snap.updatedAt;
@@ -2774,7 +2775,7 @@ async function __recordDataUpdate() {
 }
 async function __autoRefreshCheck() {
   try {
-    const res = await fetch('./data.json?t=' + Date.now(), { cache: 'no-store' });
+    const res = await fetch('./data.json?t=' + Date.now(), { cache: 'reload' });
     if (!res.ok) return;
     const snap = await res.json();
     if (!snap || !snap.updatedAt) return;
