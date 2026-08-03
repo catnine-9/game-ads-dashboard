@@ -87,12 +87,12 @@ function toGameFormat(row) {
 }
 
 async function fetchSlot(startDate, endDate) {
-  // 流量版位维度（csite+platform）—— 单独请求，与 gameName detail 分开
+  // 流量版位维度（platform 头条/快手/广点通等渠道）—— 单独请求，BI 的 csite 维度无明细
   let slot = null, slotErr = null;
   for (let i = 0; i < 4; i++) {
     try {
       slot = await post('/reportChannel/detailData', {
-        ...COMMON, dimension: 'csite',
+        ...COMMON, dimension: 'platform',
         startDate, endDate,
         pageNum: 1, pageSize: 100,
       });
