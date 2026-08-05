@@ -1218,9 +1218,14 @@ button { font-family: inherit; border: none; cursor: pointer; background: none; 
           <div class="pct" data-bind="dist-amount-100">—</div>
         </div>
         <div class="dist-row">
-          <div class="range">1000元以上</div>
+          <div class="range">1000-10000元</div>
           <div class="bar-track"><div class="bar-fill" style="width:0px; background:#7CC2FF"></div></div>
           <div class="pct" data-bind="dist-amount-1000">—</div>
+        </div>
+        <div class="dist-row">
+          <div class="range">1万元以上</div>
+          <div class="bar-track"><div class="bar-fill" style="width:0px; background:#34D399"></div></div>
+          <div class="pct" data-bind="dist-amount-10000">—</div>
         </div>
       </section>
 
@@ -2517,7 +2522,7 @@ async function loadDistData() {
 }
 function sumDistGames(games) {
   // 汇总多个游戏的充值分布（按权重：付费人数）
-  const total = (k) => k === 'people_10000' || k === 'amount_1000' ? games.reduce((a, g) => a + (g[g._totalField] || 0) * (g[k] || 0) / 100, 0) : 0;
+  const total = (k) => k === 'people_10000' || k === 'amount_1000' || k === 'amount_10000' ? games.reduce((a, g) => a + (g[g._totalField] || 0) * (g[k] || 0) / 100, 0) : 0;
   const w = games.reduce((a, g) => a + (g.payCount || 0), 0) || 1;
   const avg = (k) => games.reduce((a, g) => a + (g[k] || 0) * (g.payCount || 0), 0) / w;
   return {
@@ -2529,6 +2534,7 @@ function sumDistGames(games) {
     amount_0_100: avg('amount_0_100'),
     amount_100_1000: avg('amount_100_1000'),
     amount_1000: avg('amount_1000'),
+    amount_10000: avg('amount_10000'),
   };
 }
 function renderDist(gameId, gameName) {
@@ -2559,7 +2565,7 @@ function renderDist(gameId, gameName) {
   if (!d) {
     // 无数据：显示占位
     ['dist-people-0','dist-people-100','dist-people-1000','dist-people-10000',
-     'dist-amount-0','dist-amount-100','dist-amount-1000'].forEach(id => {
+     'dist-amount-0','dist-amount-100','dist-amount-1000','dist-amount-10000'].forEach(id => {
       const el = document.querySelector('[data-bind="' + id + '"]');
       if (el) el.textContent = '—';
     });
@@ -2572,6 +2578,7 @@ function renderDist(gameId, gameName) {
   setName('[data-bind="dist-amount-0"]', d.amount_0_100);
   setName('[data-bind="dist-amount-100"]', d.amount_100_1000);
   setName('[data-bind="dist-amount-1000"]', d.amount_1000);
+  setName('[data-bind="dist-amount-10000"]', d.amount_10000);
   // 进度条宽度（相对 100% 缩放，最大值 100px）
   const bars = [
     ['.dist-section-people + .dist-row .bar-fill', d.people_0_100],
@@ -2581,6 +2588,7 @@ function renderDist(gameId, gameName) {
     ['.dist-section-amount + .dist-row .bar-fill', d.amount_0_100],
     ['.dist-section-amount + .dist-row + .dist-row .bar-fill', d.amount_100_1000],
     ['.dist-section-amount + .dist-row + .dist-row + .dist-row .bar-fill', d.amount_1000],
+    ['.dist-section-amount + .dist-row + .dist-row + .dist-row + .dist-row .bar-fill', d.amount_10000],
   ];
   bars.forEach(([sel, pct]) => { const el = document.querySelector(sel); if (el) el.style.width = (pct != null && !isNaN(pct)) ? Math.min(pct, 100) + 'px' : '0px'; });
 }
