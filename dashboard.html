@@ -820,12 +820,16 @@ button { font-family: inherit; border: none; cursor: pointer; background: none; 
 
 .daily-table tbody td.num-cost { color: var(--text-primary); }
 .daily-table tbody td.num-new { color: #22D3EE; }
+.daily-table tbody td.num-price { color: #A78BFA; }
 .daily-table tbody td.num-pay { color: var(--green); }
 .daily-table tbody td.num-rate { color: var(--accent); font-weight: 600; }
 .daily-table tbody td.num-r { color: #3B82F6; }
 .daily-table tbody td.num-roi { font-weight: 700; }
-.daily-table tbody td.num-roi.up { color: var(--green); }
-.daily-table tbody td.num-roi.down { color: var(--red); }
+.daily-table tbody td.num-ltv { font-weight: 700; }
+.daily-table tbody td.num-roi.up,
+.daily-table tbody td.num-ltv.up { color: var(--green); }
+.daily-table tbody td.num-roi.down,
+.daily-table tbody td.num-ltv.down { color: var(--red); }
 
 .daily-table tbody tr.tfoot td {
   font-weight: 700;
@@ -1634,15 +1638,17 @@ button { font-family: inherit; border: none; cursor: pointer; background: none; 
 
                 <th>消耗（元）</th>
 
-                <th>新增用户</th>
+                <th>新增数</th>
 
-                <th>付费人数</th>
+                <th>新增单价</th>
 
-                <th>付费率</th>
+                <th>点击率</th>
 
-                <th>首日R（元）</th>
+                <th>激活率</th>
 
-                <th>首日ROI</th>
+                <th>首日ROI·厂商流水</th>
+
+                <th>首日LTV·厂商流水</th>
 
               </tr>
 
@@ -2527,7 +2533,7 @@ function renderDailyTable(detail) {
 
   if (games.length === 0) {
 
-    tbody.innerHTML = `<tr><td colspan="7" class="daily-empty">今日暂未抓到投放数据…</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="8" class="daily-empty">今日暂未抓到投放数据…</td></tr>`;
 
     return;
 
@@ -2535,7 +2541,7 @@ function renderDailyTable(detail) {
 
   // 汇总
 
-  let totCost = 0, totNew = 0, totPay = 0, totR = 0;
+  let totCost = 0, totNew = 0, totStartPrice = 0, totRoi = 0, totLtv = 0;
 
   let rows = games.map((g, i) => {
 
@@ -2543,17 +2549,22 @@ function renderDailyTable(detail) {
 
     const nu = parseInt(g.tgNewUserCount || 0, 10);
 
-    const pay = parseInt(g.tgPayCount || g.tgNewUserPayCount || 0, 10);
+    const startPrice = parseFloat(g.tgStartPrice) || 0;
 
-    const r = parseFloat(g.tgRechargeTotalAmount0d || 0);
+    const clickRate = parseFloat(g.tgClickRate) || 0;
 
-    const rate = nu > 0 ? (pay / nu) : 0;
+    const actRate = parseFloat(g.tgActiveConvertRate) || 0;
 
-    const roi = cost > 0 ? (r / cost) : 0;
+    const mfRoi = parseFloat(g.tgMfRoi0) || 0;
 
-    totCost += cost; totNew += nu; totPay += pay; totR += r;
+    const mfLtv = parseFloat(g.tgMfLtv0) || 0;
 
-    const roiCls = roi >= 1 ? 'up' : (cost > 0 ? 'down' : '');
+    // 加权累计：ROI 按消耗加权、LTV 按新增数加权
+    totCost += cost; totNew += nu; totStartPrice += startPrice; totRoi += mfRoi * cost; totLtv += mfLtv * nu;
+
+    const roiCls = mfRoi >= 0.1 ? 'up' : (cost > 0 ? 'down' : '');
+
+    const ltvCls = mfLtv >= 1 ? 'up' : (mfLtv > 0 ? 'down' : '');
 
     const tag = i === 0 ? `<span class="game-tag">TOP1</span>` : '';
 
@@ -2565,13 +2576,15 @@ function renderDailyTable(detail) {
 
       <td class="num-new">${nu.toLocaleString('zh-CN')}</td>
 
-      <td class="num-pay">${pay.toLocaleString('zh-CN')}</td>
+      <td class="num-price">¥${startPrice.toFixed(2)}</td>
 
-      <td class="num-rate">${(rate * 100).toFixed(2)}%</td>
+      <td class="num-rate">${(clickRate * 100).toFixed(2)}%</td>
 
-      <td class="num-r">¥${fmtN(r, 0)}</td>
+      <td class="num-rate">${(actRate * 100).toFixed(2)}%</td>
 
-      <td class="num-roi ${roiCls}">${roi.toFixed(2)}</td>
+      <td class="num-roi ${roiCls}">${(mfRoi * 100).toFixed(2)}%</td>
+
+      <td class="num-ltv ${ltvCls}">¥${mfLtv.toFixed(2)}</td>
 
     </tr>`;
 
@@ -2579,13 +2592,17 @@ function renderDailyTable(detail) {
 
   // 合计行
 
-  const totRate = totNew > 0 ? (totPay / totNew) : 0;
+  const avgStartPrice = games.length > 0 ? (totStartPrice / games.length) : 0;
 
-  const totRoi = totCost > 0 ? (totR / totCost) : 0;
+  const wRoi = totCost > 0 ? (totRoi / totCost) : 0;
 
-  const totRoiCls = totRoi >= 1 ? 'up' : (totCost > 0 ? 'down' : '');
+  const wLtv = totNew > 0 ? (totLtv / totNew) : 0;
 
-  rows += `<tr class="tfoot"><td class="col-game">合计 (${games.length} 款)</td><td class="num-cost">¥${fmtN(totCost, 0)}</td><td class="num-new">${totNew.toLocaleString('zh-CN')}</td><td class="num-pay">${totPay.toLocaleString('zh-CN')}</td><td class="num-rate">${(totRate * 100).toFixed(2)}%</td><td class="num-r">¥${fmtN(totR, 0)}</td><td class="num-roi ${totRoiCls}">${totRoi.toFixed(2)}</td></tr>`;
+  const roiCls = wRoi >= 0.1 ? 'up' : (totCost > 0 ? 'down' : '');
+
+  const ltvCls = wLtv >= 1 ? 'up' : (wLtv > 0 ? 'down' : '');
+
+  rows += `<tr class="tfoot"><td class="col-game">合计 (${games.length} 款)</td><td class="num-cost">¥${fmtN(totCost, 0)}</td><td class="num-new">${totNew.toLocaleString('zh-CN')}</td><td class="num-price">¥${avgStartPrice.toFixed(2)}</td><td class="num-rate">—</td><td class="num-rate">—</td><td class="num-roi ${roiCls}">${(wRoi * 100).toFixed(2)}%</td><td class="num-ltv ${ltvCls}">¥${wLtv.toFixed(2)}</td></tr>`;
 
   tbody.innerHTML = rows;
 
