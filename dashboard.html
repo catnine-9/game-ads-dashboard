@@ -1546,9 +1546,9 @@ button { font-family: inherit; border: none; cursor: pointer; background: none; 
 
             <span class="swatch" style="background:#3B82F6"></span>
 
-            <span class="name">首日R（单游戏）</span>
+            <span class="name">首日R·厂商流水</span>
 
-            <span class="total" id="dailyLegendTotal2">近7日 ¥6,679</span>
+            <span class="total" id="dailyLegendTotal2">近7日 0.00%</span>
 
           </div>
 
@@ -2216,7 +2216,7 @@ function updateKPIsFromDetail(list, forcedData, snapData) {
 
 function updateChartFromList(list) {
 
-  // 重新画折线图：分日消耗
+  // 重新画折线图：分日消耗 + 首日ROI·厂商流水
 
   const points = list.slice().sort((a,b)=>String(a.dateKey).localeCompare(String(b.dateKey)));
 
@@ -2230,13 +2230,18 @@ function updateChartFromList(list) {
 
   const costPts = points.map((p,i)=> [xs[i], 215 - ((p.tgRealCost||0)/maxC)*170]);
 
-  // 首日R 用相对值
+  // 首日ROI·厂商流水（百分比 0~1，转成 0~1 映射到 30px 高度区域）
 
-  const rFirstR = points.map(p=>p.tgRechargeTotalAmount0d||0);
+  const roiSeries = points.map(p => (p.tgMfRoi0 != null && !isNaN(p.tgMfRoi0)) ? p.tgMfRoi0 : 0);
 
-  const maxR = Math.max(...rFirstR, 1);
+  const maxR = Math.max(...roiSeries, 0.001);
 
-  const rPts = points.map((p,i)=> [xs[i], 215 - ((p.tgRechargeTotalAmount0d||0)/maxR)*30]);
+  // 用百分比最大值（比如最大 0.15），所有点按 maxR 归一
+
+  const rPts = points.map((p,i)=> {
+    const v = roiSeries[i];
+    return [xs[i], 215 - (v/maxR)*30];
+  });
 
   // 更新 path
 
@@ -2283,7 +2288,7 @@ function updateChartFromList(list) {
 
           <div class="tt-row"><span class="tt-dot" style="background:#22D3EE"></span><span class="tt-label">消耗</span><span class="tt-val">¥${fmtN(p.tgRealCost||0,0)}</span></div>
 
-          <div class="tt-row"><span class="tt-dot" style="background:#3B82F6"></span><span class="tt-label">首日R</span><span class="tt-val">¥${fmtN(p.tgRechargeTotalAmount0d||0,0)}</span></div>
+          <div class="tt-row"><span class="tt-dot" style="background:#3B82F6"></span><span class="tt-label">首日R·厂商流水</span><span class="tt-val">${(p.tgMfRoi0 != null && !isNaN(p.tgMfRoi0)) ? (p.tgMfRoi0*100).toFixed(2)+'%' : '—'}</span></div>
 
           <div class="tt-row"><span class="tt-dot" style="background:#34D399"></span><span class="tt-label">新增数</span><span class="tt-val">${fmtN(p.tgNewUserCount||0,0)}</span></div>
 
@@ -2319,7 +2324,7 @@ function updateChartFromList(list) {
 
           <div class="tt-date">${p.dateKey || ''}</div>
 
-          <div class="tt-row"><span class="tt-dot" style="background:#3B82F6"></span><span class="tt-label">首日R</span><span class="tt-val">¥${fmtN(p.tgRechargeTotalAmount0d||0,0)}</span></div>
+          <div class="tt-row"><span class="tt-dot" style="background:#3B82F6"></span><span class="tt-label">首日R·厂商流水</span><span class="tt-val">${(p.tgMfRoi0 != null && !isNaN(p.tgMfRoi0)) ? (p.tgMfRoi0*100).toFixed(2)+'%' : '—'}</span></div>
 
         `;
 
@@ -2499,7 +2504,7 @@ function renderDailyDetail(range, chart7, key) {
 
     if (legendTot1) legendTot1.textContent = `近${chart7.length}日 ¥${fmtN(sumField(chart7, 'tgRealCost'), 0)}`;
 
-    if (legendTot2) legendTot2.textContent = `近${chart7.length}日 ¥${fmtN(sumField(chart7, 'tgRechargeTotalAmount0d'), 0)}`;
+    if (legendTot2) legendTot2.textContent = `近${chart7.length}日 ${fmtAvgRoi(chart7)}`;
 
     if (cardSub) cardSub.textContent = `分日消耗趋势 · 最近 ${chart7.length} 日`;
 
@@ -2510,6 +2515,33 @@ function renderDailyDetail(range, chart7, key) {
 
 
 function sumField(arr, k) { return (arr || []).reduce((a, x) => a + (parseFloat(x[k]) || 0), 0); }
+
+// 加权平均 ROI（按消耗加权，更接近业务真实）；无 ROI 数据时回退算术平均
+function fmtAvgRoi(arr) {
+
+  let wSum = 0, w = 0;
+
+  (arr || []).forEach(p => {
+
+    const r = parseFloat(p.tgMfRoi0);
+
+    const c = parseFloat(p.tgRealCost) || 0;
+
+    if (!isNaN(r) && c > 0) { wSum += r * c; w += c; }
+
+  });
+
+  if (w > 0) return (wSum / w * 100).toFixed(2) + '%';
+
+  // 无成本权重时算术平均
+
+  const vs = (arr || []).map(p => parseFloat(p.tgMfRoi0)).filter(v => !isNaN(v));
+
+  if (vs.length) return (vs.reduce((a,b)=>a+b,0) / vs.length * 100).toFixed(2) + '%';
+
+  return '—';
+
+}
 
 
 
