@@ -736,6 +736,115 @@ button { font-family: inherit; border: none; cursor: pointer; background: none; 
 
 
 
+/* ============ Daily Detail: Table View (今日模式) ============ */
+
+.daily-table-wrap {
+  width: 100%;
+  max-height: 260px;
+  overflow-y: auto;
+  border-radius: var(--r-md);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border-soft);
+}
+
+.daily-table-wrap::-webkit-scrollbar { width: 6px; }
+.daily-table-wrap::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.18); border-radius: 3px; }
+.daily-table-wrap::-webkit-scrollbar-track { background: transparent; }
+
+.daily-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--font-mono, monospace);
+  font-size: 12px;
+}
+
+.daily-table thead {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: rgba(20, 22, 30, 0.96);
+  backdrop-filter: blur(6px);
+}
+
+.daily-table thead th {
+  font-family: 'Noto Sans SC', sans-serif;
+  font-weight: 600;
+  color: var(--text-secondary);
+  padding: 10px 12px;
+  text-align: right;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+  font-size: 11.5px;
+}
+
+.daily-table thead th:first-child,
+.daily-table thead th.col-game { text-align: left; }
+
+.daily-table tbody tr {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  transition: background 0.12s;
+}
+
+.daily-table tbody tr:hover { background: rgba(255, 255, 255, 0.04); }
+.daily-table tbody tr:last-child { border-bottom: none; }
+
+.daily-table tbody td {
+  padding: 10px 12px;
+  text-align: right;
+  white-space: nowrap;
+  color: var(--text-primary);
+}
+
+.daily-table tbody td:first-child,
+.daily-table tbody td.col-game {
+  text-align: left;
+  font-family: 'Noto Sans SC', sans-serif;
+  color: var(--text-primary);
+  font-weight: 500;
+  max-width: 240px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.daily-table tbody td.col-game .game-tag {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: rgba(124, 194, 255, 0.12);
+  color: var(--accent);
+  font-size: 10px;
+  font-family: var(--font-mono);
+  font-weight: 600;
+}
+
+.daily-table tbody td.num-cost { color: var(--text-primary); }
+.daily-table tbody td.num-new { color: #22D3EE; }
+.daily-table tbody td.num-price { color: #A78BFA; }
+.daily-table tbody td.num-pay { color: var(--green); }
+.daily-table tbody td.num-rate { color: var(--accent); font-weight: 600; }
+.daily-table tbody td.num-r { color: #3B82F6; }
+.daily-table tbody td.num-roi { font-weight: 700; }
+.daily-table tbody td.num-ltv { font-weight: 700; }
+.daily-table tbody td.num-roi.up,
+.daily-table tbody td.num-ltv.up { color: var(--green); }
+.daily-table tbody td.num-roi.down,
+.daily-table tbody td.num-ltv.down { color: var(--red); }
+
+.daily-table tbody tr.tfoot td {
+  font-weight: 700;
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-primary);
+  border-top: 1px solid var(--border);
+}
+
+.daily-empty {
+  padding: 40px 20px;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
 /* ============ Dist Card (Left top) ============ */
 
 .dist-card { gap: 14px; }
@@ -1218,9 +1327,14 @@ button { font-family: inherit; border: none; cursor: pointer; background: none; 
           <div class="pct" data-bind="dist-amount-100">—</div>
         </div>
         <div class="dist-row">
-          <div class="range">1000元以上</div>
+          <div class="range">1000-10000元</div>
           <div class="bar-track"><div class="bar-fill" style="width:0px; background:#7CC2FF"></div></div>
           <div class="pct" data-bind="dist-amount-1000">—</div>
+        </div>
+        <div class="dist-row">
+          <div class="range">1万元以上</div>
+          <div class="bar-track"><div class="bar-fill" style="width:0px; background:#34D399"></div></div>
+          <div class="pct" data-bind="dist-amount-10000">—</div>
         </div>
       </section>
 
@@ -1412,19 +1526,19 @@ button { font-family: inherit; border: none; cursor: pointer; background: none; 
 
           <h2 class="card-title">分日数据明细</h2>
 
-          <p class="card-sub">分日消耗趋势 · 按顶部筛选实时刷新</p>
+          <p class="card-sub" id="dailyCardSub">分日消耗趋势 · 按顶部筛选实时刷新</p>
 
         </div>
 
-        <div class="chart-legend">
+        <div class="chart-legend" id="dailyLegend">
 
           <div class="chart-legend-item">
 
             <span class="swatch" style="background:#22D3EE"></span>
 
-            <span class="name">消耗（元）</span>
+            <span class="name" id="dailyLegendName1">消耗（元）</span>
 
-            <span class="total">近7日 ¥91,855</span>
+            <span class="total" id="dailyLegendTotal1">近7日 ¥91,855</span>
 
           </div>
 
@@ -1434,13 +1548,15 @@ button { font-family: inherit; border: none; cursor: pointer; background: none; 
 
             <span class="name">首日R（单游戏）</span>
 
-            <span class="total">近7日 ¥6,679</span>
+            <span class="total" id="dailyLegendTotal2">近7日 ¥6,679</span>
 
           </div>
 
         </div>
 
-        <div class="chart-wrap" style="position:relative">
+        <!-- 折线图视图（过去几日） -->
+
+        <div class="chart-wrap" id="dailyChartView" style="position:relative">
 
           <svg class="line-chart" id="lineChart" viewBox="0 0 560 220" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
 
@@ -1505,6 +1621,42 @@ button { font-family: inherit; border: none; cursor: pointer; background: none; 
           </div>
 
           <div class="chart-tooltip" id="chartTooltip"></div>
+
+        </div>
+
+        <!-- 表格视图（今日模式） -->
+
+        <div class="daily-table-wrap" id="dailyTableView" style="display:none">
+
+          <table class="daily-table">
+
+            <thead>
+
+              <tr>
+
+                <th class="col-game">游戏</th>
+
+                <th>消耗（元）</th>
+
+                <th>新增数</th>
+
+                <th>新增单价</th>
+
+                <th>点击率</th>
+
+                <th>激活率</th>
+
+                <th>首日ROI·厂商流水</th>
+
+                <th>首日LTV·厂商流水</th>
+
+              </tr>
+
+            </thead>
+
+            <tbody id="dailyTableBody"></tbody>
+
+          </table>
 
         </div>
 
@@ -2299,8 +2451,174 @@ function sumGames(list) {
 
 
 
-function getRangeData() {
+/* ============ 分日数据明细：今日(表格) / 过去几日(折线图) 切换 ============ */
 
+function renderDailyDetail(range, chart7, key) {
+
+  const chartView = document.getElementById('dailyChartView');
+
+  const tableView = document.getElementById('dailyTableView');
+
+  const legendName1 = document.getElementById('dailyLegendName1');
+
+  const legendTot1 = document.getElementById('dailyLegendTotal1');
+
+  const legendTot2 = document.getElementById('dailyLegendTotal2');
+
+  const cardSub = document.getElementById('dailyCardSub');
+
+  if (!chartView || !tableView) return;
+
+  const isToday = (key === 'today' || /^\d{4}-\d{2}-\d{2}$/.test(state.date));
+
+  if (isToday) {
+
+    chartView.style.display = 'none';
+
+    tableView.style.display = 'block';
+
+    renderDailyTable(range && range.detail ? range.detail : []);
+
+    if (legendName1) legendName1.textContent = '游戏分布';
+
+    if (legendTot1) legendTot1.textContent = `今日 ${range.detail.length} 款在投`;
+
+    if (legendTot2) legendTot2.textContent = `点击切换游戏查看`;
+
+    if (cardSub) cardSub.textContent = `今日在投游戏明细 · 共 ${range.detail.length} 款`;
+
+  } else {
+
+    chartView.style.display = '';
+
+    tableView.style.display = 'none';
+
+    if (chart7 && chart7.length) updateChartFromList(chart7);
+
+    if (legendName1) legendName1.textContent = '消耗（元）';
+
+    if (legendTot1) legendTot1.textContent = `近${chart7.length}日 ¥${fmtN(sumField(chart7, 'tgRealCost'), 0)}`;
+
+    if (legendTot2) legendTot2.textContent = `近${chart7.length}日 ¥${fmtN(sumField(chart7, 'tgRechargeTotalAmount0d'), 0)}`;
+
+    if (cardSub) cardSub.textContent = `分日消耗趋势 · 最近 ${chart7.length} 日`;
+
+  }
+
+}
+
+
+
+function sumField(arr, k) { return (arr || []).reduce((a, x) => a + (parseFloat(x[k]) || 0), 0); }
+
+
+
+function renderDailyTable(detail) {
+
+  const tbody = document.getElementById('dailyTableBody');
+
+  if (!tbody) return;
+
+  // 过滤汇总行 / 无消耗行
+
+  const games = (detail || []).filter(g => {
+
+    const nm = String(g.gameName || '');
+
+    if (nm.includes('汇总') || nm.includes('合计') || nm.includes('总计')) return false;
+
+    return parseFloat(g.tgRealCost) > 0 || parseFloat(g.tgNewUserCount) > 0 || parseFloat(g.tgPayCount) > 0;
+
+  }).sort((a, b) => (parseFloat(b.tgRealCost) || 0) - (parseFloat(a.tgRealCost) || 0));
+
+  if (games.length === 0) {
+
+    tbody.innerHTML = `<tr><td colspan="8" class="daily-empty">今日暂未抓到投放数据…</td></tr>`;
+
+    return;
+
+  }
+
+  // 汇总
+
+  let totCost = 0, totNew = 0, totStartPrice = 0, totRoi = 0, totLtv = 0;
+
+  let rows = games.map((g, i) => {
+
+    const cost = parseFloat(g.tgRealCost) || 0;
+
+    const nu = parseInt(g.tgNewUserCount || 0, 10);
+
+    const startPrice = parseFloat(g.tgStartPrice) || 0;
+
+    const clickRate = parseFloat(g.tgClickRate) || 0;
+
+    const actRate = parseFloat(g.tgActiveConvertRate) || 0;
+
+    const mfRoi = parseFloat(g.tgMfRoi0) || 0;
+
+    const mfLtv = parseFloat(g.tgMfLtv0) || 0;
+
+    // 加权累计：ROI 按消耗加权、LTV 按新增数加权
+    totCost += cost; totNew += nu; totStartPrice += startPrice; totRoi += mfRoi * cost; totLtv += mfLtv * nu;
+
+    const roiCls = mfRoi >= 0.1 ? 'up' : (cost > 0 ? 'down' : '');
+
+    const ltvCls = mfLtv >= 1 ? 'up' : (mfLtv > 0 ? 'down' : '');
+
+    const tag = i === 0 ? `<span class="game-tag">TOP1</span>` : '';
+
+    return `<tr>
+
+      <td class="col-game">${escapeHtml(g.gameName || '')}${tag}</td>
+
+      <td class="num-cost">¥${fmtN(cost, 0)}</td>
+
+      <td class="num-new">${nu.toLocaleString('zh-CN')}</td>
+
+      <td class="num-price">¥${startPrice.toFixed(2)}</td>
+
+      <td class="num-rate">${(clickRate * 100).toFixed(2)}%</td>
+
+      <td class="num-rate">${(actRate * 100).toFixed(2)}%</td>
+
+      <td class="num-roi ${roiCls}">${(mfRoi * 100).toFixed(2)}%</td>
+
+      <td class="num-ltv ${ltvCls}">¥${mfLtv.toFixed(2)}</td>
+
+    </tr>`;
+
+  }).join('');
+
+  // 合计行
+
+  const avgStartPrice = games.length > 0 ? (totStartPrice / games.length) : 0;
+
+  const wRoi = totCost > 0 ? (totRoi / totCost) : 0;
+
+  const wLtv = totNew > 0 ? (totLtv / totNew) : 0;
+
+  const roiCls = wRoi >= 0.1 ? 'up' : (totCost > 0 ? 'down' : '');
+
+  const ltvCls = wLtv >= 1 ? 'up' : (wLtv > 0 ? 'down' : '');
+
+  rows += `<tr class="tfoot"><td class="col-game">合计 (${games.length} 款)</td><td class="num-cost">¥${fmtN(totCost, 0)}</td><td class="num-new">${totNew.toLocaleString('zh-CN')}</td><td class="num-price">¥${avgStartPrice.toFixed(2)}</td><td class="num-rate">—</td><td class="num-rate">—</td><td class="num-roi ${roiCls}">${(wRoi * 100).toFixed(2)}%</td><td class="num-ltv ${ltvCls}">¥${wLtv.toFixed(2)}</td></tr>`;
+
+  tbody.innerHTML = rows;
+
+}
+
+
+
+function escapeHtml(s) {
+
+  return String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+
+}
+
+
+
+function getRangeData() {
   const snap = state.snapshot || {};
 
   const ranges = snap.ranges || {};
@@ -2443,9 +2761,9 @@ function applySnapshot(snap) {
 
   }
 
-  // 折线图
+  // 分日数据明细：根据时间模式切换折线图 / 表格
 
-  if (chart7.length) updateChartFromList(chart7);
+  renderDailyDetail(range, chart7, key);
 
   // 更新时间戳（data.json 的同步时间）
 
@@ -2517,7 +2835,7 @@ async function loadDistData() {
 }
 function sumDistGames(games) {
   // 汇总多个游戏的充值分布（按权重：付费人数）
-  const total = (k) => k === 'people_10000' || k === 'amount_1000' ? games.reduce((a, g) => a + (g[g._totalField] || 0) * (g[k] || 0) / 100, 0) : 0;
+  const total = (k) => k === 'people_10000' || k === 'amount_1000' || k === 'amount_10000' ? games.reduce((a, g) => a + (g[g._totalField] || 0) * (g[k] || 0) / 100, 0) : 0;
   const w = games.reduce((a, g) => a + (g.payCount || 0), 0) || 1;
   const avg = (k) => games.reduce((a, g) => a + (g[k] || 0) * (g.payCount || 0), 0) / w;
   return {
@@ -2529,6 +2847,7 @@ function sumDistGames(games) {
     amount_0_100: avg('amount_0_100'),
     amount_100_1000: avg('amount_100_1000'),
     amount_1000: avg('amount_1000'),
+    amount_10000: avg('amount_10000'),
   };
 }
 function renderDist(gameId, gameName) {
@@ -2559,7 +2878,7 @@ function renderDist(gameId, gameName) {
   if (!d) {
     // 无数据：显示占位
     ['dist-people-0','dist-people-100','dist-people-1000','dist-people-10000',
-     'dist-amount-0','dist-amount-100','dist-amount-1000'].forEach(id => {
+     'dist-amount-0','dist-amount-100','dist-amount-1000','dist-amount-10000'].forEach(id => {
       const el = document.querySelector('[data-bind="' + id + '"]');
       if (el) el.textContent = '—';
     });
@@ -2572,6 +2891,7 @@ function renderDist(gameId, gameName) {
   setName('[data-bind="dist-amount-0"]', d.amount_0_100);
   setName('[data-bind="dist-amount-100"]', d.amount_100_1000);
   setName('[data-bind="dist-amount-1000"]', d.amount_1000);
+  setName('[data-bind="dist-amount-10000"]', d.amount_10000);
   // 进度条宽度（相对 100% 缩放，最大值 100px）
   const bars = [
     ['.dist-section-people + .dist-row .bar-fill', d.people_0_100],
@@ -2581,6 +2901,7 @@ function renderDist(gameId, gameName) {
     ['.dist-section-amount + .dist-row .bar-fill', d.amount_0_100],
     ['.dist-section-amount + .dist-row + .dist-row .bar-fill', d.amount_100_1000],
     ['.dist-section-amount + .dist-row + .dist-row + .dist-row .bar-fill', d.amount_1000],
+    ['.dist-section-amount + .dist-row + .dist-row + .dist-row + .dist-row .bar-fill', d.amount_10000],
   ];
   bars.forEach(([sel, pct]) => { const el = document.querySelector(sel); if (el) el.style.width = (pct != null && !isNaN(pct)) ? Math.min(pct, 100) + 'px' : '0px'; });
 }
