@@ -2670,11 +2670,14 @@ if (/^\d{4}-\d{2}-\d{2}$/.test(state.date)) {
 
   const range = (key && ranges[key]) || { detail: [], chart: [] };
 
-  // 折线图最多展示最近 7 个分日点
+  // 折线图：today 取 1 天，d7 取 7 天，d30 取 30 天；UI 上限 30 个分日点
 
-  const chart7 = (range.chart || []).slice(-7);
+  const dayLimit = (state.date === 'today' || /^\d{4}-\d{2}-\d{2}$/.test(state.date)) ? 1
+                  : state.date === 'd30' ? 30 : 7;
 
-  return { range, chart7, key };
+  const chartDay = (range.chart || []).slice(-dayLimit);
+
+  return { range, chart7: chartDay, key };
 
 }
 
