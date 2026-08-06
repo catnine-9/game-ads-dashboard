@@ -46,7 +46,7 @@ const COMMON = {
 
 // 分日 chart：chartData 单指标更稳定，逐指标拉取再合并
 async function fetchChart(startDate, endDate) {
-  const fields = ['tgRealCost', 'tgRechargeTotalAmount0d', 'tgNewUserCount'];
+  const fields = ['tgRealCost', 'tgRechargeTotalAmount0d', 'tgNewUserCount', 'tgMfRoi0'];
   const merged = {};
   for (const f of fields) {
     let got = null;
