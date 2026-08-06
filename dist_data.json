@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-08-06T10:37:07",
+  "updatedAt": "2026-08-06T11:07:05",
   "games": {
     "13874": {
       "gameName": "神将传说-8月12日上线",
@@ -415,8 +415,8 @@
       "amount_1000": null,
       "amount_10000": null
     },
-    "13384": {
-      "gameName": "次元星姬",
+    "12413": {
+      "gameName": "长生炼丹师",
       "channel": "直投包",
       "newUsers": 1.0,
       "rechargeAmount": null,
@@ -451,8 +451,8 @@
       "amount_1000": null,
       "amount_10000": null
     },
-    "12413": {
-      "gameName": "长生炼丹师",
+    "13384": {
+      "gameName": "次元星姬",
       "channel": "直投包",
       "newUsers": 1.0,
       "rechargeAmount": null,
