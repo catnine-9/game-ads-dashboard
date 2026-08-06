@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-08-06T11:07:05",
+  "updatedAt": "2026-08-06T14:47:11",
   "games": {
     "13874": {
       "gameName": "神将传说-8月12日上线",
@@ -15,9 +15,9 @@
       "people_1000_10000": 1.69,
       "people_10000": 0.08,
       "amount_0_100": 11.4,
-      "amount_100_1000": null,
-      "amount_1000": null,
-      "amount_10000": null
+      "amount_100_1000": 28.03,
+      "amount_1000": 32.74,
+      "amount_10000": 27.83
     },
     "13341": {
       "gameName": "上古王冠：先锋版",
@@ -33,9 +33,9 @@
       "people_1000_10000": 3.59,
       "people_10000": 0.27,
       "amount_0_100": 6.2,
-      "amount_100_1000": null,
-      "amount_1000": null,
-      "amount_10000": null
+      "amount_100_1000": 33.49,
+      "amount_1000": 41.42,
+      "amount_10000": 18.88
     },
     "14122": {
       "gameName": "御剑九宫",
@@ -51,9 +51,9 @@
       "people_1000_10000": 1.06,
       "people_10000": 0.0,
       "amount_0_100": 21.89,
-      "amount_100_1000": null,
-      "amount_1000": null,
-      "amount_10000": null
+      "amount_100_1000": 41.73,
+      "amount_1000": 36.37,
+      "amount_10000": 0.0
     },
     "13979": {
       "gameName": "英杰并起",
@@ -69,9 +69,9 @@
       "people_1000_10000": 0.99,
       "people_10000": 0.0,
       "amount_0_100": 15.59,
-      "amount_100_1000": null,
-      "amount_1000": null,
-      "amount_10000": null
+      "amount_100_1000": 24.96,
+      "amount_1000": 59.45,
+      "amount_10000": 0.0
     },
     "14172": {
       "gameName": "斗罗大陆：逆转时空-打金版",
@@ -87,9 +87,9 @@
       "people_1000_10000": 0.0,
       "people_10000": 0.0,
       "amount_0_100": 64.44,
-      "amount_100_1000": null,
-      "amount_1000": null,
-      "amount_10000": null
+      "amount_100_1000": 35.56,
+      "amount_1000": 0.0,
+      "amount_10000": 0.0
     },
     "13616": {
       "gameName": "时隙之旅",
@@ -105,9 +105,9 @@
       "people_1000_10000": 2.8,
       "people_10000": 0.0,
       "amount_0_100": 12.3,
-      "amount_100_1000": null,
-      "amount_1000": null,
-      "amount_10000": null
+      "amount_100_1000": 45.69,
+      "amount_1000": 42.01,
+      "amount_10000": 0.0
     },
     "13695": {
       "gameName": "彩虹橙-限定翅膀来袭",
@@ -123,9 +123,9 @@
       "people_1000_10000": 9.82,
       "people_10000": 0.0,
       "amount_0_100": 3.47,
-      "amount_100_1000": null,
-      "amount_1000": null,
-      "amount_10000": null
+      "amount_100_1000": 36.36,
+      "amount_1000": 60.17,
+      "amount_10000": 0.0
     },
     "13474": {
       "gameName": "新不良人-送兵神姬如雪",
@@ -141,9 +141,9 @@
       "people_1000_10000": 15.22,
       "people_10000": 0.0,
       "amount_0_100": 2.12,
-      "amount_100_1000": null,
-      "amount_1000": null,
-      "amount_10000": null
+      "amount_100_1000": 24.84,
+      "amount_1000": 73.04,
+      "amount_10000": 0.0
     },
     "12785": {
       "gameName": "拳魂觉醒-送暴走八神庵",
@@ -159,9 +159,9 @@
       "people_1000_10000": 3.39,
       "people_10000": 0.0,
       "amount_0_100": 7.7,
-      "amount_100_1000": null,
-      "amount_1000": null,
-      "amount_10000": null
+      "amount_100_1000": 27.56,
+      "amount_1000": 64.74,
+      "amount_10000": 0.0
     },
     "10000": {
       "gameName": "SDK线上专用游戏勿动测试",
@@ -177,9 +177,9 @@
       "people_1000_10000": 0.0,
       "people_10000": 0.0,
       "amount_0_100": 100.0,
-      "amount_100_1000": null,
-      "amount_1000": null,
-      "amount_10000": null
+      "amount_100_1000": 0.0,
+      "amount_1000": 0.0,
+      "amount_10000": 0.0
     },
     "13201": {
       "gameName": "小浣熊神兵列传",
@@ -213,9 +213,9 @@
       "people_1000_10000": 0.0,
       "people_10000": 0.0,
       "amount_0_100": 100.0,
-      "amount_100_1000": null,
-      "amount_1000": null,
-      "amount_10000": null
+      "amount_100_1000": 0.0,
+      "amount_1000": 0.0,
+      "amount_10000": 0.0
     },
     "13298": {
       "gameName": "百龙霸业-幻·赵云来袭",
@@ -231,9 +231,9 @@
       "people_1000_10000": 33.33,
       "people_10000": 0.0,
       "amount_0_100": 0.26,
-      "amount_100_1000": null,
-      "amount_1000": null,
-      "amount_10000": null
+      "amount_100_1000": 17.53,
+      "amount_1000": 82.2,
+      "amount_10000": 0.0
     },
     "13523": {
       "gameName": "玄影",
@@ -249,9 +249,9 @@
       "people_1000_10000": 0.0,
       "people_10000": 0.0,
       "amount_0_100": 0.0,
-      "amount_100_1000": null,
-      "amount_1000": null,
-      "amount_10000": null
+      "amount_100_1000": 100.0,
+      "amount_1000": 0.0,
+      "amount_10000": 0.0
     },
     "13288": {
       "gameName": "新斗罗大陆",
@@ -267,9 +267,9 @@
       "people_1000_10000": 0.0,
       "people_10000": 0.0,
       "amount_0_100": 6.02,
-      "amount_100_1000": null,
-      "amount_1000": null,
-      "amount_10000": null
+      "amount_100_1000": 93.98,
+      "amount_1000": 0.0,
+      "amount_10000": 0.0
     },
     "12446": {
       "gameName": "上古王冠",
@@ -339,9 +339,9 @@
       "people_1000_10000": 0.0,
       "people_10000": 0.0,
       "amount_0_100": 100.0,
-      "amount_100_1000": null,
-      "amount_1000": null,
-      "amount_10000": null
+      "amount_100_1000": 0.0,
+      "amount_1000": 0.0,
+      "amount_10000": 0.0
     },
     "12941": {
       "gameName": "格斗三国志",
@@ -357,9 +357,9 @@
       "people_1000_10000": 0.0,
       "people_10000": 0.0,
       "amount_0_100": 100.0,
-      "amount_100_1000": null,
-      "amount_1000": null,
-      "amount_10000": null
+      "amount_100_1000": 0.0,
+      "amount_1000": 0.0,
+      "amount_10000": 0.0
     },
     "12579": {
       "gameName": "都市冒险高手",
@@ -393,48 +393,12 @@
       "people_1000_10000": 0.0,
       "people_10000": 0.0,
       "amount_0_100": 100.0,
-      "amount_100_1000": null,
-      "amount_1000": null,
-      "amount_10000": null
+      "amount_100_1000": 0.0,
+      "amount_1000": 0.0,
+      "amount_10000": 0.0
     },
     "13064": {
       "gameName": "双生幻想",
-      "channel": "直投包",
-      "newUsers": 1.0,
-      "rechargeAmount": null,
-      "payCount": 0.0,
-      "payRate": 0.0,
-      "arpu": 0.0,
-      "arppu": null,
-      "people_0_100": null,
-      "people_100_1000": null,
-      "people_1000_10000": null,
-      "people_10000": null,
-      "amount_0_100": null,
-      "amount_100_1000": null,
-      "amount_1000": null,
-      "amount_10000": null
-    },
-    "12413": {
-      "gameName": "长生炼丹师",
-      "channel": "直投包",
-      "newUsers": 1.0,
-      "rechargeAmount": null,
-      "payCount": 0.0,
-      "payRate": 0.0,
-      "arpu": 0.0,
-      "arppu": null,
-      "people_0_100": null,
-      "people_100_1000": null,
-      "people_1000_10000": null,
-      "people_10000": null,
-      "amount_0_100": null,
-      "amount_100_1000": null,
-      "amount_1000": null,
-      "amount_10000": null
-    },
-    "12198": {
-      "gameName": "逆战三国志",
       "channel": "直投包",
       "newUsers": 1.0,
       "rechargeAmount": null,
@@ -469,6 +433,42 @@
       "amount_1000": null,
       "amount_10000": null
     },
+    "12198": {
+      "gameName": "逆战三国志",
+      "channel": "直投包",
+      "newUsers": 1.0,
+      "rechargeAmount": null,
+      "payCount": 0.0,
+      "payRate": 0.0,
+      "arpu": 0.0,
+      "arppu": null,
+      "people_0_100": null,
+      "people_100_1000": null,
+      "people_1000_10000": null,
+      "people_10000": null,
+      "amount_0_100": null,
+      "amount_100_1000": null,
+      "amount_1000": null,
+      "amount_10000": null
+    },
+    "12413": {
+      "gameName": "长生炼丹师",
+      "channel": "直投包",
+      "newUsers": 1.0,
+      "rechargeAmount": null,
+      "payCount": 0.0,
+      "payRate": 0.0,
+      "arpu": 0.0,
+      "arppu": null,
+      "people_0_100": null,
+      "people_100_1000": null,
+      "people_1000_10000": null,
+      "people_10000": null,
+      "amount_0_100": null,
+      "amount_100_1000": null,
+      "amount_1000": null,
+      "amount_10000": null
+    },
     "13574": {
       "gameName": "卢希达：起源",
       "channel": "直投包",
@@ -483,9 +483,9 @@
       "people_1000_10000": 0.0,
       "people_10000": 0.0,
       "amount_0_100": 100.0,
-      "amount_100_1000": null,
-      "amount_1000": null,
-      "amount_10000": null
+      "amount_100_1000": 0.0,
+      "amount_1000": 0.0,
+      "amount_10000": 0.0
     }
   }
 }
