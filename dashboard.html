@@ -2358,13 +2358,13 @@ function updateChartFromList(list) {
 
   const sumCost = costs.reduce((a,b)=>a+b,0);
 
-  const sumFirstR = rFirstR.reduce((a,b)=>a+b,0);
+  const sumFirstR = roiSeries.reduce((a,b)=>a+b,0);
 
   const legendItems = document.querySelectorAll('.chart-legend-item .total');
 
-  if (legendItems[0]) legendItems[0].textContent = '共 ' + fmtN(sumCost, 0);
+  if (legendItems[0]) legendItems[0].textContent = '共 ¥' + fmtN(sumCost, 0);
 
-  if (legendItems[1]) legendItems[1].textContent = '共 ' + fmtN(sumFirstR, 0);
+  if (legendItems[1]) legendItems[1].textContent = '共 ' + (sumFirstR*100).toFixed(2) + '%';
 
 }
 
