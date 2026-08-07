@@ -2574,7 +2574,7 @@ function renderDailyTable(detail) {
 
   // 汇总
 
-  let totCost = 0, totNew = 0, totStartPrice = 0, totRoi = 0, totLtv = 0;
+  let totCost = 0, totNew = 0, totRoi = 0, totLtv = 0;
 
   let rows = games.map((g, i) => {
 
@@ -2582,7 +2582,8 @@ function renderDailyTable(detail) {
 
     const nu = parseInt(g.tgNewUserCount || 0, 10);
 
-    const startPrice = parseFloat(g.tgStartPrice) || 0;
+    // 新增单价：3387 MCP 使用 tgPayCountPrice；老 BI 快照可能使用 tgStartPrice / tgOriginPrice
+    const startPrice = parseFloat(g.tgPayCountPrice ?? g.tgStartPrice ?? g.tgOriginPrice) || (nu > 0 ? cost / nu : 0);
 
     const clickRate = parseFloat(g.tgClickRate) || 0;
 
@@ -2593,7 +2594,7 @@ function renderDailyTable(detail) {
     const mfLtv = parseFloat(g.tgMfLtv0) || 0;
 
     // 加权累计：ROI 按消耗加权、LTV 按新增数加权
-    totCost += cost; totNew += nu; totStartPrice += startPrice; totRoi += mfRoi * cost; totLtv += mfLtv * nu;
+    totCost += cost; totNew += nu; totRoi += mfRoi * cost; totLtv += mfLtv * nu;
 
     const roiCls = mfRoi >= 0.1 ? 'up' : (cost > 0 ? 'down' : '');
 
@@ -2625,7 +2626,7 @@ function renderDailyTable(detail) {
 
   // 合计行
 
-  const avgStartPrice = games.length > 0 ? (totStartPrice / games.length) : 0;
+  const avgStartPrice = totNew > 0 ? (totCost / totNew) : 0;
 
   const wRoi = totCost > 0 ? (totRoi / totCost) : 0;
 
