@@ -45,6 +45,8 @@ const COMMON = {
 };
 
 // 分日 chart：chartData 单指标更稳定，逐指标拉取再合并
+// 注意：startDate/endDate 必须是 ISO 格式（如 '2026-08-06'），数字格式（如 '20260806'）返回空数据
+// 取 tgMfRoi0（首日 ROI·厂商流水）是前端折线图第二根线的关键字段
 async function fetchChart(startDate, endDate) {
   const fields = ['tgRealCost', 'tgRechargeTotalAmount0d', 'tgNewUserCount', 'tgMfRoi0'];
   const merged = {};
