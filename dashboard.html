@@ -2981,7 +2981,24 @@ function renderSlotList(slotList) {
 /* 加载充值分布数据 */
 loadDistData();
 
-/* ============ 数据获取：快照兜底 + 实时直连 BI（CORS 已放行） ============ */
+/* ============ 数据获取：GitHub Actions 自动同步的 3387 MCP 快照 ============ */
+const REMOTE_DATA_URL = 'https://catnine-9.github.io/game-ads-dashboard/data.json';
+async function fetchDataSnapshot() {
+  const urls = [REMOTE_DATA_URL + '?t=' + Date.now(), './data.json?t=' + Date.now()];
+  let lastErr = null;
+  for (const url of urls) {
+    try {
+      const res = await fetch(url, { cache: 'reload' });
+      if (!res.ok) throw new Error('HTTP ' + res.status + ' ' + url);
+      const snap = await res.json();
+      if (snap && snap.ranges) return snap;
+    } catch (e) {
+      lastErr = e;
+      console.warn('[snapshot-fetch-fail]', url, e && e.message);
+    }
+  }
+  throw lastErr || new Error('data.json 加载失败');
+}
 
 async function fetchDashboardData() {
 
@@ -2989,80 +3006,17 @@ async function fetchDashboardData() {
 
   try {
 
-    const res = await fetch('./data.json?t=' + Date.now(), { cache: 'reload' });
+    const snap = await fetchDataSnapshot();
 
-    if (res.ok) {
+    try { applySnapshot(snap); console.log('[snapshot-ok]', snap.updatedAt || ''); }
 
-      const snap = await res.json();
-
-      if (snap && snap.ranges) {
-
-        try { applySnapshot(snap); console.log('[snapshot-ok]'); }
-
-        catch (e) { console.error('[snapshot-fail]', e && e.message); }
-
-      }
-
-    }
+    catch (e) { console.error('[snapshot-fail]', e && e.message); }
 
   } catch (e) { console.error('[snapshot-fetch-fail]', e && e.message); }
 
 
 
-  // 2) 实时直连 BI（浏览器已登录 mailiang.4399dev.com + CORS 放行时覆盖为实时数据；失败保留快照）
-
-  try {
-
-    const d = DATES.find(x => x.id === state.date) || DATES[0];
-
-    const now = new Date();
-
-    const fmt = dt => `${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,'0')}-${String(dt.getDate()).padStart(2,'0')}`;
-
-    const end = fmt(now);
-
-    let start;
-    if (/^\d{4}-\d{2}-\d{2}$/.test(state.date)) {
-      start = state.date;
-    } else if (state.date === 'today') {
-      start = end;
-    } else if (state.date === 'd30') {
-      start = fmt(new Date(now.getTime() - 29*86400000));
-    } else {
-      start = fmt(new Date(now.getTime() - 6*86400000));
-    }
-
-    const dimension = (state.game === 'all') ? 'dateKey' : 'gameName';
-
-    const detailBody = { ...COMMON, dimension, startDate: start, endDate: end, pageNum: 1, pageSize: 60 };
-
-    if (dimension === 'gameName' && state.game !== 'all') detailBody.gameIds = [String(state.game)];
-
-    const detail = await apiPost('/reportChannel/detailData', detailBody);
-
-    const list = (detail && detail.list) || [];
-
-    updateKPIsFromDetail(list, null, snap);
-
-    try {
-
-      const chartBody = { ...COMMON, dimension: 'dateKey', startDate: start, endDate: end, summaryType: 3,
-
-        indicatorFields: ['tgRealCost','tgRechargeTotalAmount0d','tgNewUserCount'] };
-
-      const chart = await apiPost('/reportChannel/chartData', chartBody);
-
-      if (chart && chart.length) updateChartFromList(chart);
-
-    } catch (e) { console.warn('chart 拉取失败', e); }
-
-    setText('[data-bind="updated-at"]', new Date().toLocaleTimeString('zh-CN', { hour12: false }));
-
-  } catch (e) {
-
-    console.warn('BI 未连通，保留当前展示数据：', e.message);
-
-  }
+  // 2) 不再从浏览器直连 BI，避免覆盖正确的 3387 MCP 数据。实时性由 GitHub Actions 定时更新 data.json 提供。
 
 }
 
@@ -3076,17 +3030,13 @@ setInterval(() => { fetchDashboardData(); }, 600000);
 let __lastDataUpdatedAt = null;
 async function __recordDataUpdate() {
   try {
-    const res = await fetch('./data.json?t=' + Date.now(), { cache: 'reload' });
-    if (!res.ok) return;
-    const snap = await res.json();
+    const snap = await fetchDataSnapshot();
     if (snap && snap.updatedAt) __lastDataUpdatedAt = snap.updatedAt;
   } catch (e) {}
 }
 async function __autoRefreshCheck() {
   try {
-    const res = await fetch('./data.json?t=' + Date.now(), { cache: 'reload' });
-    if (!res.ok) return;
-    const snap = await res.json();
+    const snap = await fetchDataSnapshot();
     if (!snap || !snap.updatedAt) return;
     if (__lastDataUpdatedAt && snap.updatedAt !== __lastDataUpdatedAt) {
       console.log('[auto-refresh] data.json 已更新 (' + snap.updatedAt + ')，整页刷新');
