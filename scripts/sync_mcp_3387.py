@@ -24,6 +24,7 @@ from pathlib import Path
 from typing import Any, Dict, Iterable, List, Optional, Tuple
 
 MCP_URL = os.getenv("MAILIANG_MCP_URL", "https://demo.4399dev.com/mailiang-mcp/mcp")
+BEIJING_TZ = _dt.timezone(_dt.timedelta(hours=8))
 TOPIC = "fx_3387youxi_event"
 REPORT_TYPE = "ad"
 ROOT = Path(__file__).resolve().parents[1]
@@ -199,8 +200,12 @@ def fmt_date(dt: _dt.datetime) -> str:
     return dt.strftime("%Y%m%d")
 
 
+def beijing_now() -> _dt.datetime:
+    return _dt.datetime.now(BEIJING_TZ)
+
+
 def date_ranges(now: Optional[_dt.datetime] = None) -> Dict[str, Tuple[str, str]]:
-    now = now or _dt.datetime.now()
+    now = now or beijing_now()
     today = now
     return {
         "today": (fmt_date(today), fmt_date(today)),
@@ -349,12 +354,12 @@ def fetch_range(session_id: str, name: str, start: str, end: str) -> Dict[str, A
 
 def build_data() -> Dict[str, Any]:
     session_id = initialize_session()
-    now = _dt.datetime.now()
+    now = beijing_now()
     ranges = {}
     for name, (start, end) in date_ranges(now).items():
         ranges[name] = fetch_range(session_id, name, start, end)
     return {
-        "updatedAt": now.strftime("%Y-%m-%dT%H:%M:%S+08:00"),
+        "updatedAt": now.isoformat(timespec="seconds"),
         "source": "mailiang-mcp",
         "topic": TOPIC,
         "reportType": REPORT_TYPE,
