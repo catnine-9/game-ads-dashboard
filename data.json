@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-08-07T09:18:38",
+  "updatedAt": "2026-08-07T09:20:02",
   "ranges": {
     "today": {
       "detail": [
@@ -790,7 +790,7 @@
         {
           "dateKey": "20260806",
           "tgRealCost": 23113.607843252004,
-          "tgMfRoi0": 0.12402335464614868,
+          "tgMfRoi0": 0.07738904337784812,
           "tgNewUserCount": 612
         }
       ],
@@ -2078,44 +2078,44 @@
       "chart": [
         {
           "dateKey": "20260731",
-          "tgRealCost": 11093.330294170995,
-          "tgMfRoi0": 0.10416084382955801,
+          "tgRealCost": 11093.330294170999,
+          "tgMfRoi0": 0.09730711800469903,
           "tgNewUserCount": 295
         },
         {
           "dateKey": "20260801",
-          "tgRealCost": 10623.030451036999,
-          "tgMfRoi0": 0.10416084382955801,
+          "tgRealCost": 10623.030451037,
+          "tgMfRoi0": 0.10034801320709189,
           "tgNewUserCount": 290
         },
         {
           "dateKey": "20260802",
-          "tgRealCost": 9838.336725554,
-          "tgMfRoi0": 0.10416084382955801,
+          "tgRealCost": 9838.336725553998,
+          "tgMfRoi0": 0.20069855861624955,
           "tgNewUserCount": 263
         },
         {
           "dateKey": "20260803",
-          "tgRealCost": 11025.637509854998,
-          "tgMfRoi0": 0.10416084382955801,
+          "tgRealCost": 11025.637509855002,
+          "tgMfRoi0": 0.12806697106973633,
           "tgNewUserCount": 322
         },
         {
           "dateKey": "20260804",
           "tgRealCost": 10093.435019653998,
-          "tgMfRoi0": 0.10416084382955801,
+          "tgMfRoi0": 0.09833520482049174,
           "tgNewUserCount": 296
         },
         {
           "dateKey": "20260805",
           "tgRealCost": 29654.621294247,
-          "tgMfRoi0": 0.10416084382955801,
+          "tgMfRoi0": 0.06862876378714106,
           "tgNewUserCount": 864
         },
         {
           "dateKey": "20260806",
           "tgRealCost": 23113.607843252,
-          "tgMfRoi0": 0.10416084382955801,
+          "tgMfRoi0": 0.07738904337784816,
           "tgNewUserCount": 612
         }
       ],
@@ -3731,182 +3731,182 @@
       "chart": [
         {
           "dateKey": "20260708",
-          "tgRealCost": 40700.61088578199,
-          "tgMfRoi0": 0.09574659244364991,
+          "tgRealCost": 40700.61088578201,
+          "tgMfRoi0": 0.11036492824654796,
           "tgNewUserCount": 831
         },
         {
           "dateKey": "20260709",
           "tgRealCost": 72937.091703417,
-          "tgMfRoi0": 0.09574659244364991,
+          "tgMfRoi0": 0.084003623628346,
           "tgNewUserCount": 826
         },
         {
           "dateKey": "20260710",
           "tgRealCost": 68878.416725923,
-          "tgMfRoi0": 0.09574659244364991,
+          "tgMfRoi0": 0.05698011346017054,
           "tgNewUserCount": 811
         },
         {
           "dateKey": "20260711",
-          "tgRealCost": 42869.60384570999,
-          "tgMfRoi0": 0.09574659244364991,
+          "tgRealCost": 42869.60384571,
+          "tgMfRoi0": 0.150918352856378,
           "tgNewUserCount": 837
         },
         {
           "dateKey": "20260712",
-          "tgRealCost": 44918.34406658901,
-          "tgMfRoi0": 0.09574659244364991,
+          "tgRealCost": 44918.344066589,
+          "tgMfRoi0": 0.11758091509719068,
           "tgNewUserCount": 807
         },
         {
           "dateKey": "20260713",
-          "tgRealCost": 29705.693357193,
-          "tgMfRoi0": 0.09574659244364991,
+          "tgRealCost": 29705.693357192995,
+          "tgMfRoi0": 0.08323454935958577,
           "tgNewUserCount": 639
         },
         {
           "dateKey": "20260714",
           "tgRealCost": 18618.266948367997,
-          "tgMfRoi0": 0.09574659244364991,
+          "tgMfRoi0": 0.17223085311283934,
           "tgNewUserCount": 495
         },
         {
           "dateKey": "20260715",
-          "tgRealCost": 63990.948743192996,
-          "tgMfRoi0": 0.09574659244364991,
+          "tgRealCost": 63990.948743193,
+          "tgMfRoi0": 0.10036106865321572,
           "tgNewUserCount": 1628
         },
         {
           "dateKey": "20260716",
           "tgRealCost": 69197.403157155,
-          "tgMfRoi0": 0.09574659244364991,
+          "tgMfRoi0": 0.09005858190728407,
           "tgNewUserCount": 1740
         },
         {
           "dateKey": "20260717",
           "tgRealCost": 53880.316098284995,
-          "tgMfRoi0": 0.09574659244364991,
+          "tgMfRoi0": 0.07974229386781116,
           "tgNewUserCount": 1369
         },
         {
           "dateKey": "20260718",
-          "tgRealCost": 49661.05398057099,
-          "tgMfRoi0": 0.09574659244364991,
+          "tgRealCost": 49661.053980571,
+          "tgMfRoi0": 0.09825385506133184,
           "tgNewUserCount": 1072
         },
         {
           "dateKey": "20260719",
           "tgRealCost": 50016.142921800005,
-          "tgMfRoi0": 0.09574659244364991,
+          "tgMfRoi0": 0.09056655982214193,
           "tgNewUserCount": 994
         },
         {
           "dateKey": "20260720",
-          "tgRealCost": 36015.344529646005,
-          "tgMfRoi0": 0.09574659244364991,
+          "tgRealCost": 36015.344529646,
+          "tgMfRoi0": 0.059709549584618035,
           "tgNewUserCount": 728
         },
         {
           "dateKey": "20260721",
-          "tgRealCost": 43428.95960820601,
-          "tgMfRoi0": 0.09574659244364991,
+          "tgRealCost": 43428.959608205994,
+          "tgMfRoi0": 0.0829561664037483,
           "tgNewUserCount": 941
         },
         {
           "dateKey": "20260722",
           "tgRealCost": 40805.84492191599,
-          "tgMfRoi0": 0.09574659244364991,
+          "tgMfRoi0": 0.07541125556616736,
           "tgNewUserCount": 1014
         },
         {
           "dateKey": "20260723",
           "tgRealCost": 38730.815431704,
-          "tgMfRoi0": 0.09574659244364991,
+          "tgMfRoi0": 0.08929788752056328,
           "tgNewUserCount": 759
         },
         {
           "dateKey": "20260724",
           "tgRealCost": 20410.025098205002,
-          "tgMfRoi0": 0.09574659244364991,
+          "tgMfRoi0": 0.06676522902070531,
           "tgNewUserCount": 455
         },
         {
           "dateKey": "20260725",
           "tgRealCost": 18553.341176513997,
-          "tgMfRoi0": 0.09574659244364991,
+          "tgMfRoi0": 0.22076993901157826,
           "tgNewUserCount": 491
         },
         {
           "dateKey": "20260726",
-          "tgRealCost": 16175.185176513001,
-          "tgMfRoi0": 0.09574659244364991,
+          "tgRealCost": 16175.185176513005,
+          "tgMfRoi0": 0.11124818543733807,
           "tgNewUserCount": 447
         },
         {
           "dateKey": "20260727",
-          "tgRealCost": 14928.184137312997,
-          "tgMfRoi0": 0.09574659244364991,
+          "tgRealCost": 14928.184137312996,
+          "tgMfRoi0": 0.07702343362217945,
           "tgNewUserCount": 347
         },
         {
           "dateKey": "20260728",
-          "tgRealCost": 11578.010627507,
-          "tgMfRoi0": 0.09574659244364991,
+          "tgRealCost": 11578.010627506997,
+          "tgMfRoi0": 0.06505262641671769,
           "tgNewUserCount": 270
         },
         {
           "dateKey": "20260729",
-          "tgRealCost": 13793.311843194999,
-          "tgMfRoi0": 0.09574659244364991,
+          "tgRealCost": 13793.311843195002,
+          "tgMfRoi0": 0.061489945971056906,
           "tgNewUserCount": 250
         },
         {
           "dateKey": "20260730",
           "tgRealCost": 9631.348137302999,
-          "tgMfRoi0": 0.09574659244364991,
+          "tgMfRoi0": 0.1337133682264158,
           "tgNewUserCount": 234
         },
         {
           "dateKey": "20260731",
-          "tgRealCost": 11093.330294170999,
-          "tgMfRoi0": 0.09574659244364991,
+          "tgRealCost": 11093.330294170997,
+          "tgMfRoi0": 0.09730711800469902,
           "tgNewUserCount": 295
         },
         {
           "dateKey": "20260801",
           "tgRealCost": 10623.030451036999,
-          "tgMfRoi0": 0.09574659244364991,
+          "tgMfRoi0": 0.10034801320709189,
           "tgNewUserCount": 290
         },
         {
           "dateKey": "20260802",
           "tgRealCost": 9838.336725554,
-          "tgMfRoi0": 0.09574659244364991,
+          "tgMfRoi0": 0.20069855861624955,
           "tgNewUserCount": 263
         },
         {
           "dateKey": "20260803",
           "tgRealCost": 11025.637509855,
-          "tgMfRoi0": 0.09574659244364991,
+          "tgMfRoi0": 0.12806697106973633,
           "tgNewUserCount": 322
         },
         {
           "dateKey": "20260804",
-          "tgRealCost": 10093.435019654,
-          "tgMfRoi0": 0.09574659244364991,
+          "tgRealCost": 10093.435019653996,
+          "tgMfRoi0": 0.09833520482049173,
           "tgNewUserCount": 296
         },
         {
           "dateKey": "20260805",
           "tgRealCost": 29654.621294247,
-          "tgMfRoi0": 0.09574659244364991,
+          "tgMfRoi0": 0.06862876378714104,
           "tgNewUserCount": 864
         },
         {
           "dateKey": "20260806",
-          "tgRealCost": 23113.607843252,
-          "tgMfRoi0": 0.09574659244364991,
+          "tgRealCost": 23113.607843251997,
+          "tgMfRoi0": 0.07738904337784812,
           "tgNewUserCount": 612
         }
       ],
