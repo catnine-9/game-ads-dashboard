@@ -2746,14 +2746,9 @@ function applySnapshot(snap) {
 
   if (!data && list.length) data = sumGames(list); // 找不到该游戏（无消耗）→ 汇总兜底
 
-  // 流量版位（按游戏筛选 + 汇总）
-  let slotList = slot;
-  if (state.game !== 'all' && data) {
-    // 单游戏：保留 csite 在该游戏的 row（即 csite 行 cost > 0）
-    // 但 slot 数据是 csite 维度，无 gameId；按 gameName==data.gameName 过滤
-    const gameName = data.gameName;
-    slotList = slot.filter(s => s.gameName === gameName);
-  }
+  // 流量版位（渠道=头条，维度=流量版位，新增数占比）
+  // csite 维度数据无 gameName 字段，因此这里不再按 gameName 过滤，全局都是头条版位
+  const slotList = slot.filter(s => s.platform === '头条' && String(s.csite || '').trim());
 
   if (data) updateKPIsFromDetail(list, data);
 
@@ -2832,12 +2827,13 @@ const SLOT_COLORS = ['#22D3EE', '#3B82F6', '#A78BFA', '#F59E0B', '#F43F5E', '#34
 function renderDonut(top6) {
   const svg = document.getElementById('slotDonut');
   if (!svg) return;
-  const total = top6.reduce((a, s) => a + (parseFloat(s.tgRealCost) || 0), 0) || 1;
+  // 占比 = 新增数（与 renderSlotList 保持一致；BI 报表对应"新增数占比"）
+  const total = top6.reduce((a, s) => a + (parseFloat(s.tgNewUserCount) || 0), 0) || 1;
   const R = 88, r = 56, cx = 100, cy = 100;
   const paths = [];
   let angle = -Math.PI / 2; // 12 点钟
   for (let i = 0; i < top6.length; i++) {
-    const pct = (parseFloat(top6[i].tgRealCost) || 0) / total;
+    const pct = (parseFloat(top6[i].tgNewUserCount) || 0) / total;
     if (pct <= 0) continue;
     const next = angle + pct * Math.PI * 2;
     const x1 = cx + R * Math.cos(angle), y1 = cy + R * Math.sin(angle);
@@ -2846,7 +2842,7 @@ function renderDonut(top6) {
     const x4 = cx + r * Math.cos(angle), y4 = cy + r * Math.sin(angle);
     const large = (next - angle) > Math.PI ? 1 : 0;
     const d = `M ${x1.toFixed(1)} ${y1.toFixed(1)} A ${R} ${R} 0 ${large} 1 ${x2.toFixed(1)} ${y2.toFixed(1)} L ${x3.toFixed(1)} ${y3.toFixed(1)} A ${r} ${r} 0 ${large} 0 ${x4.toFixed(1)} ${y4.toFixed(1)} Z`;
-    paths.push(`<path d="${d}" fill="${SLOT_COLORS[i]}"/>`);
+    paths.push(`<path d="${d}" fill="${SLOT_COLORS[i % SLOT_COLORS.length]}"/>`);
     angle = next;
   }
   svg.innerHTML = paths.join('');
@@ -2946,22 +2942,18 @@ function renderSlotList(slotList) {
   const legendEl = document.getElementById('slotLegend');
   const subEl = document.getElementById('slot-sub');
   if (!legendEl) return;
-  // 数据源：sync-data.js 用 platform 维度（头条/快手/广点通等）；列名兼容 csite/platform
-  const valid = slotList.filter(s => (parseFloat(s.tgRealCost) || 0) > 0);
-  const total = valid.reduce((a, s) => a + (parseFloat(s.tgRealCost) || 0), 0);
-  // 提取名称（汇总行 platform+csite 都空）
-  const labelOf = s => String(s.csite || '').trim() || String(s.platform || '').trim() || '汇总';
+  // 数据源：sync-data.js 用 csite 维度（每行带 platform + csite），前端按 platform='头条' 过滤
+  // 占比 = 新增数（tgNewUserCount）/ 头条总新增数，对应 BI 报表"渠道=头条 × 维度=流量版位 × 新增数占比"
+  const valid = slotList.filter(s => (parseFloat(s.tgNewUserCount) || 0) > 0);
+  const total = valid.reduce((a, s) => a + (parseFloat(s.tgNewUserCount) || 0), 0);
   const sorted = valid
     .slice()
-    .sort((a, b) => {
-      const aEmpty = labelOf(a) === '汇总';
-      const bEmpty = labelOf(b) === '汇总';
-      if (aEmpty !== bEmpty) return aEmpty ? -1 : 1;
-      return (parseFloat(b.tgRealCost) || 0) - (parseFloat(a.tgRealCost) || 0);
-    })
-    .slice(0, 6);
+    .sort((a, b) => (parseFloat(b.tgNewUserCount) || 0) - (parseFloat(a.tgNewUserCount) || 0))
+    .slice(0, 8);
+  // 副标题：根据当前 date 状态显示今日/近7日/近30日
+  const dName = (DATES.find(d => d.id === state.date) || DATES[0]).label;
   if (subEl) {
-    subEl.textContent = '今日消耗 ¥' + Math.round(total).toLocaleString('zh-CN');
+    subEl.textContent = `${dName} · 头条新增 ${Math.round(total).toLocaleString('zh-CN')} 人`;
   }
   if (sorted.length === 0) {
     legendEl.innerHTML = '<div style="color:#6B7280;font-size:11.5px;padding:8px 0">暂无版位数据</div>';
@@ -2970,13 +2962,13 @@ function renderSlotList(slotList) {
     return;
   }
   const html = sorted.map((s, i) => {
-    const pct = total > 0 ? ((parseFloat(s.tgRealCost) || 0) / total * 100).toFixed(1) : '0.0';
-    const name = labelOf(s);
-    const cost = '¥' + Math.round(parseFloat(s.tgRealCost) || 0).toLocaleString('zh-CN');
+    const newN = parseFloat(s.tgNewUserCount) || 0;
+    const pct = total > 0 ? (newN / total * 100).toFixed(1) : '0.0';
+    const name = String(s.csite || '').trim() || '版位';
     return `<div class="slot-legend-row">
-      <span class="swatch" style="background:${SLOT_COLORS[i]}"></span>
+      <span class="swatch" style="background:${SLOT_COLORS[i % SLOT_COLORS.length]}"></span>
       <span class="name" title="${name}">${name}</span>
-      <span class="pct">${cost}</span>
+      <span class="pct">${Math.round(newN).toLocaleString('zh-CN')}</span>
       <span class="val">${pct}%</span>
     </div>`;
   }).join('');
