@@ -1,6 +1,11 @@
 name: Sync 3387 MCP Data
 
 on:
+  push:
+    branches: [main]
+    paths:
+      - "scripts/sync_mcp_3387.py"
+      - ".github/workflows/sync-3387-mcp.yml"
   schedule:
     # Every 10 minutes. GitHub Actions cron uses UTC.
     - cron: "*/10 * * * *"
