@@ -2516,7 +2516,8 @@ function renderDailyDetail(range, chart7, key) {
 
 function sumField(arr, k) { return (arr || []).reduce((a, x) => a + (parseFloat(x[k]) || 0), 0); }
 
-// 加权平均 ROI（按消耗加权，更接近业务真实）；无 ROI 数据时回退算术平均
+// 按消耗加权平均 BI 日级 tgMfRoi0（与 BI 报表汇总行算法一致）；
+// 输入：chart 数组（含 dateKey/tgRealCost/tgMfRoi0）
 function fmtAvgRoi(arr) {
 
   let wSum = 0, w = 0;
