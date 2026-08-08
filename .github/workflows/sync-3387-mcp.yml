@@ -9,6 +9,8 @@ on:
   schedule:
     # Every 10 minutes. GitHub Actions cron uses UTC.
     - cron: "*/10 * * * *"
+    # Backup: every 15 minutes offset by 5, so combined ~5 min max gap
+    - cron: "5,20,35,50 * * * *"
   workflow_dispatch:
 
 permissions:
